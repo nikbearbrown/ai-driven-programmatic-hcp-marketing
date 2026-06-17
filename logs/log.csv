@@ -1,0 +1,15 @@
+date,book,chapter_slug,word_count,sources_count,verify_flag_count,pantry_notes_found,pantry_lib_files_used,thin_pantry,mechanism_explained,contested_claims_flagged
+2026-06-16,ai-driven-programmatic-hcp-marketing,01-the-machine-nobody-sees,4936,5,8,yes,1,no,"point-of-care/CDS-Hooks delivery + co-pay price-signal economics",2
+2026-06-16,ai-driven-programmatic-hcp-marketing,02-lift-vs-brand,4532,5,4,yes,0,no,"separating campaign lift from durable brand equity (NBRx/loyalty/SOV)",1
+2026-06-16,ai-driven-programmatic-hcp-marketing,03-the-hcp-identity-graph,4700,2,6,yes,3,no,"claims->de-identification->NPI identity resolution->bid-time targeting",2
+2026-06-16,ai-driven-programmatic-hcp-marketing,04-what-todays-ai-stack-does,4270,5,13,yes,3,no,"deployed/emerging/aspirational ladder + KPI/data/evidence vendor audit",1
+2026-06-16,ai-driven-programmatic-hcp-marketing,05-the-evidence-problem,4297,5,10,yes,3,no,"association vs causation + attribution circularity in lift claims",1
+2026-06-16,ai-driven-programmatic-hcp-marketing,06-ensembles-tabular-advantage,4037,5,4,yes,2,no,"gradient-boosted tree ensembles as the tabular baseline (Grinsztajn 2022)",0
+2026-06-16,ai-driven-programmatic-hcp-marketing,07-mixture-of-experts,4298,8,5,yes,1,no,"genuine sparse-gated MoE vs relabeled stacking; output standardization + joint training",2
+2026-06-16,ai-driven-programmatic-hcp-marketing,08-uplift-and-incrementality,3832,6,8,yes,1,no,"propensity vs incrementality; holdout-first causal lift",1
+2026-06-16,ai-driven-programmatic-hcp-marketing,09-brand-association,3987,9,12,yes,1,no,"measuring durable quality/patient-type association (survey + IAT/conjoint/WEAT)",1
+2026-06-16,ai-driven-programmatic-hcp-marketing,10-llms-for-commercial-research,3916,12,11,yes,3,no,"useful-draft vs trustworthy-claim; LLM validation harness",0
+2026-06-16,ai-driven-programmatic-hcp-marketing,11-innovation-lab-operating-model,3564,11,4,yes,0,no,"lab workflow + Evidence Ladder 0-6 + public-data/IP firewall",0
+2026-06-16,ai-driven-programmatic-hcp-marketing,12-research-design-public-data,3837,13,7,yes,4,no,"causal identification (DiD/RDD/IV/natural experiments) on public data",0
+2026-06-16,ai-driven-programmatic-hcp-marketing,13-fellow-research-portfolio,6091,6,8,yes,4,no,"four research tracks; each project as question/data/identification/success+kill/owner",5
+2026-06-16,ai-driven-programmatic-hcp-marketing,14-prototype-to-product-decision,4583,7,8,yes,2,no,"test/build/kill handoff + patient-welfare gate as binding veto",1
