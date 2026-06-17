@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 9.3 — Durability decay: durable equity vs recall bump</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .axis path,.axis line{stroke:var(--color-ink);stroke-width:1.5;}
+  .axis text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .grid line{stroke:var(--color-border);stroke-width:0.75;}
+  .grid path{stroke:none;}
+  .y-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .series-durable{fill:none;stroke:var(--color-ink);stroke-width:1.5;}
+  .series-transient{fill:none;stroke:var(--color-red);stroke-width:1.5;}
+  .marker-durable{fill:var(--color-ink);}
+  .marker-transient{fill:var(--color-red);}
+  .descriptor{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;}
+  .annot{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .pt:focus{outline:none;}
+  .pt:focus circle{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Durable equity vs a recall bump: the delayed re-test is what tells them apart</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">At the immediate post-test the two patterns are indistinguishable. Only the delayed re-measurement separates durable equity from a recall bump — which is why booking the immediate spike as equity is the mistake the chapter warns against.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const TIMES = ["pre-exposure","immediate post","delayed post"];
+const FALLBACK_DATA = {
+  durable:   [{t:"pre-exposure",v:10},{t:"immediate post",v:85},{t:"delayed post",v:80}],
+  transient: [{t:"pre-exposure",v:10},{t:"immediate post",v:85},{t:"delayed post",v:20}]
+};
+const BASELINE = 10;
+const W=700,H=420, M={top:48,right:40,bottom:56,left:64};
+const IW=W-M.left-M.right, IH=H-M.top-M.bottom;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("Durability decay: only the delayed re-measurement separates durable equity from a transient recall bump");
+svg.append("desc").attr("id","chart-desc").text("Two lines across three time points — pre-exposure, immediate post, delayed post — start at the same baseline and rise identically to immediate post. At the delayed post-test the durable line holds elevated while the transient line decays back toward baseline.");
+
+const x=d3.scalePoint().domain(TIMES).range([0,IW]).padding(0.05);
+const y=d3.scaleLinear().domain([0,100]).range([IH,0]);
+const line=d3.line().x(d=>x(d.t)).y(d=>y(d.v));
+const tip=d3.select("#tooltip");
+
+function draw(){
+  svg.selectAll(".plot").remove();
+  const g=svg.append("g").attr("class","plot").attr("transform",`translate(${M.left},${M.top})`);
+
+  // plot background
+  g.append("rect").attr("x",0).attr("y",0).attr("width",IW).attr("height",IH)
+    .attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+
+  // gridlines (y)
+  g.append("g").attr("class","grid").attr("aria-hidden","true")
+    .call(d3.axisLeft(y).ticks(5).tickSize(-IW).tickFormat(""));
+
+  // zero-baseline reference: dashed line at pre-exposure level
+  g.append("line").attr("aria-hidden","true")
+    .attr("x1",0).attr("y1",y(BASELINE)).attr("x2",IW).attr("y2",y(BASELINE))
+    .attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+
+  // axes
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${IH})`).call(d3.axisBottom(x));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).ticks(5));
+
+  // divergence emphasis at delayed point
+  g.append("line").attr("aria-hidden","true")
+    .attr("x1",x("delayed post")).attr("y1",y(80))
+    .attr("x2",x("delayed post")).attr("y2",y(20))
+    .attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+
+  // series
+  g.append("path").datum(FALLBACK_DATA.durable).attr("class","series-durable").attr("d",line);
+  g.append("path").datum(FALLBACK_DATA.transient).attr("class","series-transient").attr("d",line);
+
+  // markers (interactive)
+  drawPoints(g, FALLBACK_DATA.durable, "durable", "Durable equity");
+  drawPoints(g, FALLBACK_DATA.transient.filter(d=>d.t==="delayed post"), "transient", "Recall bump (transient)");
+
+  // descriptors
+  g.append("text").attr("class","descriptor").attr("x",x("delayed post")-44).attr("y",y(80)-8)
+    .attr("text-anchor","end").attr("fill","var(--color-ink)").text("durable equity");
+  g.append("text").attr("class","descriptor").attr("x",x("delayed post")-44).attr("y",y(20)+4)
+    .attr("text-anchor","end").attr("fill","var(--color-red)").text("recall bump");
+  g.append("text").attr("class","annot").attr("x",x("immediate post")).attr("y",y(85)-14)
+    .attr("text-anchor","middle").text("identical here");
+
+  // y axis label
+  svg.append("text").attr("class","plot y-label")
+    .attr("x",18).attr("y",M.top+IH/2).attr("text-anchor","middle")
+    .attr("transform",`rotate(-90 18 ${M.top+IH/2})`).text("brand-association strength");
+}
+
+function drawPoints(g, data, kind, seriesName){
+  const pts=g.selectAll(".pt-"+kind).data(data,d=>d.t).join("g")
+    .attr("class","pt pt-"+kind).attr("tabindex",0).attr("role","img")
+    .attr("aria-label",d=>seriesName+", "+d.t+", strength "+d.v);
+  pts.append("circle").attr("cx",d=>x(d.t)).attr("cy",d=>y(d.v)).attr("r",3.5)
+    .attr("class","marker-"+kind);
+  pts.append("circle").attr("cx",d=>x(d.t)).attr("cy",d=>y(d.v)).attr("r",10).attr("fill","transparent");
+  function tipText(d){return seriesName+"<br/>"+d.t+": "+d.v;}
+  function show(event,d){tip.style("opacity",1).html(tipText(d)).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");}
+  function hide(){tip.style("opacity",0);}
+  pts.on("mousemove",show).on("mouseleave",hide)
+     .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(tipText(d)).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+     .on("blur",hide)
+     .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

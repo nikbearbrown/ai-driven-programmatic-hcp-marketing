@@ -1,0 +1,73 @@
+<!--
+  figure-title: De-identification removes the patient and leaves the prescriber
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 03-the-hcp-identity-graph
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/03-the-hcp-identity-graph.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">De-identification removes the patient and leaves the prescriber</title>
+  <desc>Two-column pipeline. The left column shows patient fields — name, date of birth, address — struck through at the payer de-identification step. The right column shows the National Provider Identifier persisting unchanged through broker, pharma buyer, model and bid.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="03-the-hcp-identity-graph" figure-number="01" figure-title="De-identification removes the patient and leaves the prescriber" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/03-the-hcp-identity-graph.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The asymmetry at the heart of HCP targeting: the patient is stripped; the prescriber stays</text>
+
+  <!-- column headers -->
+  <text x="180" y="62" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#545454" font-weight="600">PATIENT IDENTIFIERS — stripped at the payer</text>
+  <text x="520" y="62" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#C8102E" font-weight="600">NPI — persists through every step</text>
+
+  <!-- pipeline stages (rows) -->
+  <!-- Stage rows y positions -->
+  <!-- Row 1: Pharmacy claim -->
+  <text x="32" y="98" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">1. Pharmacy</text>
+  <rect x="120" y="82" width="200" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="220" y="108" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">name · DOB · address present</text>
+  <rect x="420" y="82" width="200" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="520" y="108" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">NPI 1234567890</text>
+
+  <!-- Row 2: Payer de-id (the pivot) -->
+  <text x="32" y="170" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">2. Payer</text>
+  <text x="32" y="184" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">(Safe Harbor)</text>
+  <rect x="120" y="154" width="200" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="220" y="180" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-decoration="line-through">name · DOB · address</text>
+  <rect x="420" y="154" width="200" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="520" y="180" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">NPI 1234567890</text>
+
+  <!-- Row 3: Broker / aggregator -->
+  <text x="32" y="242" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">3. Broker</text>
+  <rect x="120" y="226" width="200" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="220" y="252" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">— patient gone —</text>
+  <rect x="420" y="226" width="200" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="520" y="248" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">NPI 1234567890</text>
+  <text x="520" y="262" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">+ AMA Masterfile join</text>
+
+  <!-- Row 4: Pharma buyer / model -->
+  <text x="32" y="314" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">4. Model</text>
+  <rect x="120" y="298" width="200" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="220" y="324" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">— patient gone —</text>
+  <rect x="420" y="298" width="200" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="520" y="324" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Dr. Jane Smith named</text>
+
+  <!-- Row 5: Bid -->
+  <text x="32" y="386" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">5. Bid</text>
+  <rect x="120" y="370" width="200" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="220" y="396" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">— patient gone —</text>
+  <rect x="420" y="370" width="200" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="520" y="396" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">impression to NPI 123…</text>
+
+  <!-- vertical NPI persistence arrows on right -->
+  <line x1="520" y1="126" x2="520" y2="150" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="520" y1="198" x2="520" y2="222" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="520" y1="270" x2="520" y2="294" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="520" y1="342" x2="520" y2="366" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- caption -->
+  <text x="32" y="446" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">De-identification removes the patient and leaves the prescriber. This asymmetry is the legal</text>
+  <text x="32" y="462" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">foundation of NPI targeting — the data is anonymous to the patient, fully identified to the physician.</text>
+</svg>

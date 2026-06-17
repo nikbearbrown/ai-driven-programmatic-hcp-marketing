@@ -1,0 +1,60 @@
+<!--
+  figure-title: The graph is enriched by targeting — each campaign refines the next
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 03-the-hcp-identity-graph
+  Figure: 03
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/03-the-hcp-identity-graph.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
+  <title id="fig-title-03">The graph is enriched by targeting — each campaign refines the next</title>
+  <desc>A circular feedback diagram. An NPI profile sits at the center with three spokes to CRM rep-call logs, endemic-media click data and EHR prompt responses. Each spoke has a return arrow labeled engagement signal feeding a model feature update.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="03-the-hcp-identity-graph" figure-number="03" figure-title="The graph is enriched by targeting — each campaign refines the next" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/03-the-hcp-identity-graph.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">A continuously updating portrait, enriched by its own use</text>
+
+  <!-- center node -->
+  <circle cx="350" cy="220" r="56" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="350" y="216" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">NPI profile</text>
+  <text x="350" y="232" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">one physician</text>
+
+  <!-- spoke nodes -->
+  <!-- CRM top -->
+  <rect x="270" y="68" width="160" height="48" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="350" y="88" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">CRM</text>
+  <text x="350" y="104" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">rep call logs</text>
+
+  <!-- Endemic media bottom-left -->
+  <rect x="64" y="320" width="180" height="48" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="154" y="340" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">Endemic media</text>
+  <text x="154" y="356" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">click data (Medscape, WebMD)</text>
+
+  <!-- EHR triggers bottom-right -->
+  <rect x="456" y="320" width="180" height="48" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="546" y="340" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">EHR triggers</text>
+  <text x="546" y="356" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">prompt responses</text>
+
+  <!-- spokes out (profile -> channel) and return (channel -> profile) -->
+  <!-- CRM: out goes up, return comes down slightly offset -->
+  <line x1="338" y1="166" x2="320" y2="120" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="380" y1="116" x2="362" y2="166" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="430" y="146" text-anchor="start" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">engagement signal →</text>
+  <text x="430" y="158" text-anchor="start" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">feature update</text>
+
+  <!-- Endemic media: out lower-left, return -->
+  <line x1="305" y1="248" x2="220" y2="318" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="200" y1="332" x2="300" y2="262" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- EHR triggers: out lower-right, return -->
+  <line x1="395" y1="248" x2="480" y2="318" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="500" y1="332" x2="400" y2="262" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- caption -->
+  <text x="32" y="394" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The graph is enriched by targeting. Each engagement signal flows back into</text>
+  <text x="32" y="408" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">the profile, so each campaign refines the model that drives the next one.</text>
+</svg>

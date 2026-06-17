@@ -1,0 +1,50 @@
+<!--
+  Figure title: Channel evidence-strength matrix
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 05-the-evidence-problem
+  Figure: 02
+  Type: CHART
+  Generated: 2026-06-16
+  Source: chapters/05-the-evidence-problem.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-02" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-02">Channel evidence-strength matrix</title>
+  <desc>Scatter of four marketing channels by source independence (x) and study-design strength (y). Detailing and academic detailing sit high-high, DeJong meals medium, EHR point-of-care low-low. Vendor EHR figures are unverified and plotted as weak.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="05-the-evidence-problem" figure-number="02" figure-title="Channel evidence-strength matrix" figure-type="CHART" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/05-the-evidence-problem.md"/></metadata>
+  <defs></defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="64" y="30" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Channel evidence strength: design vs. source independence</text>
+
+  <!-- plot area: left64 right40 top48 bottom56 => x 64..660 y 48..364 -->
+  <rect x="64" y="48" width="596" height="316" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- quadrant dividers -->
+  <line x1="362" y1="48" x2="362" y2="364" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <line x1="64" y1="206" x2="660" y2="206" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+
+  <!-- quadrant corner labels -->
+  <text x="74" y="64" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">strong design, weak source — discount for conflict</text>
+  <text x="650" y="64" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">strong design + independent — actionable</text>
+  <text x="74" y="356" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">weak design, weak source — not evidence</text>
+  <text x="650" y="356" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">weak design, independent — note the gap</text>
+
+  <!-- data points -->
+  <!-- detailing: high source / high design -->
+  <circle cx="600" cy="110" r="7" fill="#2a1a0e"/>
+  <text x="588" y="100" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">detailing</text>
+  <!-- academic detailing: high / high (offset) -->
+  <circle cx="560" cy="84" r="7" fill="#2a1a0e"/>
+  <text x="548" y="78" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">academic detailing (RCT)</text>
+  <!-- DeJong meals: medium-high source / medium design -->
+  <circle cx="500" cy="226" r="7" fill="#2a1a0e"/>
+  <text x="500" y="252" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">DeJong meals (observational)</text>
+  <!-- EHR/POC: low/low (red) -->
+  <circle cx="140" cy="320" r="7" fill="#C8102E"/>
+  <text x="156" y="324" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">EHR / POC ads (vendor, [verify])</text>
+
+  <!-- axis labels -->
+  <text x="362" y="392" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Source independence  (low → high)</text>
+  <text x="40" y="206" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" transform="rotate(-90 40 206)">Study-design strength  (low → high)</text>
+
+  <text x="660" y="412" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: CH.05 — EHR FIGURES UNVERIFIED, PLOTTED AS WEAK</text>
+</svg>

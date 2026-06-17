@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 5.1 — Four mechanisms inflate observed lift</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .mtitle{font-size:12px;fill:var(--color-ink);}.msub{font-size:11px;fill:var(--color-secondary);}
+  .elabel{font-size:13px;fill:var(--color-ink);}.esub{font-size:11px;fill:var(--color-secondary);}
+  .note{font-size:10px;fill:var(--color-secondary);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .mech rect{cursor:pointer;}.mech rect:focus{outline:2px solid var(--color-ochre);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-size:12px;color:var(--color-ink);max-width:240px;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Four mechanisms push observed lift above the true causal effect</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {n:1,t:"Selection on the outcome",s:"targets already-likely prescribers",conf:"conflates prior trajectory with treatment effect"},
+  {n:2,t:"Attribution circularity",s:"server also measures the lift",conf:"conflates measurement interest with measured value"},
+  {n:3,t:"Absence of a control",s:"no held-out counterfactual",conf:"conflates gross change with net effect"},
+  {n:4,t:"Publication asymmetry",s:"only the wins become case studies",conf:"conflates a curated sample with the average outcome"}
+];
+const data=FALLBACK_DATA;const tip=d3.select("#tip");
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Four mechanisms inflate observed lift");
+  svg.append("desc").attr("id","chart-desc").text("Four bias mechanisms feed arrows into observed lift; the true causal effect is reachable only via design controls.");
+  const defs=svg.append("defs");
+  ["arrow","arrowred"].forEach((id,i)=>{
+    defs.append("marker").attr("id",id).attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+      .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill",i?cv("--color-red"):cv("--color-ink"));
+  });
+  const bx=32,bw=232,bh=48,gap=20,top=60;
+  const obs={x:434,y:172,w:Math.min(180,W-474),h:64};
+  // arrows into observed lift
+  data.forEach((d,i)=>{
+    const y=top+i*(bh+gap)+bh/2;
+    svg.append("line").attr("x1",bx+bw).attr("y1",y).attr("x2",obs.x).attr("y2",obs.y+obs.h/2).attr("stroke",cv("--color-red")).attr("stroke-width",1.5).attr("marker-end","url(#arrowred)");
+  });
+  const mech=svg.selectAll("g.mech").data(data).join("g").attr("class","mech");
+  mech.append("rect").attr("x",bx).attr("width",bw).attr("height",bh).attr("y",(d,i)=>top+i*(bh+gap))
+    .attr("fill",cv("--color-white")).attr("stroke",cv("--color-border")).attr("stroke-width",1)
+    .attr("tabindex",0).attr("aria-label",d=>`${d.t}: ${d.conf}`)
+    .on("mousemove",(e,d)=>showTip(e,d)).on("mouseleave",hideTip)
+    .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,d);}});
+  mech.append("text").attr("class","mtitle").attr("x",bx+12).attr("y",(d,i)=>top+i*(bh+gap)+20).text(d=>`${d.n}. ${d.t}`);
+  mech.append("text").attr("class","msub").attr("x",bx+12).attr("y",(d,i)=>top+i*(bh+gap)+38).text(d=>d.s);
+  // observed lift box
+  svg.append("rect").attr("x",obs.x).attr("y",obs.y).attr("width",obs.w).attr("height",obs.h).attr("fill",cv("--color-fill")).attr("stroke",cv("--color-ink")).attr("stroke-width",1);
+  svg.append("text").attr("class","elabel").attr("text-anchor","middle").attr("x",obs.x+obs.w/2).attr("y",obs.y+28).text("OBSERVED LIFT");
+  svg.append("text").attr("class","esub").attr("text-anchor","middle").attr("x",obs.x+obs.w/2).attr("y",obs.y+46).text("inflated, all four present");
+  // true causal effect box
+  const tc={x:obs.x,y:300,w:obs.w,h:64};
+  svg.append("rect").attr("x",tc.x).attr("y",tc.y).attr("width",tc.w).attr("height",tc.h).attr("fill",cv("--color-white")).attr("stroke",cv("--color-border")).attr("stroke-width",1);
+  svg.append("text").attr("class","elabel").attr("text-anchor","middle").attr("x",tc.x+tc.w/2).attr("y",tc.y+28).text("TRUE CAUSAL EFFECT");
+  svg.append("text").attr("class","esub").attr("text-anchor","middle").attr("x",tc.x+tc.w/2).attr("y",tc.y+46).text("unobserved without a holdout");
+  svg.append("line").attr("x1",tc.x+tc.w/2).attr("y1",tc.y).attr("x2",tc.x+tc.w/2).attr("y2",obs.y+obs.h).attr("stroke",cv("--color-border")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4").attr("marker-end","url(#arrow)");
+  svg.append("text").attr("class","note").attr("x",tc.x+tc.w/2+10).attr("y",(tc.y+obs.y+obs.h)/2).text("requires design controls");
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-32).attr("y",H-6).text("SOURCE: CH.05 — THE EVIDENCE PROBLEM");
+}
+function showTip(e,d){tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px").html(`<strong>${d.t}</strong><br>${d.conf}`);}
+function hideTip(){tip.style("opacity",0);}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!--
+  Title: The WEAT setup for brand-vs-patient-archetype association
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 09-brand-association
+  Figure: 02
+  Type: Diagram (schematic of target/attribute sets + cosine)
+  Generated: 2026-06-16
+  Source: chapters/09-brand-association.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">The Word-Embedding Association Test setup: two target sets and two attribute sets with cosine-similarity comparisons</title>
+  <desc>Four labeled boxes — Target Set X of Brand X tokens, Target Set Y of competitor tokens, Attribute Set A of target patient-archetype descriptors, and Attribute Set B of other patient descriptors. Arrows show cosine-similarity computation between each target and each attribute set. The WEAT score formula combines them. A caption flags that whether the score predicts prescribing is an open question.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="09-brand-association" figure-number="02" figure-title="The WEAT setup for brand-vs-patient-archetype association" figure-slug="weat-setup-schematic" figure-type="Diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/09-brand-association.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The WEAT setup: is Brand X more associated with the target patient archetype than the competitor?</text>
+
+  <!-- Target sets (left column) -->
+  <rect x="32" y="80" width="180" height="56" rx="0" fill="#F5F5F5" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="122" y="104" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">Target Set X</text>
+  <text x="122" y="122" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">Brand X tokens</text>
+
+  <rect x="32" y="264" width="180" height="56" rx="0" fill="#F5F5F5" stroke="#2a1a0e" stroke-width="1"/>
+  <text x="122" y="288" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">Target Set Y</text>
+  <text x="122" y="306" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">competitor tokens</text>
+
+  <!-- Attribute sets (right column) -->
+  <rect x="488" y="80" width="180" height="56" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="578" y="104" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">Attribute Set A</text>
+  <text x="578" y="122" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">target-patient descriptors</text>
+
+  <rect x="488" y="264" width="180" height="56" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="578" y="288" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">Attribute Set B</text>
+  <text x="578" y="306" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">other-patient descriptors</text>
+
+  <!-- cosine comparison arrows: X-A, X-B, Y-A, Y-B -->
+  <line x1="212" y1="100" x2="484" y2="100" stroke="#C8102E" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="212" y1="120" x2="484" y2="284" stroke="#C8102E" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <line x1="212" y1="284" x2="484" y2="116" stroke="#2a1a0e" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <line x1="212" y1="300" x2="484" y2="300" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- cosine label hub -->
+  <rect x="312" y="142" width="76" height="30" fill="#FFFFFF"/>
+  <text x="350" y="154" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="10" fill="#545454" text-anchor="middle">cosine sim</text>
+  <text x="350" y="168" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="10" fill="#545454" text-anchor="middle">each pair</text>
+
+  <!-- Formula box -->
+  <rect x="100" y="336" width="500" height="36" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="350" y="359" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e" text-anchor="middle">WEAT = [sim(X,A) - sim(X,B)] - [sim(Y,A) - sim(Y,B)]</text>
+
+  <!-- Caption -->
+  <text x="32" y="394" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">A positive score means Brand X is more associated with the target archetype than the competitor. Whether the score</text>
+  <text x="32" y="410" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">predicts prescribing is an unvalidated open question — a proposal built from validated parts, not a cited result.</text>
+</svg>

@@ -31,7 +31,16 @@ Prescription counting looks simpler than it is. Three metrics dominate the field
 
 The opening case is now readable in metric terms. The team had flat-to-rising TRx — old decisions refilling — and NBRx down twenty percent. Every new patient was going to a competitor, but the refill stream was masking it. TRx is a lagging measure of decisions already locked in; NBRx is the leading indicator of the decisions being made *right now*. The moment you see strong TRx and falling NBRx together, you are looking at a brand that is aging in place while the market moves past it. Paradoxically, that is exactly the moment a brand team should worry most — when the dashboard still looks green.
 
-<!-- → [TABLE: Three-column comparison of TRx, NRx, NBRx — rows: what it counts, lag characteristics, what it misses, when to use it as primary metric] -->
+
+| | TRx (Total Rx) | NRx (New Rx) | NBRx (New-to-Brand Rx) |
+|---|---|---|---|
+| What it counts | Every prescription dispensed — new starts plus refills | Newly written prescriptions, excluding refills | Only prescriptions where the patient is genuinely new to the brand, judged across full therapy history |
+| Lag characteristics | Lagging — a refill of a two-year-old decision counts identically to a fresh one | Mixed — fresher than TRx but not anchored to first brand exposure | Leading — captures the decision at the moment it is made |
+| What it misses | When the decision was actually made; can stay green on refill inertia | Blends existing-brand patients getting routine new scripts with genuinely new decisions | Persistence — a burst of new starts that never refill |
+| When to use it as primary metric | Headline volume / quarterly business review only | A rough new-activity read when NBRx is unavailable | The cleanest read on decisions being made now; pair with a persistence guardrail |
+
+*Table 2.1 — The three prescription-count metrics measure three different things: TRx is a lagging volume number, NBRx is the leading indicator of decisions being made now.*
+
 
 One technical note worth flagging. The major claims-data vendors — IQVIA foremost among them — describe their NBRx methodology as a "gold standard" with roughly 93% coverage of outpatient prescriptions before projection adjustments. These are the vendors' own characterizations of their own products, not independent validation. The metric definition is industry-standardized and uncontroversial; the specific coverage claims are product positioning and should be read accordingly. [verify the 93% figure as a current IQVIA self-description before publication]
 
@@ -44,6 +53,9 @@ Volume is not the whole story. *Who* prescribes and whether their patients *stay
 **Loyalty deciles** segment the universe of eligible prescribers in a therapeutic class by prescribing volume. Decile 10 is the highest-volume prescribers, decile 1 the lowest, non-writers fall outside the ranking. The metric is widely used for targeting; it is also widely misused.
 
 Here is the trap. Sophisticated brand teams go one step further than raw volume and compute *brand share within each physician's eligible patient pool*: Brand X prescriptions divided by all prescriptions that physician writes for the category. This yields a behavioral map that raw deciles cannot see. Consider two cardiologists. Dr. X is decile 10 — enormous prescribing volume — but only 5% brand share: ninety-five percent of her eligible patients are going to competitors. Dr. Y is decile 5 — half the volume — but 60% brand share. A naive targeting model that ranks physicians by predicted prescribing would rank Dr. Y higher. It is targeting the physician who is already largely won. Dr. X is the larger opportunity; there is far more prescribing left to convert.
+
+![A 2x2 scatter of prescribing decile against brand share within category, showing Dr. X at decile 10 with 5 percent share as high headroom and Dr. Y at decile 5 with 60 percent share as already won.](images/02-lift-vs-brand-fig-01.png)
+*Figure 2.1 — Volume is not opportunity: brand share within the eligible pool reveals headroom*
 
 <!-- → [CHART: 2x2 scatter plot — x-axis: brand share within category (0–100%), y-axis: decile rank (1–10); quadrants labeled: "already won," "high headroom," "low priority," "efficiently converted"; points colored by opportunity tier] -->
 
@@ -77,7 +89,16 @@ Keep one distinction sharp, because the evidence does not support collapsing it.
 
 And here is the contested edge: whether brand equity tracks clinical value at all — whether the drugs with the strongest physician loyalty are also the drugs with the strongest evidence base — is not settled. A BMJ-linked analysis argued that the most-promoted drugs were less likely than top-selling drugs to be effective, safe, affordable, novel, or genuine advances; a 2023 study reported that 68% of the most-advertised drugs have low added clinical benefit. [verify both figures against primary sources before publication] Whether these patterns hold robustly, and what they imply for the commercial machine, is an open question the book does not close. Brand equity may be correlated with clinical value, uncorrelated, or negatively correlated. That is testable against ICER value scores in the final projects of Chapter 13, and the chapter seeds it without asserting a direction.
 
-<!-- → [TABLE: Comparison of brand equity in FMCG vs. pharma — rows: what equity means, how it is measured, whether identity or archetype ownership, the failure mode of measuring it wrong] -->
+
+| | FMCG (consumer goods) | Pharma |
+|---|---|---|
+| What equity means | Identity expression — "I buy this because of who I am"; salience and mental availability | The durable default: "for this patient profile, in this disease state, after this prior therapy, Brand X is my default" |
+| How it is measured | Aided/unaided awareness, recall, preference surveys | Behavioral: brand share across a physician's eligible patients (awareness is necessary but far from sufficient) |
+| Identity or archetype ownership | Identity ownership — the brand stands for a self-image | Archetype ownership — the brand is mentally bound to a specific patient type and clinical situation |
+| Failure mode of measuring it wrong | Mistaking reach for preference | Mistaking stated awareness for behavioral equity — a physician who says "best efficacy data" but never switches a stable patient |
+
+*Table 2.2 — Brand equity in pharma is archetype ownership measured behaviorally, not the identity-driven awareness construct imported from consumer goods.*
+
 
 ---
 
@@ -101,6 +122,9 @@ One patient-welfare note that belongs here before the chapter closes.
 
 The welfare risk in metric work is metric capture: optimizing NBRx and share without ever measuring whether the new starts were clinically appropriate. Commercial measurement sees commercial KPIs well — NBRx, switch-ins, share of voice — and patient-welfare KPIs poorly: real-world outcomes, clinical appropriateness, total cost of care. For every project in this book, the welfare question is: *does this metric, optimized hard, reward anything a patient would not want?* Winning new decisions is good for the brand. Whether those decisions were the right drug, for the right patients, at the right time — the commercial metric never asks.
 
+![A decision tree for choosing a primary outcome metric: branching on causation versus association, then horizon and level, into a lift metric with a control, a brand metric with longitudinal design, or NBRx, each paired with a guardrail.](images/02-lift-vs-brand-fig-02.png)
+*Figure 2.2 — Choosing a primary outcome metric from a commercial goal*
+
 <!-- → [INFOGRAPHIC: Decision tree for choosing a primary outcome metric given a commercial goal — branches: Is the question about causation or association? Short or long horizon? Individual prescriber or market-level? Outputs: lift metric with control, brand metric with longitudinal design, guardrail pairing] -->
 
 ---
@@ -108,25 +132,6 @@ The welfare risk in metric work is metric capture: optimizing NBRx and share wit
 The central claim of this chapter is falsifiable and worth stating as such. If a large linked dataset showed that TRx and NBRx move together so tightly that the distinction makes no practical difference to brand decisions, the "winning refills, losing decisions" framing would be substantially weakened — and the insistence on NBRx as the leading indicator would need revision. Separately, if a rigorous test on linked survey-plus-claims data showed that share-of-mind-intent does *not* predict subsequent share growth, the entire SOMi → SOMa concept would need to be demoted from "leading indicator" to "interesting but non-predictive attitude data."
 
 These are open questions. They are more interesting as open questions.
-
----
-
-**Five-part AI exercise block**
-
-**When to use AI.** Use an LLM to draft definitions, generate candidate failure modes for a metric, or restate a vague commercial goal as several alternative measurable outcomes you can then choose among. Good for breadth and first drafts.
-
-**When NOT to use AI.** Do not let an LLM decide *whether your thread is a lift or a brand question*, or *whether brand equity tracks clinical value* — the first requires understanding your specific intervention's causal structure, the second is a contested empirical question the model will happily answer with false confidence.
-
-**LLM exercise (copy-paste prompt):**
-> "I have a pharma commercial goal: [STATE GOAL]. Propose three different primary outcome metrics it could map to (choose from TRx, NRx, NBRx, persistence/DOT, loyalty-decile movement, share of voice, share of mind). For each, state (a) what it measures, (b) its single most important failure mode, and (c) a guardrail metric that would catch that failure. Then tell me which metrics make this a *lift* question and which make it a *brand* question. Do not assert that any metric reflects patient benefit."
-
-**CLI exercise.** From a public prescriber dataset (e.g., a Medicare Part D Prescriber file you will use heavily in Chapter 12), use the command line to compute, for a single drug, the count of prescribers and total claims by year, then the year-over-year change. Write one sentence on why this Part-D-derived number is closer to a TRx-style lagging measure than an NBRx leading measure, and what you would need to approximate NBRx.
-
-**AI Validation exercise.** Ask an LLM to summarize the relationship between share of voice and share of mind in pharma. Then check its answer against this chapter: did it state the SOV > SOM rule as a *law* (wrong for pharma) or as a *leading indicator gated by formulary/label/guidelines* (right)? Write one sentence correcting it if it overstated the rule, and note that this is exactly the SOMi → SOMa claim the chapter flags as unvalidated.
-
-**AI Use Disclosure**
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to brainstorm candidate metrics and failure modes for my goal; I decided myself that my thread is a brand question rather than a lift question, because the AI could not tell whether my intervention's value lies in causing one extra script or in shifting the durable default for a patient type."*
 
 ---
 
@@ -178,3 +183,153 @@ The central claim of this chapter is that lift and brand are genuinely distinct 
 
 9. *(Open-ended — design a study)* The chapter flags SOMi → SOMa — the claim that share-of-mind-intent predicts future market share with a lag — as unvalidated on linked survey-plus-claims data. Sketch a study design (in one paragraph) that would test this claim. What data would you need? What is the hardest methodological problem? What result would falsify the claim?
    *What this tests: converting a flagged hypothesis into a tractable research design, and identifying its empirical breaking point.*
+
+---
+
+## Prompts
+
+### Figure 2.1 — Volume is not opportunity: brand share within the eligible pool reveals headroom
+
+Build a 2x2 scatter plot as a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN, inline CSS and inline JS. X-axis = brand share within category, 0–100%, linear; Y-axis = prescribing decile, 1–10, linear. Draw two dashed quadrant dividers (at 50% share and the decile midpoint) splitting the plot region into four labeled quadrants: top-left "high headroom", top-right "already won", bottom-left "low priority", bottom-right "efficiently converted". Plot two named points: Dr. X at decile 10 / 5% share (highlighted red, "huge volume, almost unconverted") and Dr. Y at decile 5 / 60% share (ink, "largely won already"). Each point labeled in place and with a hover tooltip. Plot-region fill light grey, not white. Margins top48 right40 bottom56 left64. Two data marks only; no zero-baseline bar logic. viewBox 700x420. Structural, not aesthetic.
+
+### Figure 2.2 — Choosing a primary outcome metric from a commercial goal
+
+Build a top-down decision tree as a single self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Root box "Q1: Causation or association?". Left branch (edge labeled "causation") → red-bordered "LIFT question — needs a control / holdout group" → output box "incremental scripts vs. exposed-minus-control". Right branch (edge labeled "association") → "Q2: Short or long horizon? / individual or market level?" which splits into two leaf boxes: long → "BRAND metric — longitudinal design; brand share, SOMi" and short → "NBRx — decisions now; leading indicator". Below the tree, one full-width ochre-bordered callout: "Always pair the primary metric with a guardrail (e.g. NBRx + persistence over the next 2–3 fills)". Directed arrows between nodes, edge labels off the centerline, hover tooltips per node. viewBox 700x480. Structural flow, not decorative.
+
+---
+
+## Chapter 2 Exercises: Lift vs. Brand
+
+**Project:** One Drug, End to End
+**This chapter adds:** Chart your chosen drug's lift-vs-equity profile — its TRx/NBRx split, its loyalty-decile position, and where its brand share reveals headroom versus an already-won base.
+
+### Exercise 1 — When to Use AI
+
+**The judgment:** Three chapter tasks where AI assistance is appropriate.
+
+- *Restating a vague commercial goal as several measurable outcomes* ("grow share" → candidate primary metrics + guardrails). **Why AI works here:** option-generation — you want breadth of candidate metrics before you choose, and you can judge each against the chapter's definitions.
+- *Drafting precise definitions of TRx, NRx, NBRx, persistence, loyalty decile* for your drug's class. **Why AI works here:** drafting — these are standardized definitions you can verify against the chapter's Table 2.1.
+- *Generating candidate failure modes for a chosen metric* (e.g., NBRx without persistence). **Why AI works here:** pattern-spotting — surfacing the standard ways a metric misleads, which you then confirm apply to your drug.
+
+**The tell:** You are using AI appropriately when you can independently evaluate the output — when you already know what NBRx counts and are just speeding up the write-up.
+
+### Exercise 2 — When NOT to Use AI
+
+**The judgment:** Three tasks here that require your judgment.
+
+- *Deciding whether your drug's question is a lift question or a brand question.* **Why AI fails here:** causal-identification problem — this depends on your specific intervention's causal structure (one extra script vs. a durable shifted default), which the model cannot infer from the metric names.
+- *Concluding whether brand equity tracks clinical value for your drug.* **Why AI fails here:** missing ground truth — this is a contested, unsettled empirical question, and the model will answer it with false confidence in whichever direction it last saw.
+- *Asserting that SOV > SOM means your drug will grow.* **Why AI fails here:** calibration gap — the FMCG rule of thumb is gated in pharma by formulary, label, and guidelines, and the model tends to state the rule as a law.
+
+**The tell:** You've crossed the line when AI output is your *reason* for a conclusion rather than a tool for reaching one.
+**Series connection:** This trains **T5 Causal** judgment — distinguishing "likely to prescribe" from "moveable," which is the difference between a description and a causal claim the data may not support.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** A lift-vs-equity profile for your drug — its primary outcome metric, guardrail, loyalty-decile/brand-share read, and an explicit statement of which questions about it are lift questions and which are brand questions.
+**Tool:** Claude. Recommend a **Claude Project** — it can hold your Chapter 1 split-agency map and drug identity so this profile builds directly on it.
+
+**The Prompt:**
+
+```
+We are continuing a teaching case study. The drug is a branded SGLT2 inhibitor
+for type 2 diabetes, in a class with branded competitors and an older generic
+oral antidiabetic as a cheaper substitute. From Chapter 1 we already established
+its prescriber set (primary care + endocrinology) and that the payer is the
+party absent from the commercial message.
+
+Build a lift-vs-equity profile for this drug, using only the metric framework
+below. Use general market knowledge only; invent NO specific numbers and state
+NO lift or share figure as fact; mark anything uncertain "[verify]".
+
+1. METRIC TABLE. For this drug, fill a table with rows TRx, NRx, NBRx,
+   persistence/DOT, loyalty decile, brand-share-within-eligible-pool. For each:
+   what it would tell a brand team about THIS drug, and its single most
+   important failure mode.
+
+2. GOAL TRANSLATION. The brand director says "grow share next year." Translate
+   that into one primary outcome metric + one guardrail metric, and name the
+   failure mode the primary metric alone would miss. Justify why you chose NBRx
+   (or argue for another) for THIS drug.
+
+3. HEADROOM READ. Describe the two-physician headroom trap for this drug: a
+   high-decile / low-brand-share prescriber vs. a mid-decile / high-brand-share
+   prescriber, and which is the larger opportunity and why.
+
+4. LIFT-OR-BRAND SORT. List three questions a team might ask about this drug and
+   sort each as a LIFT question (needs a control) or a BRAND question (needs
+   longitudinal measurement). Do NOT claim any metric reflects patient benefit.
+
+Output as markdown. End with the one number you would most want to verify before
+acting on this profile.
+```
+
+**What this produces:** A structured lift-vs-equity profile for your drug, with metric choices, guardrails, a headroom read, and a lift/brand sort.
+**How to adapt this prompt:** *For your own drug:* swap the first two sentences (drug, class, substitute) and your Chapter 1 prescriber/payer findings; keep the four-part structure. *For ChatGPT/Gemini:* paste in one message and re-include your Chapter 1 facts since there is no persistent Project. *For a Claude Project:* keep the drug identity and Chapter 1 map in the Project instructions; send only the numbered tasks.
+**Connection to previous chapters:** Uses the Chapter 1 split-agency map (prescriber set, absent payer) as the starting context. **Preview of next chapter:** In Chapter 3 you will assemble this drug's synthetic/public prescriber identity graph and propensity vector — the deciles you reason about here become features there.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building this chapter:** A reproducible local computation of prescriber count and total claims by year for your drug from public Part D data, with a written note on why this is a TRx-style lagging measure. · **Tool:** Claude Code (single dataset, scripted summary). · **Skill level:** Intermediate.
+
+**Setup:**
+1. Download one year-or-two slice of the public Medicare Part D Prescriber file (you will reuse it heavily in Chapter 12) into `one-drug/data/`.
+2. Claude Code installed; Python or DuckDB available.
+3. Add a CLAUDE.md rule: "Only compute over the local data file; never invent counts; print the exact filter used."
+
+**The Task:**
+
+```
+In one-drug/, using the Part D file already in one-drug/data/, do only this:
+
+1. Write a small script (Python+pandas or DuckDB) that filters to one drug's
+   brand name (use the SGLT2 brand you placed in DRUG.txt), and computes, per
+   year present in the data: distinct prescriber count and total claim count.
+2. Compute the year-over-year change in each.
+3. Write ch02-partd-summary.md with the resulting table, the exact drug-name
+   filter string used, and a one-paragraph note explaining why this Part-D count
+   is closer to a lagging TRx-style measure than an NBRx leading indicator, and
+   what additional data you would need to approximate NBRx.
+
+Verification step: print the row count before and after the filter so I can
+confirm the filter actually matched rows. Do not modify the raw data file. Stop
+after writing ch02-partd-summary.md.
+```
+
+**Expected output:** A script, plus `ch02-partd-summary.md` with the per-year table, the filter string, the row-count check, and the TRx-vs-NBRx note.
+**What to inspect:** The pre/post-filter row counts — if "after" is zero or implausibly high, the brand-name match is wrong.
+**If it goes wrong:** Most likely failure is a brand-name string that matches nothing (formatting/casing in the file) yielding an empty table the model then "explains" anyway. Recovery: inspect distinct brand names in the file for the right spelling and re-filter — don't accept a summary built on zero rows.
+**CLAUDE.md / AGENTS.md note:** Add "Every data summary must report the filter string and the pre/post-filter row count."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** The lift-vs-equity profile from Exercise 3 (and the metric reasoning behind the Exercise 4 note). · **Validation type:** Reasoning + Structured-data. · **Risk level:** Med — a mislabeled lift/brand sort will misdirect every study design later in the project.
+
+**Setup:** Use your Exercise 3 output as the artifact.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 2 (Lift-vs-Equity Profile)
+
+Mark each Pass / Fail / Cannot-determine with one line of evidence:
+
+- Correctness: Are TRx, NRx, NBRx defined consistently with the chapter (TRx
+  lagging, NBRx leading)?
+- Completeness: Does every metric row have BOTH a use and a failure mode? Is the
+  primary metric paired with a guardrail?
+- Scope: Did it avoid asserting any metric reflects patient benefit?
+- Chapter-specific 1 (lift vs. brand): Is each sorted question correctly a lift
+  question (control needed) or brand question (longitudinal)? Re-derive two
+  yourself.
+- Chapter-specific 2 (headroom): Is the larger opportunity the high-volume /
+  low-share prescriber, not the already-won high-share one?
+- Failure-mode check (fluent-but-wrong + attribution circularity): Did it state
+  the SOV>SOM rule as a law (wrong), or treat any vendor "lift" figure as causal
+  when the same platform would serve and measure it? Flag any number not marked
+  [verify].
+```
+
+**What to do with your findings:** Pass → adopt the profile. One fail → revise that section and re-run. Multiple/uncertain → redo the lift/brand sort yourself from the chapter's two-ladder logic; this is a "When NOT to Use AI" moment, because the lift/brand call is exactly the judgment the model cannot make for your intervention.
+**AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "drafted the metric table and goal translation") and how you used it, plus one thing it couldn't determine (e.g., "whether my drug's core question is a lift or brand question, which I decided because only I know the intervention's causal structure").
+**Series connection:** Trains detection of **attribution circularity** under **T5 Causal** judgment — refusing to read a same-platform "lift" number as a causal effect.

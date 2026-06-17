@@ -1,0 +1,50 @@
+<!--
+  figure-title: Generation and verification are different acts
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 10-llms-for-commercial-research
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/10-llms-for-commercial-research.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">Generation and verification are different acts</title>
+  <desc>A left-to-right pipeline: an LLM generates a draft, a validation harness sits in the middle, and only after it does the draft become a trustworthy claim. A labeled gap separates generation from verification.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="10-llms-for-commercial-research" figure-number="01" figure-title="Generation and verification are different acts" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/10-llms-for-commercial-research.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Generation and verification are different acts</text>
+
+  <!-- LLM generates draft (left, red = unverified) -->
+  <rect x="32" y="160" width="176" height="80" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="120" y="194" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">LLM GENERATES DRAFT</text>
+  <text x="120" y="214" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">fluent, plausibly sourced</text>
+
+  <!-- arrow draft -> harness -->
+  <line x1="208" y1="200" x2="260" y2="200" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Validation harness (center) -->
+  <rect x="264" y="160" width="176" height="80" rx="0" stroke="#2a1a0e" stroke-width="1.5" fill="#F5F5F5"/>
+  <text x="352" y="194" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">VALIDATION HARNESS</text>
+  <text x="352" y="214" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">resolve, score, flag, review</text>
+
+  <!-- arrow harness -> claim -->
+  <line x1="440" y1="200" x2="492" y2="200" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Trustworthy claim (right) -->
+  <rect x="496" y="160" width="172" height="80" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="582" y="194" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">TRUSTWORTHY CLAIM</text>
+  <text x="582" y="214" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">verified, attributed, reviewed</text>
+
+  <!-- gap band over draft..claim -->
+  <line x1="32" y1="124" x2="668" y2="124" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="350" y="116" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">— the gap this chapter operationalizes —</text>
+
+  <text x="32" y="300" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">A useful draft becomes a trustworthy claim only after every atomic assertion is verified</text>
+  <text x="32" y="316" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">against a real, correctly attributed source and has cleared expert review.</text>
+
+  <text x="32" y="372" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Generation and verification are different acts. The harness is what fills the gap.</text>
+</svg>

@@ -29,6 +29,9 @@ This is why diversity among ensemble members is not an aesthetic preference. It 
 
 Hold that thought. Chapter 7 is going to make a specific claim — that Mixture of Experts systems escape this floor through *routing-induced* specialization. That claim deserves to be examined with exactly this math in hand. But the resolution is not this chapter's problem. The floor is.
 
+![Three-panel diagram of the bias-variance-covariance decomposition. Panel 1: a single model's error as bias-squared plus variance. Panel 2: a ten-model ensemble where the variance term shrinks and a covariance term appears. Panel 3: the covariance floor as N approaches infinity, where ensemble error settles at bias-squared plus covariance.](images/06-ensembles-tabular-advantage-fig-01.png)
+*Figure 6.1 — Adding models reduces variance but cannot reduce correlated error*
+
 <!-- → [DIAGRAM: Three-panel figure showing bias-variance-covariance decomposition. Panel 1: single model error as bias² + variance. Panel 2: 10-model ensemble — variance term shrinks, covariance term appears and grows. Panel 3: the covariance floor: as N → ∞, ensemble error approaches bias² + covar. Caption: "Adding models reduces variance but cannot reduce correlated error. Diversity is what moves the floor."] -->
 
 ---
@@ -41,7 +44,13 @@ The second is **boosting**. Rather than training models independently and averag
 
 The third is **stacking** — David Wolpert, 1992. Train several diverse base models. Then train a *meta-learner* on their out-of-fold predictions: the meta-learner learns which base model to trust in which region of the input space, and combines them accordingly. Remember stacking's definition precisely, because it is the punchline of Chapter 7: **most pharma platforms that describe themselves as running "Mixture of Experts" are actually running stacking**. The terms have been relabeled; the machinery has not changed. Knowing what stacking actually is lets you ask the right question about whether what a vendor is selling is genuinely different.
 
-<!-- → [TABLE: Three-column comparison of bagging, boosting, and stacking. Columns: paradigm, originating idea, primary error component reduced, canonical modern implementation, key weakness. Rows: Bagging (parallel, independent; variance; Random Forest; correlated errors if features overlap), Boosting (sequential, corrective; bias + variance; XGBoost/LightGBM/CatBoost; sensitive to noise), Stacking (meta-learner on base models; both via learned combination; any diverse ensemble + meta-learner; requires careful out-of-fold discipline to avoid leakage).] -->
+| Paradigm | Originating idea | Primary error component reduced | Canonical modern implementation | Key weakness |
+|---|---|---|---|---|
+| Bagging | Parallel, independent models on bootstrap samples, then averaged (Breiman, 1996) | Variance | Random Forest (Breiman, 2001) | Correlated errors if features overlap; cannot beat the covariance floor |
+| Boosting | Sequential, corrective — each model fits the residuals of its predecessors (Freund & Schapire 1997; Friedman 2001) | Bias and variance | XGBoost / LightGBM / CatBoost | Sensitive to noise and outliers; needs careful tuning |
+| Stacking | Meta-learner trained on base models' out-of-fold predictions (Wolpert, 1992) | Both, via learned combination | Any diverse ensemble + meta-learner | Requires strict out-of-fold discipline to avoid leakage; often relabeled "Mixture of Experts" |
+
+*Table 6.1 — Three ways to manufacture ensemble diversity. Stacking is the one to hold precisely: most pharma platforms describing a "Mixture of Experts" are running stacking under a relabeled name.*
 
 ---
 
@@ -61,6 +70,9 @@ The pharma relevance is not a loose analogy. NPI-level propensity prediction is 
 
 One hedge, stated explicitly because otherwise this chapter ages badly: newer tabular deep-learning methods — FT-Transformer, SAINT, and particularly **TabPFN and TabPFN v2 (2024/25)** — are narrowing the gap on some benchmarks, especially on small-sample problems and where large-scale pre-training transfers well. [verify 2026 state of these results.] The Grinsztajn result remains the right anchor for medium tabular data, but it is no longer unchallenged across the entire landscape. The honest framing is not "trees are unbeatable" but "trees are the correct default and baseline; tabular deep learning is an active, not-yet-default frontier." That framing is robust to the next few years of results — even if a deep tabular model eventually wins on your specific problem, you would only know that by beating the tuned tree baseline you built first.
 
+![Bar chart qualitatively reproducing the structure of Grinsztajn et al. 2022 Figure 1: tree-based methods clustered at the top of average normalized performance across 45 tabular datasets, deep-learning methods scattered lower.](images/06-ensembles-tabular-advantage-fig-02.png)
+*Figure 6.2 — Tree-based vs. deep-learning methods on medium tabular data (qualitative reproduction of Grinsztajn et al., NeurIPS 2022, Figure 1; `[verify]` against paper)*
+
 <!-- → [CHART: Bar chart reproducing the qualitative structure of Grinsztajn et al. 2022 Figure 1 — tree-based vs. deep-learning methods ranked by average normalized performance across 45 tabular datasets. Trees clustered at the top; DL methods scattered lower. Caption: "On medium tabular data, gradient-boosted trees consistently outperform deep-learning architectures. This is the benchmark any 'AI platform' claim must beat. Source: Grinsztajn et al., NeurIPS 2022. [verify figure representation against paper before publication.]"] -->
 
 ---
@@ -76,6 +88,9 @@ Discrimination — measured by AUC or AUPRC — answers: can the model rank pres
 **Out-of-time validation** means splitting by time, not by randomly shuffled rows. Pharma data drifts. Prescribing patterns shift with trial publications, label changes, competitor entries. Random cross-validation leaks the future into the training fold and makes your model look more stable than it is. Train on earlier periods. Test on later ones. Any lift in performance you see on a random split that disappears on a time split is a signal the model has memorized temporal regularities it will not have at deployment.
 
 **Subgroup robustness** means evaluating by specialty, decile, and geography separately — not just on the aggregate. A model that is strong on average can be useless on the one segment the campaign actually targets. In my worked example, the aggregate AUC after fixing the leakage was 0.78 and looked defensible. Breaking it out by decile revealed the model was near-useless on low-decile physicians — the exact group a growth campaign cares about most. Aggregate AUC had hidden a segment failure.
+
+![Four-quadrant evaluation checklist. Discrimination (AUC, AUPRC — can it rank?), Calibration (reliability curve, Brier score — does the probability mean what it says?), Temporal validation (out-of-time split — does it hold when the future is actually the future?), and Subgroup robustness (by specialty, decile, geography — where does it fail?), each with a one-line failure mode if skipped.](images/06-ensembles-tabular-advantage-fig-03.png)
+*Figure 6.3 — The four-quadrant evaluation checklist for an honest baseline*
 
 <!-- → [INFOGRAPHIC: Four-quadrant evaluation checklist. Quadrant 1: Discrimination (AUC, AUPRC — "can it rank?"). Quadrant 2: Calibration (reliability curve, Brier score — "does the probability mean what it says?"). Quadrant 3: Temporal validation (out-of-time split — "does it hold when the future is actually the future?"). Quadrant 4: Subgroup robustness (by specialty, decile, geography — "where does it fail?"). Each quadrant includes a one-line failure mode if skipped. Caption: "A model that passes all four is the baseline. A model that passes only the first is the most common mistake."] -->
 
@@ -96,23 +111,6 @@ What you have by the end of this chapter is the baseline: a tuned, calibrated, l
 That number is the bar. Every claim in Chapter 7 — "we run a Mixture of Experts," "our deep model beats trees," "our routing architecture unlocks specialist knowledge the ensemble misses" — has to clear it. Not on some internal holdout set with a different data distribution, not on a random split that leaks temporal regularities, not on aggregate AUC that hides a segment failure. On the same task, evaluated the same way.
 
 The boring thing is hard to beat. Building it correctly is the proof.
-
-**Five-part AI exercise block**
-
-**When to use AI here.** Use an LLM or CLI assistant to scaffold the pipeline — generate the join logic for Open Payments and Part D data, draft the cross-validation harness, produce the calibration curve and subgroup evaluation plots. It is a fast, competent pair programmer for boilerplate.
-
-**When NOT to use AI here.** Do not let an AI decide your as-of timestamp or vet your features for leakage on its own. Whether a feature postdates the prediction point depends on pharma data-plumbing facts — claims lag, revision cycles, broker processing delays — that the model does not know about your specific source. Leakage detection is the human judgment this chapter trains. An LLM will happily build you a beautiful, leaking pipeline.
-
-**LLM exercise (copy-paste prompt):**
-> "Here is my feature list and my prediction timestamp for an NPI-propensity model on Medicare Part D and Open Payments data. For each feature, ask me the questions you'd need answered to determine whether it could leak the outcome — do not assume, ask. Then propose a calibration and out-of-time validation plan based on my answers."
-
-**CLI exercise.** With a public extract loaded, use command-line tooling to compute the date distribution of your claims records (`csvstat` or `awk` on the fill-date column) and show yourself the lag between service date and recorded date. Then count how many "post-exposure" records have service dates that predate a hypothetical exposure window. This makes the claims-lag illusion concrete with real numbers rather than an abstraction.
-
-**AI validation.** Have the AI generate the full evaluation report, then audit it: re-run the calibration on a held-out *time* split yourself, confirm the AUC was not computed on a random split, and confirm no feature in the final model postdates the as-of timestamp. Record any leakage the AI's pipeline introduced.
-
-## AI Use Disclosure
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to scaffold the pipeline and draft the evaluation harness; I decided which features leak given the claims-lag behavior of my specific data source, because that is pharma data-plumbing knowledge the model does not have."*
 
 ## What Would Change My Mind
 
@@ -153,3 +151,164 @@ I would retire "gradient-boosted trees are the correct baseline for NPI propensi
 **Challenge**
 
 9. *(Challenge — open-ended) What this tests: critical evaluation of a vendor benchmark.* A pharma platform vendor publishes a white paper claiming their deep-learning model achieves AUC 0.91 on NPI propensity prediction versus 0.83 for "standard gradient boosting." Write the three questions you would ask to evaluate the claim — including questions about the split strategy, the feature set, calibration reporting, and whether the comparison baseline was tuned — and state precisely what evidence would justify abandoning the tree baseline in favor of the vendor's model.
+
+---
+
+## Prompts
+
+### Figure 6.1 — Adding models reduces variance but cannot reduce correlated error
+
+Build a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN. Render a three-panel stacked-bar diagram of the bias-variance-covariance decomposition of ensemble error. Panel 1 (single model): two stacked segments, bias² and variance. Panel 2 (10-model ensemble): bias² unchanged, variance segment shrunk to ~1/10, a new covariance segment appearing. Panel 3 (N → ∞): bias² plus covariance only, variance gone — annotate the covariance floor with a horizontal reference line. Shared zero-baseline y-axis for total error across panels so heights are comparable. Use ink for bias², gray for variance, red for covariance (the load-bearing term). Label each segment with its name. Interactive: hovering a segment shows its formula contribution. Deliverable: one HTML file, inline CSS, CSS-variable theming with light/dark media query, D3 7.9.0 only.
+
+### Figure 6.2 — Tree-based vs. deep-learning methods on medium tabular data
+
+Build a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN. Render a horizontal bar chart, one bar per method, ranked by average normalized performance across 45 tabular datasets — a qualitative reproduction of Grinsztajn et al. 2022 Figure 1, not exact values. Sort descending so tree-based methods (GBT, Random Forest, XGBoost) cluster at the top and deep-learning methods (FT-Transformer, ResNet, MLP, SAINT) fall lower. Zero-baseline x-axis. Color tree methods in red (the one data series of interest), deep-learning methods in ink/gray. Title and caption must state this is a qualitative reproduction and `[verify]` against the paper; never present the bar heights as exact published values. Interactive: hovering a bar shows method family and approximate rank. Deliverable: one HTML file, inline CSS, CSS-variable theming with light/dark media query, D3 7.9.0 only.
+
+### Figure 6.3 — The four-quadrant evaluation checklist for an honest baseline
+
+Build a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN. Render a 2×2 grid of equal quadrants: Discrimination (AUC, AUPRC — "can it rank?"), Calibration (reliability curve, Brier score — "does the probability mean what it says?"), Temporal validation (out-of-time split — "does it hold when the future is the future?"), Subgroup robustness (by specialty, decile, geography — "where does it fail?"). Each quadrant shows its metrics and a one-line failure mode if skipped. No axes; this is a layout infographic. Use ink boxes with a thin red accent on the most-skipped quadrant (calibration). Interactive: clicking a quadrant reveals its failure-mode detail. Deliverable: one HTML file, inline CSS, CSS-variable theming with light/dark media query, D3 7.9.0 only.
+
+---
+
+## Chapter 6 Exercises: Ensembles and the Tabular-Data Advantage
+
+**Project:** One Drug, End to End
+**This chapter adds:** A calibrated, leakage-checked propensity baseline for your drug's prescribers, built from public data — the honest AUC that every later claim in the series must beat.
+
+Throughout the series we carry one branded drug end to end. The worked example is **Jardiance (empagliflozin)**, a branded SGLT2 inhibitor in a crowded class — branded competitors (Farxiga, Invokana) alongside cheaper generic alternatives (metformin, sulfonylureas). Every prompt is written for Jardiance and copy-pastes as-is; adaptation notes tell you how to swap in your own drug. This chapter lays the first stone: the propensity baseline.
+
+### Exercise 1 — When to Use AI
+
+You have a public Open Payments and Medicare Part D extract and a target: score each prescriber's propensity to start Jardiance. Hand the AI the mechanical scaffolding.
+
+1. Ask an LLM to draft the join logic that links Open Payments records to Part D prescribing by NPI, plus a stratified out-of-time split harness (train on earlier quarters, test on later ones). *Why AI works here:* code generation against a stated schema — a task type where the output is deterministic and runnable.
+2. Have it generate the reliability-curve and per-decile subgroup evaluation plots from your scored predictions. *Why AI works here:* boilerplate visualization from a fixed dataframe — mechanical transformation, not judgment.
+
+**The tell:** you can independently evaluate the output — run the code, read the AUC, eyeball the calibration plot. The result is checkable against ground truth you hold.
+
+### Exercise 2 — When NOT to Use AI
+
+1. Do not let the AI decide your as-of timestamp or clear your Jardiance feature list of leakage on its own. Whether a "recent-fill flag" postdates the prediction point depends on the claims-lag behavior of your specific Part D source — facts not in the model's training data. *Why AI fails here:* ground-truth — the model cannot know your data plumbing, so it will build a beautiful, leaking pipeline (the 0.94-that-should-be-0.78 trap from the opening case).
+2. Do not let the AI declare your propensity scores "calibrated." It will read a Brier score back to you as a verdict rather than running the held-out-time reliability check that earns the word. *Why AI fails here:* calibration — co-equal with discrimination for spend decisions and load-bearing for Chapter 8's CATE base learners, and not certifiable from fluent output.
+
+**The tell:** if the AI's claim ("no leakage," "well calibrated") is your *reason* to believe, you have failed; if it is a *tool* whose output you then verify against a time split, you are fine. **Series connection:** this is a **T6** judgment — miscalibration masquerading as accuracy. A propensity score that *looks* accurate but is silently miscalibrated corrupts every downstream uplift and brand estimate in the series. The human owns the leakage and calibration calls.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** an ensemble-baseline memo for Jardiance propensity — target definition, as-of timestamp, feature set with a per-feature leakage check, ensemble and tuning choice, and the four-quadrant evaluation plan.
+
+**Tool:** Claude, run as a **Claude Project**. Persistent drug-context helps because every chapter in this series adds to the same Jardiance case — a Project keeps the drug, class, competitors, and data sources resident so you never re-paste them, and so Chapter 8's uplift work inherits this chapter's baseline definition.
+
+**The Prompt:**
+
+```
+You are helping me build the propensity-baseline memo for a running case study on
+one branded drug carried end to end. The drug is Jardiance (empagliflozin), a
+branded SGLT2 inhibitor for type 2 diabetes. Its class has branded competitors
+(Farxiga, Invokana) and cheaper generic alternatives (metformin, sulfonylureas).
+Data is PUBLIC ONLY: CMS Open Payments and Medicare Part D Prescriber data, joined
+by NPI. No proprietary or patient-level data.
+
+Target: predict whether a prescriber will be a new-to-Jardiance starter in the
+quarter following an as-of date of January 1.
+
+Produce a draft memo with these sections, and for the leakage check, ASK ME the
+questions you need rather than assuming:
+
+1. Target definition (new-to-brand starter, stated precisely).
+2. As-of timestamp and why it matters given claims-processing lag.
+3. Candidate feature set from public data (prior Jardiance and class volume,
+   Open Payments meal/speaker counts, specialty, geography, trend features),
+   and for EACH feature, the one question you'd need answered to rule out that it
+   postdates the as-of date.
+4. Ensemble choice (default to a gradient-boosted tree ensemble) and why trees are
+   the correct baseline on this tabular problem — reference the Grinsztajn et al.
+   (NeurIPS 2022) result and its scope conditions.
+5. The four-quadrant evaluation plan: discrimination, calibration, out-of-time
+   validation, subgroup robustness by specialty and decile.
+
+Flag any claim about competitor pricing or class effects as [verify]. Do not
+assign a final calibration verdict — describe the check I must run myself.
+
+ADAPTATION: to use your own drug, replace Jardiance with your branded drug, its
+class, its branded competitors, and its generic alternatives, and keep everything
+else. To run in ChatGPT or Gemini, paste the drug context at the top of each
+session since they lack a persistent Project.
+```
+
+**What this produces:** a structured baseline memo with a feature-by-feature leakage interrogation — the exact artifact Chapter 7's vendor audit and Chapter 8's uplift work build on.
+
+**How to adapt:** swap the drug block for your own brand; in ChatGPT/Gemini re-paste the drug context each session; in a Claude Project, save the drug block as Project knowledge so it persists.
+
+**Connection to previous chapters:** the memo operationalizes the vendor-claim skepticism from Chapters 1 and 5 — instead of grading someone's number, you build the honest one.
+
+**Preview of next chapter:** this baseline AUC is literally the bar a vendor's "Mixture of Experts" claim must clear in Chapter 7's sixth buyer question.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** a concrete measurement of the claims-lag illusion in your own extract — the date distribution between service date and recorded date.
+
+**Tool:** Claude Code (or Cowork) — it can read your local CSVs, run shell tooling, and write a short script in one loop. **Skill level:** beginner-to-intermediate (comfortable running a notebook or `awk`).
+
+**Setup:**
+- [ ] A public Part D extract (or a synthetic claims file) with a service-date and a recorded/adjudicated-date column in your working directory.
+- [ ] `csvkit` or Python+pandas available.
+- [ ] A scratch folder for outputs; nothing else writable.
+
+**The Task:**
+
+```
+Read ONLY the claims CSV in ./data/ (do not modify it). Compute the distribution
+of (recorded_date - service_date) in days. Then, assuming a hypothetical Jardiance
+marketing-exposure window of the most recent 90 days, COUNT how many records fall
+inside a naive "post-exposure" outcome window but have a SERVICE date that predates
+the exposure window start — i.e., scripts that look like responses but were written
+before the contact.
+
+Write the day-lag histogram and the contaminated-record count to
+./outputs/claims-lag-report.txt. Do not write anywhere else. Do not alter the
+source CSV. Stop when the report file exists, then print its contents so I can
+verify the numbers myself.
+```
+
+**Expected output:** a histogram of recording lag plus a single count of fills that would inflate naive Jardiance "lift" purely through bookkeeping.
+
+**What to inspect:** is the contaminated-record count non-trivial? Does the lag distribution have a long tail past 90 days? Confirm the source CSV's modification time is unchanged.
+
+**If it goes wrong:** if Claude Code edits the source CSV (failure), recover from your untouched copy and re-run with the read-only scope restated; if it invents a lag column that does not exist, point it at the real column names and re-run.
+
+**CLAUDE.md note:** add `Treat all files in ./data/ as read-only source data; write only to ./outputs/.`
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** the evaluation report the AI produced for your Jardiance baseline (from Ex3/Ex4) — specifically whether its "calibrated, leakage-free, validated" framing survives scrutiny.
+
+**Validation type:** correctness-and-calibration audit of a generated analytic artifact. **Risk level:** high — because a miscalibrated propensity score silently corrupts the entire downstream series (uplift in Ch8, brand work in Ch9), and the failure is invisible in fluent output.
+
+**Setup:** use your Ex3 memo and Ex4 report. If you need a specific failure to practice on, have the AI generate a deliberately flawed evaluation that reports AUC from a *random* (not time) split and calls the model "well calibrated" on the strength of a single Brier number.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 6 (Jardiance propensity baseline)
+
+Mark each Pass / Fail / Cannot-determine:
+- Correctness: Is the reported AUC computed on an out-of-TIME split, not a random
+  shuffle?
+- Completeness: Are all four evaluation quadrants present (discrimination,
+  calibration, out-of-time, subgroup)?
+- Scope: Does every feature use only public, pre-as-of-date data?
+- Calibration criterion: Is there a reliability curve on a HELD-OUT TIME split, not
+  just a Brier scalar?
+- Subgroup criterion: Is performance broken out by decile, exposing any low-decile
+  failure the aggregate hides?
+- Failure-mode check: Look specifically for miscalibration-masquerading-as-accuracy
+  — a fluent "well-calibrated" claim backed only by a single number — and for any
+  missing ground truth (a claim of "no leakage" with no stated as-of check).
+```
+
+**What to do with findings:** all Pass — the baseline is defensible and becomes the series anchor. One Fail — fix that layer (re-run the time split, add the decile breakout) and re-validate. Multiple Fails — discard the AI's verdict, rebuild the evaluation yourself, and treat the original report as a fluency-trap exhibit.
+
+**AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to draft the join logic and the four-quadrant evaluation harness for the Jardiance baseline; I decided which features leak and whether the scores were truly calibrated, because that requires the claims-lag knowledge of my specific Part D source and a held-out-time reliability check the model cannot certify."* (Mandatory.)
+
+**Series connection:** the failure mode here is **miscalibration-masquerading-as-accuracy** at tier **T6** — the same class of silent error that, uncaught, propagates into every downstream chapter of the One Drug case.

@@ -1,0 +1,91 @@
+<!--
+  figure-title: Staggered adoption: TWFE forbidden comparisons vs. clean controls
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 12-research-design-public-data
+  Figure: 02
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/12-research-design-public-data.md
+-->
+<svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">Staggered adoption: TWFE forbidden comparisons vs. clean controls</title>
+  <desc>Three panels. Left: three units adopt treatment in 2006, 2009, and 2012, plus a never-treated control unit. Center: two-way fixed effects, where an early-treated unit is wrongly used as a control for a later-treated unit — a forbidden comparison marked in red. Right: Callaway and Sant'Anna, where each treated cohort is compared only to not-yet-treated and never-treated units.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="12-research-design-public-data" figure-number="02" figure-title="Staggered adoption: TWFE forbidden comparisons vs. clean controls" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/12-research-design-public-data.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#C8102E"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Three units adopt at different dates — which comparisons are allowed?</text>
+
+  <!-- ============ PANEL 1: adoption structure ============ -->
+  <text x="32" y="70" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">1 · Adoption structure</text>
+  <rect x="32" y="80" width="216" height="220" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <!-- rows: untreated (light) vs treated (dark) split at adoption year -->
+  <!-- 2006 unit -->
+  <rect x="44" y="98" width="40" height="20" fill="#D4D4D4"/>
+  <rect x="84" y="98" width="148" height="20" fill="#2a1a0e"/>
+  <text x="44" y="112" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#FFFFFF">U1</text>
+  <text x="86" y="112" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#FFFFFF">2006</text>
+  <!-- 2009 unit -->
+  <rect x="44" y="142" width="92" height="20" fill="#D4D4D4"/>
+  <rect x="136" y="142" width="96" height="20" fill="#2a1a0e"/>
+  <text x="44" y="156" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">U2</text>
+  <text x="138" y="156" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#FFFFFF">2009</text>
+  <!-- 2012 unit -->
+  <rect x="44" y="186" width="148" height="20" fill="#D4D4D4"/>
+  <rect x="192" y="186" width="40" height="20" fill="#2a1a0e"/>
+  <text x="44" y="200" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">U3</text>
+  <text x="160" y="200" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">2012</text>
+  <!-- never-treated -->
+  <rect x="44" y="230" width="188" height="20" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="48" y="244" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">C · never treated</text>
+  <!-- axis -->
+  <text x="44" y="276" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">2004</text>
+  <text x="192" y="276" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">2014</text>
+  <text x="44" y="294" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">dark = treated; light = untreated</text>
+
+  <!-- ============ PANEL 2: TWFE forbidden comparison ============ -->
+  <text x="272" y="70" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">2 · TWFE — forbidden</text>
+  <rect x="272" y="80" width="216" height="220" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <!-- early-treated U1 (already treated) -->
+  <rect x="284" y="98" width="40" height="20" fill="#D4D4D4"/>
+  <rect x="324" y="98" width="148" height="20" fill="#2a1a0e"/>
+  <text x="286" y="112" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#FFFFFF">U1 '06</text>
+  <!-- late-treated U3 -->
+  <rect x="284" y="186" width="148" height="20" fill="#D4D4D4"/>
+  <rect x="432" y="186" width="40" height="20" fill="#2a1a0e"/>
+  <text x="286" y="200" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">U3 2012</text>
+  <!-- forbidden comparison arrow (red) -->
+  <line x1="398" y1="120" x2="398" y2="184" stroke="#C8102E" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arrowred)"/>
+  <text x="284" y="148" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">already-treated U1</text>
+  <text x="284" y="164" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">used as control for U3</text>
+  <text x="284" y="240" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">U1 already adjusted —</text>
+  <text x="284" y="256" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">a forbidden comparison.</text>
+  <text x="284" y="284" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Coefficient can flip sign.</text>
+
+  <!-- ============ PANEL 3: Callaway-Sant'Anna clean controls ============ -->
+  <text x="512" y="70" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">3 · Callaway–Sant'Anna</text>
+  <rect x="512" y="80" width="216" height="220" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <!-- treated cohort U3 -->
+  <rect x="524" y="98" width="148" height="20" fill="#D4D4D4"/>
+  <rect x="672" y="98" width="40" height="20" fill="#2a1a0e"/>
+  <text x="526" y="112" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">U3 2012</text>
+  <!-- not-yet-treated control -->
+  <rect x="524" y="186" width="188" height="20" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="528" y="200" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">not-yet / never treated</text>
+  <!-- clean comparison arrow (ink) -->
+  <line x1="600" y1="120" x2="600" y2="184" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="608" y="148" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">compared</text>
+  <text x="608" y="164" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">only to clean</text>
+  <text x="608" y="180" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">controls</text>
+  <text x="524" y="240" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Group-time ATT, then</text>
+  <text x="524" y="256" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">aggregated transparently.</text>
+  <text x="524" y="284" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">No forbidden comparisons.</text>
+
+  <!-- Caption -->
+  <text x="32" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">TWFE uses forbidden comparisons under heterogeneous effects — already-treated units as controls for</text>
+  <text x="32" y="360" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">later-treated ones. The modern fix uses only not-yet-treated and never-treated units as clean controls.</text>
+  <text x="32" y="384" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: GOODMAN-BACON 2021; CALLAWAY &amp; SANT'ANNA 2021 — METHOD IS ESTABLISHED; ILLUSTRATIVE UNITS</text>
+</svg>

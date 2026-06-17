@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 9.1 — The brand-formation loop</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .node rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-white);}
+  .node.focal rect{stroke:var(--color-ink);stroke-width:1.5;fill:var(--color-fill);}
+  .node-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;fill:var(--color-ink);}
+  .node-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .flow-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .flow-marketing{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-red);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .node:focus{outline:none;}
+  .node:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">How a brand association forms: marketing acts at the mental-association node</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">Marketing content acts at the mental-association node; prescriptions are the lagging proof. Whether this brand equity tracks a drug's clinical value is an untested open question, not a measured relationship.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  nodes:[
+    {id:"clinical-evidence", label:"clinical evidence", sub:"+ label", x:32, y:80, w:120, h:44, focal:false, tip:"The trial evidence and regulatory label — the raw clinical inputs that begin the chain."},
+    {id:"kol", label:"KOL + guideline", sub:"interpretation", x:192, y:80, w:120, h:44, focal:false, tip:"Key opinion leaders and guideline committees interpret the evidence for the field."},
+    {id:"promotion", label:"detailing · CME", sub:"congress", x:352, y:80, w:120, h:44, focal:false, tip:"The promotional layer: sales detailing, sponsored CME, congress presence."},
+    {id:"association", label:"HCP mental association", sub:"“Brand X is for this kind of patient”", x:488, y:156, w:168, h:76, focal:true, tip:"FOCAL NODE. The durable mental association is where marketing content acts. Whether it tracks clinical value is an untested open question."},
+    {id:"trial", label:"first patient trial", sub:"→ outcome + access", x:512, y:272, w:144, h:44, focal:false, tip:"The prescriber tries the brand on a first patient; outcome and access then feed back."},
+    {id:"repeat", label:"repeat prescribing", sub:"or abandonment", x:332, y:272, w:144, h:44, focal:false, tip:"Based on the observed trial, the prescriber repeats or abandons the brand."},
+    {id:"habit", label:"habit · loyalty", sub:"advocacy or switching", x:152, y:272, w:144, h:44, focal:false, tip:"Repeated use hardens into habit, loyalty and advocacy — or switching away."}
+  ],
+  flows:[
+    {from:"clinical-evidence", to:"kol", type:"h"},
+    {from:"kol", to:"promotion", type:"h"},
+    {from:"promotion", to:"association", type:"marketing", label:"marketing acts here"},
+    {from:"association", to:"trial", type:"v"},
+    {from:"trial", to:"repeat", type:"h"},
+    {from:"repeat", to:"habit", type:"h"},
+    {from:"habit", to:"association", type:"loop", label:"loop-back"}
+  ]
+};
+const W=700,H=420;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The brand-formation loop: from clinical evidence through the durable mental association to repeat prescribing and back");
+svg.append("desc").attr("id","chart-desc").text("A directed process chain that closes into a loop. Clinical evidence and label flow through KOL interpretation and the promotional layer into a central HCP mental-association node, then to first trial, repeat-or-abandon, and habit and loyalty, which loops back. The association node is the focal node where marketing acts.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+function nodeById(id){return FALLBACK_DATA.nodes.find(n=>n.id===id);}
+
+function draw(){
+  svg.selectAll(".flow,.flowlabel").remove();
+  FALLBACK_DATA.flows.forEach(f=>{
+    const a=nodeById(f.from), b=nodeById(f.to);
+    if(f.type==="h"){
+      const left = a.x<b.x;
+      const x1 = left ? a.x+a.w : a.x;
+      const x2 = left ? b.x : b.x+b.w;
+      const y = a.y+a.h/2;
+      svg.append("line").attr("class","flow").attr("aria-hidden","true")
+        .attr("x1",x1).attr("y1",y).attr("x2",x2-4).attr("y2",y)
+        .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    } else if(f.type==="v"){
+      const x = a.x+a.w/2;
+      svg.append("line").attr("class","flow").attr("aria-hidden","true")
+        .attr("x1",x).attr("y1",a.y+a.h).attr("x2",x).attr("y2",b.y-4)
+        .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    } else if(f.type==="marketing"){
+      svg.append("line").attr("class","flow").attr("aria-hidden","true")
+        .attr("x1",472).attr("y1",102).attr("x2",512).attr("y2",150)
+        .attr("stroke","var(--color-red)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+      svg.append("text").attr("class","flowlabel flow-marketing")
+        .attr("x",500).attr("y",118).text(f.label);
+    } else if(f.type==="loop"){
+      svg.append("path").attr("class","flow").attr("aria-hidden","true")
+        .attr("d","M 152 286 L 92 286 L 92 178 L 484 178")
+        .attr("fill","none").attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+      svg.append("text").attr("class","flowlabel flow-label").attr("x",100).attr("y",240).text(f.label);
+    }
+  });
+
+  svg.selectAll(".node").data(FALLBACK_DATA.nodes,d=>d.id).join(
+    enter=>{
+      const grp=enter.append("g").attr("class",d=>"node"+(d.focal?" focal":""))
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.label+": "+d.sub);
+      grp.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",d=>d.w).attr("height",d=>d.h).attr("rx",0);
+      grp.append("text").attr("class","node-label").attr("x",d=>d.x+d.w/2).attr("y",d=>d.y + (d.focal?28:20)).attr("text-anchor","middle").text(d=>d.label);
+      grp.append("text").attr("class","node-sub").attr("x",d=>d.x+d.w/2).attr("y",d=>d.y + (d.focal?46:36)).attr("text-anchor","middle").text(d=>d.sub);
+      grp.filter(d=>d.id==="association").append("text").attr("class","node-sub").attr("x",d=>d.x+d.w/2).attr("y",d=>d.y+62).attr("text-anchor","middle").text("focal node");
+      return grp;
+    }
+  );
+  function show(event,d){
+    tip.style("opacity",1).html(d.tip)
+      .style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");
+  }
+  function hide(){tip.style("opacity",0);}
+  svg.selectAll(".node")
+   .on("mousemove",show).on("mouseleave",hide)
+   .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+   .on("blur",hide)
+   .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

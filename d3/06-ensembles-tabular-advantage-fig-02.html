@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 6.2 — Tree-based vs. deep-learning on tabular data</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 2px;}
+  .sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;color:var(--color-secondary);margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .tick text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .axis path,.axis line{stroke:var(--color-border);}
+  .grid line{stroke:var(--color-border);stroke-dasharray:5 4;}
+  .mlabel{font-size:11px;fill:var(--color-ink);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  rect.bar{cursor:pointer;}rect.bar:focus{outline:2px solid var(--color-ochre);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-size:12px;color:var(--color-ink);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Average normalized performance across 45 tabular datasets</p>
+  <p class="sub">Qualitative reproduction of Grinsztajn et al., NeurIPS 2022, Fig. 1 — [verify] against paper; heights are not exact published values</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {method:"XGBoost (GBT)",family:"tree",score:0.95},
+  {method:"Gradient Boosting",family:"tree",score:0.93},
+  {method:"Random Forest",family:"tree",score:0.89},
+  {method:"FT-Transformer",family:"deep",score:0.78},
+  {method:"SAINT",family:"deep",score:0.72},
+  {method:"ResNet (tabular)",family:"deep",score:0.66},
+  {method:"MLP",family:"deep",score:0.58},
+  {method:"Transformer",family:"deep",score:0.50}
+].sort((a,b)=>b.score-a.score);
+const data=FALLBACK_DATA;const tip=d3.select("#tip");
+const margin={top:48,right:40,bottom:56,left:140};
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const iw=W-margin.left-margin.right,ih=H-margin.top-margin.bottom;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Tree-based vs deep-learning on tabular data");
+  svg.append("desc").attr("id","chart-desc").text("Horizontal bars; tree methods cluster at the top, deep learning lower. Qualitative reproduction.");
+  const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const x=d3.scaleLinear().domain([0,1]).range([0,iw]);
+  const y=d3.scaleBand().domain(data.map(d=>d.method)).range([0,ih]).padding(0.25);
+  g.append("rect").attr("width",iw).attr("height",ih).attr("fill",cv("--color-fill")).attr("stroke",cv("--color-border")).attr("stroke-width",0.75);
+  g.append("g").attr("class","grid").attr("aria-hidden","true").attr("transform",`translate(0,${ih})`).call(d3.axisBottom(x).ticks(2).tickSize(-ih).tickFormat(""));
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${ih})`).call(d3.axisBottom(x).ticks(2));
+  g.selectAll(".tick text").attr("class","tick");
+  g.selectAll("g.row").data(data).join("g").attr("class","row").each(function(d){
+    const col=d.family==="tree"?cv("--color-red"):(d.score>=0.7?cv("--color-ink"):cv("--color-secondary"));
+    d3.select(this).append("rect").attr("class","bar").attr("tabindex",0)
+      .attr("aria-label",`${d.method}: ${d.family}, score ${d.score}`)
+      .attr("x",0).attr("y",y(d.method)).attr("width",x(d.score)).attr("height",y.bandwidth())
+      .attr("fill",col).attr("rx",0)
+      .on("mousemove",(e)=>showTip(e,d)).on("mouseleave",hideTip)
+      .on("keydown",(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,d);}});
+    d3.select(this).append("text").attr("class","mlabel").attr("text-anchor","end")
+      .attr("x",-8).attr("y",y(d.method)+y.bandwidth()/2+4).text(d.method);
+  });
+  g.append("text").attr("text-anchor","end").attr("x",iw-4).attr("y",y(data[1].method)+10).attr("font-size","10px").attr("fill",cv("--color-red")).text("tree-based — the bar to beat");
+  svg.append("text").attr("text-anchor","middle").attr("x",margin.left+iw/2).attr("y",H-16).attr("font-size","12px").attr("fill",cv("--color-ink")).text("normalized test performance (qualitative)");
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-margin.right).attr("y",H-2).text("SOURCE: GRINSZTAJN ET AL. 2022 — QUALITATIVE REPRODUCTION");
+}
+function showTip(e,d){tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px").html(`<strong>${d.method}</strong><br>family: ${d.family}<br>~normalized score: ${d.score}`);}
+function hideTip(){tip.style("opacity",0);}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

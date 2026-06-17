@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 2.1 — Brand share within the eligible pool reveals headroom</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .axis path,.axis line{stroke:var(--color-ink);}
+  .axis text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .quad line{stroke:var(--color-border);stroke-width:0.75;stroke-dasharray:5 4;}
+  .quad-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:#787878;}
+  .axis-title{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .pt-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);font-weight:600;}
+  .pt-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .pt:focus{outline:none;}
+  .pt:focus circle{stroke:var(--color-ink);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">The targeting trap: a high-volume, low-share prescriber is the larger opportunity</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">A model that ranks by predicted volume picks Dr. Y, who is already won. Dr. X is the larger opportunity — far more prescribing left to convert.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {name:"Dr. X", decile:10, share:5, red:true, sub:"huge volume, almost unconverted", tip:"Decile 10 (enormous volume) but only 5% brand share — high headroom, the larger opportunity."},
+  {name:"Dr. Y", decile:5, share:60, red:false, sub:"largely won already", tip:"Decile 5 (half the volume) but 60% brand share — already largely won; little headroom left."}
+];
+const W=700,H=420, margin={top:48,right:40,bottom:56,left:64};
+const iw=W-margin.left-margin.right, ih=H-margin.top-margin.bottom;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("Brand share within the eligible pool reveals headroom");
+svg.append("desc").attr("id","chart-desc").text("Scatter of prescribing decile against brand share, with two named cardiologists illustrating the headroom trap.");
+const tip=d3.select("#tooltip");
+
+function draw(){
+  svg.selectAll("g.root").remove();
+  const g=svg.append("g").attr("class","root").attr("transform",`translate(${margin.left},${margin.top})`);
+  g.append("rect").attr("x",0).attr("y",0).attr("width",iw).attr("height",ih).attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+  const x=d3.scaleLinear().domain([0,100]).range([0,iw]);
+  const y=d3.scaleLinear().domain([1,10]).range([ih,0]);
+  // quadrant dividers
+  const q=g.append("g").attr("class","quad").attr("aria-hidden","true");
+  q.append("line").attr("x1",x(50)).attr("y1",0).attr("x2",x(50)).attr("y2",ih);
+  q.append("line").attr("x1",0).attr("y1",y(5.5)).attr("x2",iw).attr("y2",y(5.5));
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${ih})`).call(d3.axisBottom(x).tickValues([0,50,100]).tickFormat(d=>d+"%"));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).tickValues([1,5,10]));
+  g.append("text").attr("class","axis-title").attr("x",iw/2).attr("y",ih+44).attr("text-anchor","middle").text("Brand share within category");
+  g.append("text").attr("class","axis-title").attr("transform","rotate(-90)").attr("x",-ih/2).attr("y",-44).attr("text-anchor","middle").text("Prescribing decile");
+  // quadrant labels
+  [["high headroom",25,9.4],["already won",75,9.4],["low priority",25,1.6],["efficiently converted",75,1.6]].forEach(l=>{
+    g.append("text").attr("class","quad-label").attr("x",x(l[1])).attr("y",y(l[2])).attr("text-anchor","middle").text(l[0]);
+  });
+  const pts=g.selectAll(".pt").data(FALLBACK_DATA).join("g").attr("class","pt")
+    .attr("tabindex",0).attr("role","img").attr("aria-label",d=>d.name+", decile "+d.decile+", "+d.share+"% share");
+  pts.append("circle").attr("cx",d=>x(d.share)).attr("cy",d=>y(d.decile)).attr("r",9).attr("fill",d=>d.red?"var(--color-red)":"var(--color-ink)");
+  pts.append("text").attr("class","pt-label").attr("x",d=>x(d.share)+14).attr("y",d=>y(d.decile)-4).text(d=>d.name+" — decile "+d.decile+", "+d.share+"% share");
+  pts.append("text").attr("class","pt-sub").attr("x",d=>x(d.share)+14).attr("y",d=>y(d.decile)+12).text(d=>d.sub);
+  pts.on("mousemove",(event,d)=>tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+     .on("mouseleave",()=>tip.style("opacity",0))
+     .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+     .on("blur",()=>tip.style("opacity",0))
+     .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

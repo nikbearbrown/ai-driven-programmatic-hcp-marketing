@@ -1,0 +1,67 @@
+<!--
+  Title: The Qini / uplift curve
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 08-uplift-and-incrementality
+  Figure: 02
+  Type: Statistical (curve chart)
+  Generated: 2026-06-16
+  Source: pantry/08-uplift-and-incrementality-cajal.md
+-->
+<svg viewBox="0 0 700 450" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">The Qini curve: cumulative incremental response against fraction targeted, with perfect, actual, and random curves</title>
+  <desc>Three curves share an origin and endpoint: a perfect-model curve rising steeply then flattening, an actual-model curve bowing moderately above the diagonal, and a random-targeting straight diagonal. The shaded area between the actual curve and the diagonal is the Qini coefficient.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="08-uplift-and-incrementality" figure-number="02" figure-title="The Qini / uplift curve" figure-slug="qini-uplift-curve" figure-type="Statistical" priority="Critical" author="Nik Bear Brown" date-generated="2026-06-16" source-file="pantry/08-uplift-and-incrementality-cajal.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="450" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The Qini curve: how much incremental response a targeting ranking captures</text>
+
+  <!-- Plot: x 64..620, y 64..344. origin (64,344) endpoint (620,64) -->
+  <rect x="64" y="64" width="556" height="280" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- Qini shaded region: between actual curve and diagonal -->
+  <!-- diagonal: (64,344)->(620,64). actual bows above. Fill path. -->
+  <path d="M 64 344 Q 200 180 360 116 Q 500 80 620 64 L 64 344 Z" fill="#C8102E" fill-opacity="0.10"/>
+
+  <!-- axes -->
+  <line x1="64" y1="344" x2="620" y2="344" stroke="#2a1a0e" stroke-width="1.5"/>
+  <line x1="64" y1="344" x2="64" y2="64" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- random diagonal (gray, straight) -->
+  <line x1="64" y1="344" x2="620" y2="64" stroke="#787878" stroke-width="1.5" stroke-dasharray="5 4"/>
+
+  <!-- perfect model curve (ink, steep then flat) -->
+  <path d="M 64 344 Q 120 100 240 72 L 620 64" fill="none" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- actual model curve (red, intermediate bow) -->
+  <path d="M 64 344 Q 200 180 360 116 Q 500 80 620 64" fill="none" stroke="#C8102E" stroke-width="1.5"/>
+
+  <!-- knee annotation on actual curve (~x=360,y=116) -->
+  <circle cx="360" cy="116" r="3.5" fill="#C8102E"/>
+  <line x1="360" y1="116" x2="360" y2="344" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="356" y="200" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="end">persuadables</text>
+  <text x="376" y="200" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="start">sure things</text>
+  <text x="364" y="138" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">knee</text>
+
+  <!-- curve descriptors -->
+  <text x="232" y="84" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">perfect</text>
+  <text x="430" y="116" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">actual</text>
+  <text x="470" y="180" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">random</text>
+  <text x="138" y="266" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Qini area</text>
+
+  <!-- axis labels -->
+  <text x="342" y="384" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">fraction of population targeted</text>
+  <text x="40" y="204" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle" transform="rotate(-90 40 204)">cumulative incremental response</text>
+
+  <!-- ticks -->
+  <text x="64" y="360" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">0</text>
+  <text x="620" y="360" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">1</text>
+  <text x="58" y="348" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="end">0</text>
+
+  <!-- Caption -->
+  <text x="32" y="406" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The shaded area between the actual model and the random diagonal is the Qini</text>
+  <text x="32" y="422" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">coefficient — a standard summary of uplift targeting quality.</text>
+</svg>

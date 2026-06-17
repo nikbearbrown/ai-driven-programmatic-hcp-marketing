@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 3.3 — The graph is enriched by targeting</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .center circle{stroke:var(--color-red);stroke-width:1.5;fill:var(--color-white);}
+  .spoke rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-white);}
+  .nl{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);font-weight:600;}
+  .ns{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .flowlbl{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .node:focus{outline:none;}
+  .node:focus rect,.node:focus circle{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">A continuously updating portrait, enriched by its own use</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The graph is enriched by targeting. Each engagement signal flows back into the profile, so each campaign refines the model that drives the next one.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const CX=350, CY=220, R=56;
+const FALLBACK_DATA={
+  center:{l:"NPI profile", s:"one physician", tip:"One physician's unified profile — the unit of analysis that drives every channel."},
+  spokes:[
+    {id:"crm", x:270, y:68, w:160, h:48, l:"CRM", s:"rep call logs", tip:"CRM systems surface next-best-action to reps; whether the call got answered flows back."},
+    {id:"media", x:64, y:320, w:180, h:48, l:"Endemic media", s:"click data (Medscape, WebMD)", tip:"Endemic media serve targeted display; whether a banner got clicked flows back."},
+    {id:"ehr", x:456, y:320, w:180, h:48, l:"EHR triggers", s:"prompt responses", tip:"EHR-integrated platforms fire prompts; whether a prompt was dismissed flows back."}
+  ]
+};
+const W=700,H=420;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The graph is enriched by targeting — each campaign refines the next");
+svg.append("desc").attr("id","chart-desc").text("Central NPI profile with three channel spokes, each with an outbound activation arrow and a return engagement-signal arrow.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+function bindTip(g,d){
+  g.on("mousemove",(event)=>tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+   .on("mouseleave",()=>tip.style("opacity",0))
+   .on("focus",function(){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+   .on("blur",()=>tip.style("opacity",0))
+   .on("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+}
+function unit(ax,ay,bx,by){const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy);return [dx/len,dy/len];}
+function draw(){
+  svg.selectAll("g.spoke,g.center,line.edge,text.flowlbl").remove();
+  FALLBACK_DATA.spokes.forEach(sp=>{
+    const bx=sp.x+sp.w/2, by=sp.y+sp.h/2;
+    const [ux,uy]=unit(CX,CY,bx,by);
+    // outbound: from circle edge toward box, offset perpendicular
+    const px=-uy, py=ux;
+    const off=8;
+    svg.append("line").attr("class","edge").attr("aria-hidden","true")
+      .attr("x1",CX+ux*R+px*off).attr("y1",CY+uy*R+py*off)
+      .attr("x2",bx-ux*(sp.h/1.6)+px*off).attr("y2",by-uy*(sp.h/1.6)+py*off)
+      .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    // return: from box back to circle, opposite offset
+    svg.append("line").attr("class","edge").attr("aria-hidden","true")
+      .attr("x1",bx-ux*(sp.h/1.6)-px*off).attr("y1",by-uy*(sp.h/1.6)-py*off)
+      .attr("x2",CX+ux*R-px*off).attr("y2",CY+uy*R-py*off)
+      .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  });
+  // single flow label
+  svg.append("text").attr("class","flowlbl").attr("x",430).attr("y",146).text("engagement signal →");
+  svg.append("text").attr("class","flowlbl").attr("x",430).attr("y",158).text("feature update");
+  // center
+  const c=svg.append("g").attr("class","node center").attr("tabindex",0).attr("role","img").attr("aria-label",FALLBACK_DATA.center.l);
+  c.append("circle").attr("cx",CX).attr("cy",CY).attr("r",R);
+  c.append("text").attr("class","nl").attr("x",CX).attr("y",CY-4).attr("text-anchor","middle").text(FALLBACK_DATA.center.l);
+  c.append("text").attr("class","ns").attr("x",CX).attr("y",CY+12).attr("text-anchor","middle").text(FALLBACK_DATA.center.s);
+  bindTip(c,FALLBACK_DATA.center);
+  FALLBACK_DATA.spokes.forEach(sp=>{
+    const g=svg.append("g").attr("class","node spoke").attr("tabindex",0).attr("role","img").attr("aria-label",sp.l+" "+sp.s);
+    g.append("rect").attr("x",sp.x).attr("y",sp.y).attr("width",sp.w).attr("height",sp.h).attr("rx",0);
+    g.append("text").attr("class","nl").attr("x",sp.x+sp.w/2).attr("y",sp.y+20).attr("text-anchor","middle").text(sp.l);
+    g.append("text").attr("class","ns").attr("x",sp.x+sp.w/2).attr("y",sp.y+36).attr("text-anchor","middle").text(sp.s);
+    bindTip(g,sp);
+  });
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!--
+  Title: What MoE routes on: token type vs a feature vector
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 07-mixture-of-experts
+  Figure: 02
+  Type: Infographic (two-panel contrast)
+  Generated: 2026-06-16
+  Source: chapters/07-mixture-of-experts.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">What MoE routes on: token type in a sequence versus a tabular NPI feature vector with no structure to route on</title>
+  <desc>Two side-by-side panels. Left: a token sequence flows into a MoE layer and each token routes to an expert by token type, shown as color-distinct routes. Right: a tabular NPI feature vector flows toward the same architecture, but a question mark sits over the routing because there is no syntactic structure to route on. Caption flags physician archetypes as an open question, not an established result.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="07-mixture-of-experts" figure-number="02" figure-title="What MoE routes on: token type vs a feature vector" figure-slug="moe-routes-token-vs-tabular" figure-type="Infographic" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/07-mixture-of-experts.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">What MoE routes on: token type in a sequence versus a feature vector with no structure</text>
+
+  <!-- panel divider -->
+  <line x1="350" y1="56" x2="350" y2="344" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- LEFT PANEL: sequence input -->
+  <text x="40" y="76" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Sequence model: routes on token type</text>
+
+  <!-- token row -->
+  <rect x="40" y="92" width="36" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="58" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e" text-anchor="middle">verb</text>
+  <rect x="84" y="92" width="36" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="102" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e" text-anchor="middle">.</text>
+  <rect x="128" y="92" width="36" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="146" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e" text-anchor="middle">noun</text>
+
+  <!-- gate -->
+  <rect x="56" y="156" width="92" height="36" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="102" y="179" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">gate</text>
+  <line x1="102" y1="120" x2="102" y2="152" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- experts: routes distinct by token type -->
+  <rect x="40" y="232" width="80" height="32" rx="0" fill="#2a1a0e" stroke="#2a1a0e" stroke-width="1"/>
+  <text x="80" y="252" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle">expert A</text>
+  <rect x="132" y="232" width="80" height="32" rx="0" fill="#787878" stroke="#787878" stroke-width="1"/>
+  <text x="172" y="252" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF" text-anchor="middle">expert B</text>
+  <line x1="92" y1="192" x2="80" y2="228" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <line x1="120" y1="192" x2="172" y2="228" stroke="#787878" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <text x="40" y="296" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Each token type takes a stable route —</text>
+  <text x="40" y="312" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">specialization on surface structure.</text>
+
+  <!-- RIGHT PANEL: tabular feature vector -->
+  <text x="366" y="76" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Tabular NPI input: no structure to route on</text>
+
+  <!-- feature vector as a single row of cells -->
+  <rect x="366" y="92" width="48" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="390" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">Rx</text>
+  <rect x="414" y="92" width="48" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="438" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">geo</text>
+  <rect x="462" y="92" width="48" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="486" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">pay</text>
+  <rect x="510" y="92" width="48" height="28" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="534" y="111" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">spec</text>
+  <text x="572" y="111" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">one vector</text>
+
+  <!-- gate with question mark -->
+  <rect x="416" y="156" width="92" height="36" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="462" y="179" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">gate</text>
+  <line x1="462" y1="120" x2="462" y2="152" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- question mark over routing -->
+  <line x1="462" y1="194" x2="462" y2="206" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="462" y="224" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="13" fill="#C8102E" text-anchor="middle">?  no syntactic structure</text>
+
+  <!-- experts (greyed, uncertain) -->
+  <rect x="402" y="240" width="80" height="32" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="442" y="260" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">expert ?</text>
+  <rect x="494" y="240" width="80" height="32" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="534" y="260" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">expert ?</text>
+
+  <text x="366" y="296" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">"Physician archetypes" via routing is an</text>
+  <text x="366" y="312" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">open question — likely near-redundancy.</text>
+
+  <!-- Caption -->
+  <line x1="32" y1="336" x2="668" y2="336" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="32" y="356" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">MoE routing specializes on token type in sequential models. What it would route on in a feature-vector regime is</text>
+  <text x="32" y="372" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">unestablished — and probably not stable "physician archetypes." Token labels are illustrative [inferred].</text>
+</svg>

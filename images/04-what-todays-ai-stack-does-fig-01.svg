@@ -1,0 +1,91 @@
+<!--
+  Figure title: The MLR governance gap (illustrative)
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 04-what-todays-ai-stack-does
+  Figure: 01
+  Type: CHART
+  Generated: 2026-06-16
+  Source: chapters/04-what-todays-ai-stack-does.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-01" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-01">The MLR governance gap (illustrative)</title>
+  <desc>Grouped vertical bar chart, 2020 to 2024, contrasting promotional materials submitted for MLR review against materials actively used by field teams. The submitted bars rise while used bars stay low, opening a widening gap. Figures are illustrative of the reported pattern, not verified counts.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="04-what-todays-ai-stack-does" figure-number="01" figure-title="The MLR governance gap (illustrative)" figure-type="CHART" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/04-what-todays-ai-stack-does.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="64" y="30" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Promotional materials: submitted for MLR review vs. actively used</text>
+  <text x="64" y="46" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Illustrative of the reported ~77%-unused pattern — figures are not verified counts</text>
+
+  <!-- plot area: top48 right40 bottom56 left64 => x 64..660, y 48..364 -->
+  <rect x="64" y="48" width="596" height="316" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- y gridlines + ticks (0..120) -->
+  <g font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">
+    <line x1="64" y1="364" x2="660" y2="364" stroke="#D4D4D4" stroke-width="0.75"/>
+    <text x="56" y="368" text-anchor="end">0</text>
+    <line x1="64" y1="311" x2="660" y2="311" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="315" text-anchor="end">200</text>
+    <line x1="64" y1="259" x2="660" y2="259" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="263" text-anchor="end">400</text>
+    <line x1="64" y1="206" x2="660" y2="206" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="210" text-anchor="end">600</text>
+    <line x1="64" y1="153" x2="660" y2="153" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="157" text-anchor="end">800</text>
+    <line x1="64" y1="101" x2="660" y2="101" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="105" text-anchor="end">1000</text>
+  </g>
+
+  <!-- bars: scale 0.262 px per unit (316px / 1200). submitted red, used ink -->
+  <!-- 2020: sub 600(157px) used 290(76px) -->
+  <rect x="92"  y="207" width="34" height="157" fill="#C8102E"/>
+  <rect x="128" y="288" width="34" height="76"  fill="#2a1a0e"/>
+  <text x="109" y="200" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">600</text>
+  <text x="145" y="281" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">290</text>
+
+  <!-- 2021: sub 700(184) used 280(73) -->
+  <rect x="208" y="180" width="34" height="184" fill="#C8102E"/>
+  <rect x="244" y="291" width="34" height="73"  fill="#2a1a0e"/>
+  <text x="225" y="173" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">700</text>
+  <text x="261" y="284" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">280</text>
+
+  <!-- 2022: sub 830(218) used 250(66) -->
+  <rect x="324" y="146" width="34" height="218" fill="#C8102E"/>
+  <rect x="360" y="298" width="34" height="66"  fill="#2a1a0e"/>
+  <text x="341" y="139" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">830</text>
+  <text x="377" y="291" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">250</text>
+
+  <!-- 2023: sub 960(252) used 240(63) -->
+  <rect x="440" y="112" width="34" height="252" fill="#C8102E"/>
+  <rect x="476" y="301" width="34" height="63"  fill="#2a1a0e"/>
+  <text x="457" y="95" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">960</text>
+  <text x="493" y="294" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">240</text>
+
+  <!-- 2024: sub 1100(289) used 250(66) -->
+  <rect x="556" y="75"  width="34" height="289" fill="#C8102E"/>
+  <rect x="592" y="298" width="34" height="66"  fill="#2a1a0e"/>
+  <text x="573" y="68" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">1100</text>
+  <text x="609" y="291" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">250</text>
+
+  <!-- x category labels -->
+  <g font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">
+    <text x="127" y="380">2020</text>
+    <text x="243" y="380">2021</text>
+    <text x="359" y="380">2022</text>
+    <text x="475" y="380">2023</text>
+    <text x="591" y="380">2024</text>
+  </g>
+
+  <!-- gap annotation on 2024 -->
+  <text x="638" y="180" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">the gap is</text>
+  <text x="638" y="194" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">the problem</text>
+
+  <!-- legend -->
+  <rect x="64" y="392" width="11" height="11" fill="#C8102E"/>
+  <text x="80" y="401" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Submitted for MLR review</text>
+  <rect x="270" y="392" width="11" height="11" fill="#2a1a0e"/>
+  <text x="286" y="401" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Actively used by field teams</text>
+
+  <text x="660" y="414" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: ILLUSTRATIVE — CH.04, NOT VERIFIED COUNTS</text>
+</svg>

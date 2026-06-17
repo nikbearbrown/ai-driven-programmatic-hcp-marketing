@@ -1,0 +1,74 @@
+<!--
+  figure-title: The four tracks on the Evidence Ladder
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 13-fellow-research-portfolio
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/13-fellow-research-portfolio.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The four tracks on the Evidence Ladder</title>
+  <desc>An Evidence Ladder with rungs L0 at the bottom up to L6 at the top. The four portfolio tracks are placed by the level public data lets them reach: Track A (Lift) and Track B (Brand) span L2 to L3, Track C (Models) sits at L3, and Track D (Ethics/Privacy) splits with D1 and D3 at L2 and D2 at L3. A red horizontal line above L3 labeled "proprietary data required" marks the public-data ceiling.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="13-fellow-research-portfolio" figure-number="01" figure-title="The four tracks on the Evidence Ladder" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/13-fellow-research-portfolio.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The public-data ceiling: where every portfolio track tops out</text>
+
+  <!-- Plot area: x from 96 to 668, levels L0..L6 mapped to y -->
+  <!-- y for level: L6=72, L5=128, L4=184, L3=240, L2=296, L1=352, L0=408 (step 56) -->
+  <rect x="96" y="60" width="572" height="364" rx="0" stroke="#D4D4D4" stroke-width="0.75" fill="#F5F5F5"/>
+
+  <!-- Level gridlines + tick labels -->
+  <line x1="96" y1="72" x2="668" y2="72" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="76" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L6</text>
+  <line x1="96" y1="128" x2="668" y2="128" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="132" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L5</text>
+  <line x1="96" y1="184" x2="668" y2="184" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="188" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L4</text>
+  <line x1="96" y1="240" x2="668" y2="240" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="244" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L3</text>
+  <line x1="96" y1="296" x2="668" y2="296" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="300" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L2</text>
+  <line x1="96" y1="352" x2="668" y2="352" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="356" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L1</text>
+  <line x1="96" y1="408" x2="668" y2="408" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="84" y="412" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">L0</text>
+
+  <!-- The L3 ceiling line (red, the single accent): just above L3 at y=212 -->
+  <line x1="96" y1="212" x2="668" y2="212" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="664" y="206" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E" font-weight="600">proprietary data required</text>
+
+  <!-- Track A (Lift): span L2 (296) to L3 (240), x=164 -->
+  <line x1="164" y1="296" x2="164" y2="240" stroke="#2a1a0e" stroke-width="1.5"/>
+  <circle cx="164" cy="296" r="4" fill="#2a1a0e"/>
+  <circle cx="164" cy="240" r="4" fill="#2a1a0e"/>
+  <text x="164" y="446" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">Track A</text>
+  <text x="164" y="462" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Lift</text>
+
+  <!-- Track B (Brand): span L2 (296) to L3 (240), x=290 -->
+  <line x1="290" y1="296" x2="290" y2="240" stroke="#2a1a0e" stroke-width="1.5"/>
+  <circle cx="290" cy="296" r="4" fill="#2a1a0e"/>
+  <circle cx="290" cy="240" r="4" fill="#2a1a0e"/>
+  <text x="290" y="446" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">Track B</text>
+  <text x="290" y="462" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Brand</text>
+
+  <!-- Track C (Models): L3 only (240), x=416 -->
+  <circle cx="416" cy="240" r="4" fill="#2a1a0e"/>
+  <text x="416" y="446" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">Track C</text>
+  <text x="416" y="462" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Models</text>
+
+  <!-- Track D (Ethics/Privacy): D1/D3 at L2 (296), D2 at L3 (240), x=560 (D1/D3 at 542, D2 at 578) -->
+  <circle cx="542" cy="296" r="4" fill="#787878"/>
+  <text x="542" y="316" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">D1/D3</text>
+  <circle cx="578" cy="240" r="4" fill="#2a1a0e"/>
+  <text x="578" y="230" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">D2</text>
+  <text x="560" y="446" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">Track D</text>
+  <text x="560" y="462" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Ethics/Privacy</text>
+
+  <!-- Caption -->
+  <text x="32" y="478" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Claims above the ceiling belong in the partner handoff, not in the portfolio.</text>
+</svg>

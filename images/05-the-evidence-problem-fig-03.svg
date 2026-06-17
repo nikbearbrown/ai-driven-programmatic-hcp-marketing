@@ -1,0 +1,56 @@
+<!--
+  Figure title: Evidence-map construction for the EHR co-pay program
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 05-the-evidence-problem
+  Figure: 03
+  Type: INFOGRAPHIC
+  Generated: 2026-06-16
+  Source: chapters/05-the-evidence-problem.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-03" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-03">Evidence-map construction for the EHR co-pay program</title>
+  <desc>Five-step vertical flowchart: name the dependent variable, locate best evidence, grade on two axes, identify mechanisms, state known vs. unknown. Output box reads WEAK — holdout required.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="05-the-evidence-problem" figure-number="03" figure-title="Evidence-map construction for the EHR co-pay program" figure-type="INFOGRAPHIC" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/05-the-evidence-problem.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="32" y="28" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Building the evidence map: the EHR co-pay-message program</text>
+
+  <!-- five steps stacked, x=120 width=460 -->
+  <g font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">
+    <rect x="120" y="44" width="460" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="132" y="62">1. Name the dependent variable</text>
+    <text x="132" y="78" font-size="11" fill="#545454">lift claim (incremental scripts) → requires a control group</text>
+
+    <rect x="120" y="104" width="460" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="132" y="122">2. Locate best available evidence</text>
+    <text x="132" y="138" font-size="11" fill="#545454">vendor 19% NPI-level lift; no independent estimate exists</text>
+
+    <rect x="120" y="164" width="460" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="132" y="182">3. Grade on two axes</text>
+    <text x="132" y="198" font-size="11" fill="#545454">design: unadjusted (low) · source: vendor (low) → min = weak</text>
+
+    <rect x="120" y="224" width="460" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="132" y="242">4. Identify bias mechanisms present</text>
+    <text x="132" y="258" font-size="11" fill="#545454">selection · circularity · no control · publication — all four</text>
+
+    <rect x="120" y="284" width="460" height="40" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="132" y="302">5. State known vs. unknown</text>
+    <text x="132" y="318" font-size="11" fill="#545454">known: little, with confidence · unknown: the true effect</text>
+  </g>
+
+  <!-- connectors -->
+  <line x1="350" y1="84"  x2="350" y2="104" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="350" y1="144" x2="350" y2="164" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="350" y1="204" x2="350" y2="224" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="350" y1="264" x2="350" y2="284" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="350" y1="324" x2="350" y2="348" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- output box (red) -->
+  <rect x="200" y="350" width="300" height="46" fill="#F5F5F5" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="350" y="372" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="14" fill="#C8102E">WEAK — HOLDOUT REQUIRED</text>
+  <text x="350" y="388" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">no post-hoc adjustment substitutes for a control</text>
+
+  <text x="668" y="412" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: CH.05</text>
+</svg>

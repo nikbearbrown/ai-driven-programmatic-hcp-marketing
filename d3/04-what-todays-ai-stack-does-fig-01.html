@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 4.1 — The MLR governance gap (illustrative)</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+      --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}
+  }
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;color:var(--color-ink);margin:0 0 2px;}
+  .sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;color:var(--color-secondary);margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .tick text,.vlabel{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .axis path,.axis line{stroke:var(--color-border);}
+  .grid line{stroke:var(--color-border);stroke-dasharray:5 4;}
+  .src{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .legend{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;color:var(--color-ink);}
+  rect.bar{transition:opacity 200ms cubic-bezier(0.2,0.8,0.2,1);}
+  rect.bar:focus{outline:2px solid var(--color-ochre);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Promotional materials: submitted for MLR review vs. actively used</p>
+  <p class="sub">Illustrative of the reported ~77%-unused pattern — figures are not verified counts</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {year:"2020",submitted:600,used:290},
+  {year:"2021",submitted:700,used:280},
+  {year:"2022",submitted:830,used:250},
+  {year:"2023",submitted:960,used:240},
+  {year:"2024",submitted:1100,used:250}
+];
+const data=FALLBACK_DATA;
+const margin={top:48,right:40,bottom:56,left:64};
+const tip=d3.select("#tip");
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700, H=420;
+  const iw=W-margin.left-margin.right, ih=H-margin.top-margin.bottom;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("The MLR governance gap (illustrative)");
+  svg.append("desc").attr("id","chart-desc").text("Grouped bars 2020-2024 contrasting materials submitted for MLR review against materials actively used; the widening gap is the governance problem. Illustrative figures.");
+  const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+
+  const x0=d3.scaleBand().domain(data.map(d=>d.year)).range([0,iw]).paddingInner(0.3).paddingOuter(0.15);
+  const x1=d3.scaleBand().domain(["submitted","used"]).range([0,x0.bandwidth()]).padding(0.12);
+  const y=d3.scaleLinear().domain([0,1200]).range([ih,0]);
+
+  g.append("g").attr("class","grid").attr("aria-hidden","true")
+    .call(d3.axisLeft(y).ticks(6).tickSize(-iw).tickFormat(""));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).ticks(6));
+  g.append("g").attr("class","axis").attr("transform",`translate(0,${ih})`).call(d3.axisBottom(x0));
+  g.selectAll(".tick text").attr("class","tick");
+
+  const color={submitted:cv("--color-red"),used:cv("--color-ink")};
+  const grp=g.selectAll(".grp").data(data).join("g")
+    .attr("transform",d=>`translate(${x0(d.year)},0)`);
+  ["submitted","used"].forEach(key=>{
+    grp.append("rect").attr("class","bar").attr("tabindex",0)
+      .attr("aria-label",d=>`${d.year}: ${key} ${d[key]}`)
+      .attr("x",x1(key)).attr("width",x1.bandwidth())
+      .attr("y",d=>y(d[key])).attr("height",d=>ih-y(d[key]))
+      .attr("fill",color[key]).attr("rx",0)
+      .on("mousemove",(e,d)=>showTip(e,d,key))
+      .on("mouseleave",hideTip)
+      .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,d,key);}});
+    grp.append("text").attr("class","vlabel").attr("text-anchor","middle")
+      .attr("x",x1(key)+x1.bandwidth()/2).attr("y",d=>y(d[key])-6).text(d=>d[key]);
+  });
+
+  // gap annotation on last group
+  const last=data[data.length-1];
+  g.append("text").attr("class","legend").attr("text-anchor","end")
+    .attr("x",iw).attr("y",y(last.submitted)-2)
+    .attr("font-size","11px").attr("fill",cv("--color-secondary")).text("the gap is the problem");
+
+  // legend
+  const lg=svg.append("g").attr("transform",`translate(${margin.left},${H-12})`);
+  lg.append("rect").attr("width",11).attr("height",11).attr("y",-9).attr("fill",color.submitted);
+  lg.append("text").attr("class","legend").attr("x",16).text("Submitted for MLR review");
+  lg.append("rect").attr("width",11).attr("height",11).attr("y",-9).attr("x",200).attr("fill",color.used);
+  lg.append("text").attr("class","legend").attr("x",216).text("Actively used by field teams");
+
+  svg.append("text").attr("class","src").attr("text-anchor","end")
+    .attr("x",W-margin.right).attr("y",H-2).text("SOURCE: ILLUSTRATIVE — CH.04, NOT VERIFIED COUNTS");
+}
+function showTip(e,d,key){
+  tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px")
+    .html(`<strong>${d.year}</strong><br>${key}: ${d[key]}<br>gap: ${d.submitted-d.used}`);
+}
+function hideTip(){tip.style("opacity",0);}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 7.2 — What MoE routes on: token type vs feature vector</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .panel-head{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .cell rect{stroke:var(--color-border);stroke-width:0.75;fill:var(--color-fill);}
+  .cell-label{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-ink);}
+  .cell-label.muted{fill:var(--color-secondary);}
+  .gate rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-white);}
+  .gate-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .expert-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-white);}
+  .expert-label.muted{fill:var(--color-secondary);}
+  .note{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .qmark{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:14px;fill:var(--color-red);}
+  .small{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:240px;}
+  .hit:focus{outline:none;}
+  .hit:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">What MoE routes on: token type in a sequence versus a feature vector with no structure</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">MoE routing specializes on token type in sequential models. What it would route on in a feature-vector regime is unestablished — and probably not stable "physician archetypes." Physician archetypes via routing is an open question, not an established result. Token labels are illustrative [inferred].</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  left:{
+    head:{x:40, y:76, text:"Sequence model: routes on token type"},
+    tokens:[
+      {label:"verb", x:40,  y:92, w:36, h:28, muted:false, tip:"A token in a sequence carries a syntactic type the gate can route on."},
+      {label:".",    x:84,  y:92, w:36, h:28, muted:false, tip:"Punctuation is its own token type, taking a stable route."},
+      {label:"noun", x:128, y:92, w:36, h:28, muted:false, tip:"Another token type — distinct surface structure to specialize on."}
+    ],
+    gate:{x:56, y:156, w:92, h:36, label:"gate", tip:"The gate scores each token by its type and routes it to an expert."},
+    gateArrow:{x:102, y1:120, y2:152},
+    experts:[
+      {label:"expert A", x:40,  y:232, w:80, h:32, color:"var(--color-ink)", muted:false, fromX:92, tip:"Expert A specializes on one token type — a stable, learned route."},
+      {label:"expert B", x:132, y:232, w:80, h:32, color:"var(--color-secondary)", muted:false, fromX:120, tip:"Expert B specializes on a different token type."}
+    ],
+    notes:[
+      {x:40, y:296, text:"Each token type takes a stable route —"},
+      {x:40, y:312, text:"specialization on surface structure."}
+    ]
+  },
+  right:{
+    head:{x:366, y:76, text:"Tabular NPI input: no structure to route on"},
+    tokens:[
+      {label:"Rx",   x:366, y:92, w:48, h:28, muted:true, tip:"A feature in an NPI vector — not a token type; it is one dimension among many."},
+      {label:"geo",  x:414, y:92, w:48, h:28, muted:true, tip:"Geography feature — part of a single flat vector, no sequential structure."},
+      {label:"pay",  x:462, y:92, w:48, h:28, muted:true, tip:"Payer feature — another dimension of the same vector."},
+      {label:"spec", x:510, y:92, w:48, h:28, muted:true, tip:"Specialty feature — still one vector, with nothing to route token-by-token."}
+    ],
+    vecLabel:{x:572, y:111, text:"one vector"},
+    gate:{x:416, y:156, w:92, h:36, label:"gate", tip:"A gate has no token stream to route on — the whole NPI is a single vector."},
+    gateArrow:{x:462, y1:120, y2:152},
+    qLine:{x:462, y1:192, y2:228},
+    qText:{x:462, y:222, text:"?  no syntactic structure"},
+    experts:[
+      {label:"expert ?", x:402, y:240, w:80, h:32, muted:true, tip:"It is unclear what an expert would specialize in without structure to route on."},
+      {label:"expert ?", x:494, y:240, w:80, h:32, muted:true, tip:"Likely near-redundant experts — an open question, not an established result."}
+    ],
+    notes:[
+      {x:366, y:296, text:"\"Physician archetypes\" via routing is an"},
+      {x:366, y:312, text:"open question — likely near-redundancy."}
+    ]
+  },
+  divider:{x:350, y1:56, y2:344},
+  captionLine:{x1:32, x2:668, y:336}
+};
+const W=700,H=420;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("What MoE routes on: token type in a sequence versus a tabular NPI feature vector with no structure to route on");
+svg.append("desc").attr("id","chart-desc").text("Two side-by-side panels. Left: a token sequence routes each token to an expert by token type. Right: a tabular NPI feature vector reaches the same architecture, but a question mark sits over the routing because there is no syntactic structure to route on. Caption flags physician archetypes as an open question.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+
+function bindTip(sel){
+  sel.on("mousemove",(event,d)=>tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+     .on("mouseleave",()=>tip.style("opacity",0))
+     .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+     .on("blur",()=>tip.style("opacity",0))
+     .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+}
+
+function draw(){
+  svg.selectAll(".layer").remove();
+  const root=svg.append("g").attr("class","layer");
+  const D=FALLBACK_DATA;
+
+  // divider
+  root.append("line").attr("aria-hidden","true").attr("x1",D.divider.x).attr("y1",D.divider.y1).attr("x2",D.divider.x).attr("y2",D.divider.y2).attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+
+  function panel(P, isLeft){
+    root.append("text").attr("class","panel-head").attr("x",P.head.x).attr("y",P.head.y).text(P.head.text);
+
+    // token / feature cells
+    const cells=root.selectAll(null).data(P.tokens).join("g")
+      .attr("class","hit cell").attr("tabindex",0).attr("role","img").attr("aria-label",d=>d.label);
+    cells.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",d=>d.w).attr("height",d=>d.h);
+    cells.append("text").attr("class",d=>"cell-label"+(d.muted?" muted":"")).attr("x",d=>d.x+d.w/2).attr("y",d=>d.y+d.h/2+4).attr("text-anchor","middle").text(d=>d.label);
+    bindTip(cells);
+
+    if(P.vecLabel) root.append("text").attr("class","small").attr("x",P.vecLabel.x).attr("y",P.vecLabel.y).text(P.vecLabel.text);
+
+    // gate
+    const gG=root.append("g").attr("class","hit gate").attr("tabindex",0).attr("role","img").attr("aria-label","gate").datum(P.gate);
+    gG.append("rect").attr("x",P.gate.x).attr("y",P.gate.y).attr("width",P.gate.w).attr("height",P.gate.h);
+    gG.append("text").attr("class","gate-label").attr("x",P.gate.x+P.gate.w/2).attr("y",P.gate.y+P.gate.h/2+4).attr("text-anchor","middle").text(P.gate.label);
+    bindTip(gG);
+
+    // arrow into gate
+    root.append("line").attr("aria-hidden","true").attr("x1",P.gateArrow.x).attr("y1",P.gateArrow.y1).attr("x2",P.gateArrow.x).attr("y2",P.gateArrow.y2).attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+
+    if(isLeft){
+      // distinct routed arrows
+      root.append("line").attr("aria-hidden","true").attr("x1",92).attr("y1",192).attr("x2",80).attr("y2",228).attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+      root.append("line").attr("aria-hidden","true").attr("x1",120).attr("y1",192).attr("x2",172).attr("y2",228).attr("stroke","var(--color-secondary)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    } else {
+      // uncertain dashed line + question mark
+      root.append("line").attr("aria-hidden","true").attr("x1",P.qLine.x).attr("y1",P.qLine.y1).attr("x2",P.qLine.x).attr("y2",P.qLine.y2).attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+      root.append("text").attr("class","qmark").attr("x",P.qText.x).attr("y",P.qText.y).attr("text-anchor","middle").text(P.qText.text);
+    }
+
+    // experts
+    const exG=root.selectAll(null).data(P.experts).join("g")
+      .attr("class","hit").attr("tabindex",0).attr("role","img").attr("aria-label",d=>d.label);
+    exG.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",d=>d.w).attr("height",d=>d.h)
+      .attr("fill",d=>d.muted?"var(--color-fill)":d.color).attr("stroke",d=>d.muted?"var(--color-border)":d.color)
+      .attr("stroke-width",d=>d.muted?0.75:1).attr("stroke-dasharray",d=>d.muted?"5 4":null);
+    exG.append("text").attr("class",d=>"expert-label"+(d.muted?" muted":"")).attr("x",d=>d.x+d.w/2).attr("y",d=>d.y+d.h/2+4).attr("text-anchor","middle").text(d=>d.label);
+    bindTip(exG);
+
+    // notes
+    P.notes.forEach(n=>root.append("text").attr("class","note").attr("x",n.x).attr("y",n.y).text(n.text));
+  }
+
+  panel(D.left, true);
+  panel(D.right, false);
+
+  // caption divider
+  root.append("line").attr("aria-hidden","true").attr("x1",D.captionLine.x1).attr("y1",D.captionLine.y).attr("x2",D.captionLine.x2).attr("y2",D.captionLine.y).attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+  root.append("text").attr("class","small").attr("x",32).attr("y",356).text("MoE routing specializes on token type in sequential models. What it would route on in a feature-vector regime is");
+  root.append("text").attr("class","small").attr("x",32).attr("y",372).text("unestablished — and probably not stable “physician archetypes.” Token labels are illustrative [inferred].");
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

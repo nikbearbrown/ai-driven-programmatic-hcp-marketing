@@ -1,0 +1,63 @@
+<!--
+  Title: Durability decay curve: durable equity vs transient recall bump
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 09-brand-association
+  Figure: 03
+  Type: Statistical (line chart)
+  Generated: 2026-06-16
+  Source: pantry/09-brand-association-cajal.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
+  <title id="fig-title-03">Durability decay: only the delayed re-measurement separates durable equity from a transient recall bump</title>
+  <desc>Two lines across three time points — pre-exposure, immediate post, delayed post — start at the same baseline and rise identically to immediate post. At the delayed post-test the durable line holds elevated while the transient line decays back toward baseline. They are indistinguishable until the third time point.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="09-brand-association" figure-number="03" figure-title="Durability decay curve: durable equity vs transient recall bump" figure-slug="durability-decay-curve" figure-type="Statistical" priority="Critical" author="Nik Bear Brown" date-generated="2026-06-16" source-file="pantry/09-brand-association-cajal.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Durable equity vs a recall bump: the delayed re-test is what tells them apart</text>
+
+  <!-- Plot: x 96..604, y 64..344. three points at x=96, x=350, x=604 -->
+  <rect x="96" y="64" width="508" height="280" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- axes -->
+  <line x1="96" y1="344" x2="604" y2="344" stroke="#2a1a0e" stroke-width="1.5"/>
+  <line x1="96" y1="344" x2="96" y2="64" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- shared baseline reference (pre level) -->
+  <line x1="96" y1="300" x2="604" y2="300" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+
+  <!-- both lines: pre (96,300) -> immediate (350,110) identical; then diverge -->
+  <!-- durable (ink): holds elevated -->
+  <path d="M 96 300 L 350 110 L 604 124" fill="none" stroke="#2a1a0e" stroke-width="1.5"/>
+  <!-- transient (red): decays toward baseline -->
+  <path d="M 96 300 L 350 110 L 604 288" fill="none" stroke="#C8102E" stroke-width="1.5"/>
+
+  <!-- markers -->
+  <circle cx="96" cy="300" r="3.5" fill="#2a1a0e"/>
+  <circle cx="350" cy="110" r="3.5" fill="#2a1a0e"/>
+  <circle cx="604" cy="124" r="3.5" fill="#2a1a0e"/>
+  <circle cx="604" cy="288" r="3.5" fill="#C8102E"/>
+
+  <!-- divergence emphasis at delayed point -->
+  <line x1="604" y1="124" x2="604" y2="288" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+
+  <!-- line descriptors -->
+  <text x="560" y="116" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="end">durable equity</text>
+  <text x="560" y="284" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E" text-anchor="end">recall bump</text>
+  <text x="350" y="100" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">identical here</text>
+
+  <!-- x tick labels -->
+  <text x="96" y="362" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">pre</text>
+  <text x="350" y="362" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">immediate post</text>
+  <text x="604" y="362" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">delayed post</text>
+
+  <!-- y axis label -->
+  <text x="40" y="204" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle" transform="rotate(-90 40 204)">brand-association strength</text>
+
+  <!-- Caption -->
+  <text x="32" y="392" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">At the immediate post-test the two patterns are indistinguishable. Only the delayed re-measurement separates durable</text>
+  <text x="32" y="408" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">equity from a recall bump — which is why booking the immediate spike as equity is the mistake the chapter warns against.</text>
+</svg>

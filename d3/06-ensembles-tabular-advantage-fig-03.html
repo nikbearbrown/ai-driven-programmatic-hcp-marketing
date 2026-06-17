@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 6.3 — Four-quadrant evaluation checklist</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .qt{font-size:13px;fill:var(--color-ink);}
+  .qm{font-size:12px;fill:var(--color-ink);}
+  .qd{font-size:11px;fill:var(--color-secondary);}
+  .qf{font-size:11px;fill:var(--color-red);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .quad rect{cursor:pointer;}.quad rect:focus{outline:2px solid var(--color-ochre);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Pass all four and you have the baseline. Passing only the first is the common mistake.</p>
+  <div id="chart"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {n:1,t:"DISCRIMINATION",m:'AUC, AUPRC — "can it rank?"',d:"Can it sort prescribers above non-prescribers, top decile vs. bottom?",f:"skip it → you can't target at all",accent:false},
+  {n:2,t:"CALIBRATION",m:"reliability curve, Brier score",d:"Does a 0.7–0.8 bin actually prescribe at ~75%? The probability must mean it.",f:"skip it → every bid decision is wrong",accent:true},
+  {n:3,t:"TEMPORAL VALIDATION",m:"out-of-time split",d:"Train on earlier periods, test on later. Does it hold when the future is the future?",f:"skip it → leakage inflates stability",accent:false},
+  {n:4,t:"SUBGROUP ROBUSTNESS",m:"by specialty, decile, geography",d:"Strong on average can be useless on the one segment the campaign targets.",f:"skip it → aggregate AUC hides a failure",accent:false}
+];
+const data=FALLBACK_DATA;
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function wrap(text,width){
+  text.each(function(){
+    const t=d3.select(this),words=t.text().split(/\s+/).reverse();
+    let word,line=[],lineNo=0;const x=t.attr("x"),y=+t.attr("y"),lh=14;
+    let tspan=t.text(null).append("tspan").attr("x",x).attr("y",y);
+    while(word=words.pop()){line.push(word);tspan.text(line.join(" "));
+      if(tspan.node().getComputedTextLength()>width&&line.length>1){line.pop();tspan.text(line.join(" "));
+        line=[word];tspan=t.append("tspan").attr("x",x).attr("y",y+(++lineNo)*lh).text(word);}}
+  });
+}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=400;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Four-quadrant evaluation checklist");
+  svg.append("desc").attr("id","chart-desc").text("Two by two grid: discrimination, calibration, temporal validation, subgroup robustness, each with a failure mode.");
+  const gx=32,gy=20,gw=W-64,gh=H-60,cw=(gw-16)/2,ch=(gh-16)/2;
+  const pos=[[gx,gy],[gx+cw+16,gy],[gx,gy+ch+16],[gx+cw+16,gy+ch+16]];
+  const q=svg.selectAll("g.quad").data(data).join("g").attr("class","quad");
+  q.append("rect").attr("x",(d,i)=>pos[i][0]).attr("y",(d,i)=>pos[i][1]).attr("width",cw).attr("height",ch)
+    .attr("fill",cv("--color-white")).attr("stroke",d=>d.accent?cv("--color-red"):cv("--color-border")).attr("stroke-width",d=>d.accent?1.5:1)
+    .attr("tabindex",0).attr("aria-label",d=>`${d.t}: ${d.m}. ${d.d} ${d.f}`)
+    .on("click",(e,d,i)=>{}).on("keydown",(e)=>{if(e.key==="Enter"||e.key===" ")e.preventDefault();});
+  q.append("text").attr("class","qt").attr("x",(d,i)=>pos[i][0]+16).attr("y",(d,i)=>pos[i][1]+26).text(d=>`${d.n} · ${d.t}`);
+  q.append("text").attr("class","qm").attr("x",(d,i)=>pos[i][0]+16).attr("y",(d,i)=>pos[i][1]+48).text(d=>d.m);
+  q.append("text").attr("class","qd").attr("x",(d,i)=>pos[i][0]+16).attr("y",(d,i)=>pos[i][1]+70).text(d=>d.d).call(wrap,cw-32);
+  q.append("text").attr("class","qf").attr("x",(d,i)=>pos[i][0]+16).attr("y",(d,i)=>pos[i][1]+ch-14).text(d=>d.f);
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-32).attr("y",H-8).text("SOURCE: CH.06 — ENSEMBLES AND THE TABULAR ADVANTAGE");
+}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

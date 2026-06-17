@@ -15,6 +15,10 @@ The mistake that ends most causal claims before they start is believing that a l
 
 Structure means a feature of the world that assigns treatment for reasons plausibly unrelated to the outcome. A state passes a gift-ban law because a legislator champions it, not because that state's physicians were already trending toward generics. An academic medical center restricts rep visits because its conflict-of-interest committee recommends it, not because prescribing had already started to shift. A Medicare spending threshold triggers a coverage gap because of a budget formula written in 2003, not because the patients who hit it are different from the ones who fall just short. In each case, the treatment assignment carries information — it encodes something about who got treated and when — but it is the *right kind* of information: information about the institutional or legislative or administrative process, not about the outcome you are trying to explain. That is what "as good as random with respect to the outcome" means, and it is the thing you are always trying to establish.
 
+![Two parallel timelines for one physician: World A — heavy detailing, observed with measured outcomes; World B — no detailing, an unobserved ghost box with the outcome missing. An arrow reads "Causal effect = World A outcome minus World B outcome." A footer notes that every design is a different argument for imputing World B from other observable physicians.](images/12-research-design-public-data-fig-01.png)
+
+*Figure 12.1 — The fundamental problem of causal inference*
+
 <!-- → [DIAGRAM: The fundamental causal inference problem. Two parallel timelines for one physician: "World A — heavy detailing" (observed, with outcomes) and "World B — no detailing" (unobserved, outcome missing). Arrow labeled "Causal effect = World A outcome − World B outcome." Below: "Every design is a different argument for how to impute World B from other observable physicians." Caption: "The missing counterfactual is the central problem. Structure is the solution."] -->
 
 ---
@@ -38,6 +42,10 @@ The clean case — two groups, two time periods — is rare in policy data. The 
 The naive fix for staggered adoption is a two-way fixed effects regression — unit fixed effects, time fixed effects, a single treatment dummy — and then reading off one coefficient. The problem, formalized by Goodman-Bacon (2021) and now widely understood, is that the TWFE estimator uses *already-treated* units as controls for *later-treated* units. Those are forbidden comparisons: a state that banned gifts in 2007 is being used as a counterfactual for a state that banned gifts in 2011, but the 2007 state has been treated for four years and its prescribing has already adjusted. The comparison conflates the causal effect you want with dynamics you did not intend to estimate. The resulting coefficient can be wrong in sign and magnitude.
 
 The modern fix is a family of heterogeneity-robust estimators — **Callaway and Sant'Anna (2021)** is the most widely adopted, with de Chaisemartin and D'Haultfœuille, Sun and Abraham, and Borusyak et al. as close alternatives — that construct group-time average treatment effects using only never-treated or not-yet-treated units as controls. The estimates are then aggregated across groups and time periods in a way that is explicit about what is being averaged and weighted. Any staggered DiD analysis that still uses plain TWFE is dated. Not wrong by convention — wrong by math.
+
+![Three panels on staggered adoption. Left: three units adopting treatment in 2006, 2009, and 2012, plus a never-treated control. Center: a two-way fixed-effects comparison marked in red, where an early-treated unit is wrongly used as a control for a later-treated unit — the forbidden comparison. Right: the Callaway–Sant'Anna fix, where each treated cohort is compared only to not-yet-treated and never-treated units.](images/12-research-design-public-data-fig-02.png)
+
+*Figure 12.2 — Staggered adoption: TWFE forbidden comparisons vs. clean controls*
 
 <!-- → [DIAGRAM: Staggered adoption illustration. Left panel: three units adopting treatment in years 2006, 2009, and 2012, plus a never-treated control unit. Center panel: forbidden comparison in TWFE — early-treated unit used as control for late-treated unit. Right panel: Callaway-Sant'Anna — each treated cohort compared only to not-yet-treated and never-treated units. Caption: "TWFE uses forbidden comparisons under heterogeneous effects. The modern fix uses only clean controls."] -->
 
@@ -69,7 +77,14 @@ The four identification strategies map onto the public data in ways that are wor
 
 **ICER value assessments** supply the clinical-value covariate that transforms a promotion-and-prescribing study into a welfare-relevant finding. ICER reports cost-effectiveness ratios and value-based price benchmarks, distinguishing high-value drugs (below roughly $50,000 per QALY) from low-value ones (above roughly $175,000 per QALY). [verify current ICER thresholds.] When you pair a promotion effect — detailing increases branded share — with the ICER score for that drug, you can ask whether the effect is larger for high-value drugs (promotion serves patients) or for low-value ones (promotion serves volume). That question is testable on public data. No published study has answered it.
 
-<!-- → [TABLE: Public-data stack. Columns: dataset, what it contains, coverage, access, what it supports, critical limits. Rows: Open Payments (promotion dose; 2013–present; free download; payment→prescribing natural experiments; association-grade alone, requires a design), Part D Prescriber PUF (prescribing outcome by NPI; 2013–present, ~2-year lag; free download; lift/brand-persistence outcomes; no NBRx, Medicare population only), Medicaid SDUD (state × time prescribing panel; multi-year; free download; state-policy DiD outcomes; no physician identity), ICER assessments (clinical value; rolling; free PDFs; welfare-relevant covariate). Caption: "The datasets are commodities. The design and the identification argument are the contribution."] -->
+| Dataset | What it contains | Coverage | Access | What it supports | Critical limits |
+| --- | --- | --- | --- | --- | --- |
+| Open Payments | Industry transfer of value per NPI (promotion dose) | Aug 2013–present | Free download, no DUA | payment→prescribing natural experiments | Association-grade alone; requires a design |
+| Part D Prescriber PUF | Prescribing outcome per NPI (claims, fills, beneficiaries, cost) | 2013–present, ~2-yr lag | Free download, no DUA | lift / brand-persistence outcomes | No new-to-brand (NBRx); Medicare population only |
+| Medicaid SDUD | State × quarter outpatient drug utilization by NDC | Multi-year | Free download | state-policy DiD outcomes | No physician identity; aggregated |
+| ICER assessments | Clinical-value / cost-effectiveness covariate | Rolling | Free PDFs | welfare-relevant covariate | QALY methodology contested; selected drug set |
+
+*Table 12.1 — The public-data stack: the datasets are commodities; the identification argument is the contribution*
 
 ---
 
@@ -78,25 +93,6 @@ Put the pieces together and the decision is a short tree. If a policy was adopte
 In every case, what you are required to produce is: the identifying assumption stated in plain English, the diagnostic that would falsify it, and the Evidence Ladder level the design can reach. Public-data designs of this kind top out around Level 3 — a small offline causal test. Level 4 (offline causal test on partner data) and Level 5 (client-validated business impact) require the proprietary panel on the other side of the firewall. Stating the ceiling is not a concession; it is the honest calibration that makes the estimate trustworthy.
 
 The contribution is the identification argument. Open Payments and Part D are freely available to anyone with a laptop. The finding that is worth something is the finding that has a credible answer to "why is this causal rather than associated?" That answer is built from the structure in the world, the estimator chosen to exploit it, and the diagnostics that would catch it if the structure were not as clean as assumed.
-
-**Five-part AI exercise block**
-
-**When to use AI here.** Use an LLM to draft an analysis plan, generate event-study plotting code, summarize a dataset's data dictionary, or suggest candidate instruments for you to then scrutinize. It is a fast first draft of the research skeleton.
-
-**When NOT to use AI here.** Do not let an LLM judge whether the exclusion restriction holds, decide whether the pre-trends plot is close enough to zero, or produce a DiD estimator without checking which one it chose. These are the exact judgments the chapter trains. An LLM prompted to "run a staggered difference-in-differences analysis" will frequently return TWFE code — the biased estimator — because TWFE was the standard in most of the training data. Catching that is the human judgment.
-
-**LLM exercise (copy-paste prompt):**
-> "Draft a staggered difference-in-differences analysis plan and R code for studying the effect of state pharmaceutical gift bans on branded drug share in Medicaid SDUD data. The bans were adopted in different states in different years between 2006 and 2015. Specify the estimator you recommend and why."
-
-Run whatever it produces against a small public extract and inspect the estimator. If it gave you a TWFE regression with unit and year fixed effects, catch it. Replace it with a Callaway–Sant'Anna group-time ATT using not-yet-treated controls, and produce the event-study plot. The catch is the exercise.
-
-**CLI exercise.** Download a slice of Medicaid SDUD for two states — one that adopted a gift ban in your study window, one that did not — and plot the prescribing series for a branded drug alongside its generic equivalent across the pre- and post-ban periods. Before running any model, ask yourself whether the pre-ban trends look parallel. A trend divergence before the ban is a warning the identifying assumption is in trouble.
-
-**AI validation.** Have the LLM explain the Goodman-Bacon decomposition and the problem with TWFE under heterogeneous treatment effects. Then locate the Goodman-Bacon (2021) paper and verify whether the model's description is accurate, overstated, or missing the key point about forbidden comparisons. Record the discrepancy.
-
-## AI Use Disclosure
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to generate the Callaway–Sant'Anna code and to summarize the Part D data dictionary; I decided myself whether the parallel-trends assumption was defensible given the specific legislative history of the gift bans I was studying, because that judgment requires reading the political context the model does not have."*
 
 ## What Would Change My Mind
 
@@ -135,3 +131,160 @@ The most policy-relevant promotion effects operate on the commercially insured �
 **Challenge**
 
 9. *(Challenge — open-ended) What this tests: designing a study at the boundary of what public data can support.* Design a study using only public data (Open Payments, Part D PUF, Medicaid SDUD, ICER) that addresses the question "does promotion of low-value drugs (ICER >$175k/QALY) produce a larger prescribing effect than promotion of high-value drugs (<$50k/QALY)?" Specify the identification strategy, the comparison structure, the identifying assumption, the dataset join logic, and the one inferential limit you cannot resolve with public data alone. State honestly what Evidence Ladder level it can reach and what the next step across the firewall would require.
+
+---
+
+## Prompts
+
+### Figure 12.1 — The fundamental problem of causal inference
+
+Build a single self-contained HTML file (inline CSS, D3 7.9.0 from cdnjs) rendering a conceptual two-timeline diagram, not a data chart — zero-baseline n/a. Data shape: one physician with two potential-outcome worlds, each an object {world, label, observed (boolean), outcome}. World A ("heavy detailing") is observed with a measured outcome; World B ("no detailing") is unobserved with a missing outcome. Marks: two horizontal timeline rows of equal width, each a labeled rectangle (box) with a short outcome glyph at its end; a connecting arrow between the two outcome ends annotated "Causal effect = World A outcome − World B outcome"; a footer line of body text reading that every design is a different argument for imputing World B from other observable physicians. Channels: encode observed vs. unobserved by fill and stroke — World A solid box with ink stroke and a real outcome value; World B distinct as a ghost/empty dashed box (stroke-dasharray, var(--color-border)) with no outcome value, using var(--color-red) only to mark the missing world. Two data colors max. No sort. Annotations: row labels left, the causal-effect arrow label centered (never on the arrow centerline), caption below. Title and desc for accessibility; ResizeObserver redraw. Deliverable: one HTML file.
+
+### Figure 12.2 — Staggered adoption: TWFE forbidden comparisons vs. clean controls
+
+Build a single self-contained HTML file (inline CSS, D3 7.9.0 from cdnjs) rendering a three-panel small-multiple conceptual diagram, not a quantitative chart — zero-baseline n/a. Data shape: an array of units {id, adoptionYear (2006, 2009, 2012, or null=never-treated)} on a shared year axis (≈2004–2014), plus a list of comparison edges {from, to, kind: "forbidden" | "clean"}. Marks: each panel is a grid of unit rows against the year axis; each unit row drawn as a pre-period segment and a post-treatment segment split at its adoption year (never-treated stays one segment); vertical tick marking each adoption year; comparison arrows between unit rows. Channels: encode treated/post state by segment fill; encode comparison validity by color — forbidden comparisons (early-treated used as control for late-treated) in var(--color-red), clean comparisons (vs. not-yet-treated / never-treated) in var(--color-ink). Two data colors max. Sort units by adoption year within each panel. Panels left→right: (1) adoption structure, (2) TWFE forbidden comparison in red, (3) Callaway–Sant'Anna clean controls. Annotations: panel titles, year ticks (monospace), legend, caption. Title/desc; ResizeObserver redraw. Deliverable: one HTML file.
+
+---
+
+## Chapter 12 Exercises: Research Design and Public Data for Marketing Science
+
+**Project:** One Drug, End to End
+**This chapter adds:** You design an identifiable public-data study of your drug — choosing among DiD, RDD, and IV, stating the identifying assumption, and naming the falsification test first — turning Chapter 11's cheap test into a credible identification argument.
+
+*Worked example throughout: **Cardizem-X**, the branded cardiometabolic drug from Chapter 11, with its first generic entrant arriving at a dated, exogenous loss-of-exclusivity shock. Swap in your own drug and its policy shock wherever the notes say so.*
+
+### Exercise 1 — When to Use AI
+
+The dataset is the commodity; the identification argument is the contribution. Use AI for the scaffolding around the argument, not the argument itself.
+
+1. **Summarize a data dictionary.** Point an LLM at the Medicare Part D Prescriber PUF and Medicaid SDUD field lists and ask it to tell you which fields supply your outcome (branded vs. generic share for Cardizem-X's NDC family) and which are missing. *Why AI works here:* the data dictionaries are public and fixed, so every field claim is checkable against the documentation in minutes — you are verifying a lookup, not trusting a judgment.
+2. **Generate event-study plotting code.** Ask for R or Python that draws the pre-trend leads and post-treatment lags around the loss-of-exclusivity date. *Why AI works here:* plotting code either runs and produces the diagnostic figure or it errors; correctness is visible the moment the plot renders and you read the pre-period leads yourself.
+
+**The tell:** in both tasks the output is independently checkable — against a published data dictionary or against a figure that either renders the diagnostic or does not. You are not asking the model to decide whether the design identifies anything.
+
+### Exercise 2 — When NOT to Use AI
+
+1. **Choosing — and defending — the estimator under staggered adoption.** *Why AI fails here:* prompted to "run a staggered difference-in-differences," LLMs routinely return two-way fixed-effects code, because TWFE dominated the training corpus; under heterogeneous effects that estimator uses already-treated units as controls (the forbidden comparisons Goodman-Bacon 2021 formalized) and can be wrong in sign. The model reproduces the literature's old default, not the correct fix.
+2. **Judging whether parallel trends or the exclusion restriction holds.** *Why AI fails here:* parallel trends is a claim about your drug's specific legislative or patent history, and the exclusion restriction is untestable by construction — both require reading the institutional context (why Cardizem-X's generic entered when it did) that the model does not have. It will pronounce "trends look parallel" from a description, which is exactly the wave-past the chapter warns against.
+
+**The tell:** AI as *reason* vs. *tool* — if your design identifies a causal effect because the model said the assumption holds, AI has become the reason; it may only draft the code around an identification argument you make and defend. **Series connection:** these are **T7 Wisdom** judgments — the identifying assumption and the estimator choice are the contribution itself, and no collective or model can supply the "why is this causal rather than associated?" answer for your drug.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building:** the identification-design memo for your drug's loss-of-exclusivity study — research question, dataset, design, identifying assumption in plain English, the falsification test stated first, and the honest Evidence Ladder ceiling.
+
+**Tool:** Claude, continuing the **Claude Project** "One Drug — Cardizem-X" from Chapter 11. Persistent context helps because the drug, class, KPIs, and firewall ceiling are already loaded; the model can carry the Chapter 11 cheap test forward instead of re-deriving it.
+
+**The Prompt:**
+
+```
+Continuing the One Drug project for Cardizem-X (branded cardiometabolic drug, two generic
+competitors, one branded competitor, loss of exclusivity ~18 months out). I work only on
+PUBLIC data: CMS Open Payments, Medicare Part D Prescriber PUF, Medicaid SDUD, ICER value
+scores. Reference "AI-Driven Programmatic HCP Marketing," Chapter 12.
+
+Help me draft an IDENTIFICATION-DESIGN MEMO for this question: "Does branded share for
+Cardizem-X persist after generic entry more than a no-equity baseline would predict, after
+controlling for ICER clinical value?" The loss-of-exclusivity date is a dated, exogenous
+shock set by patent expiration and FDA generic approval.
+
+Produce, in this order, FALSIFICATION FIRST:
+1. The single diagnostic that would FALSIFY the design (state it before anything else):
+   for a DiD, the pre-trend event-study leads; name what pattern kills the design.
+2. The identification design you recommend (natural experiment / DiD, RDD, or IV) and WHY,
+   given that loss of exclusivity is a dated shock. If staggered across drugs or states,
+   specify Callaway-Sant'Anna group-time ATT with not-yet-treated/never-treated controls,
+   NOT plain two-way fixed effects.
+3. The comparison/counterfactual group.
+4. The identifying assumption in plain English (one paragraph).
+5. The two Part D / SDUD dataset limits I must state in the brief (e.g., no new-to-brand
+   scripts; Medicare-only population; ecological aggregation in SDUD).
+6. The Evidence Ladder level this public-data design can honestly reach, and why it cannot
+   exceed it.
+
+If you reach for an estimator, name it explicitly and say why it is heterogeneity-robust.
+Flag any number you are unsure of with [verify].
+```
+
+**What this produces:** a falsification-first identification-design memo for your drug, ready to drop into the Chapter 13 portfolio card and stress-tested against the TWFE trap.
+
+**How to adapt:** replace Cardizem-X and its loss-of-exclusivity shock with your own drug and policy shock (a state gift ban, a formulary tier change, a prior-authorization rule); the same prompt runs on ChatGPT or Gemini, but reset it with the firewall and dataset constraints each session if you lack a persistent Project.
+
+**Connection to previous chapters:** the memo upgrades Chapter 11's "cheap test" into a defensible identification argument and keeps Chapter 11's Evidence Ladder ceiling; the ICER value control reaches back to the welfare-relevance thread the book has carried since Chapter 2.
+
+**Preview of next chapter:** Chapter 13 turns this single design into one of four portfolio cards for your drug, with the pre-registered kill criterion made explicit in the seven-field card.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** a pre-trends sanity check for your drug — download a public slice, plot the branded-vs-generic series around the shock, and decide *before any model* whether the trends look parallel.
+
+**Tool:** **Claude Code** — why: this is a focused download-plus-plot task in one working directory with a clear stopping condition, the kind of single-thread analysis Claude Code runs cleanly; the multi-file Cowork workflow is overkill here. · **Skill level:** intermediate.
+
+**Setup (3-item checklist):**
+- A folder `cardizem-x-did/` with a `data/` and `figs/` subfolder.
+- Python 3 with pandas and matplotlib (or R with ggplot2) installed.
+- `CLAUDE.md` noting: public data only; the parallel-trends check happens before estimation; flag a pre-trend divergence as a design warning, do not model past it.
+
+**The Task:**
+
+```
+In cardizem-x-did/, write a script that:
+- READS only a public Medicaid SDUD extract I place in data/ (two states or two NDC groups:
+  the Cardizem-X branded NDC family and its generic equivalent) — do not download anything
+  beyond the SDUD slice I name;
+- WRITES only into figs/;
+- LEAVES everything else alone.
+
+Plot the branded series and the generic series across the pre- and post-generic-entry
+periods, with a vertical line at the loss-of-exclusivity date. Output figs/pretrends.png.
+
+STOP after the plot is written. Do NOT fit any DiD or regression model — the point is the
+pre-trend eyeball check before modeling. Print a one-line prompt asking me: "Do the
+pre-entry trends look parallel? If not, the identifying assumption is in trouble."
+VERIFY by opening figs/pretrends.png and confirming both series and the event line render.
+Do not commit or push.
+```
+
+**Expected output:** `figs/pretrends.png` showing the two series and the loss-of-exclusivity line, plus the printed parallel-trends question.
+
+**What to inspect:** the pre-entry leads — do branded and generic move together before the shock? A divergence before the date is the warning the chapter names, and it means the design is in trouble regardless of what a model would later report.
+
+**If it goes wrong:** if the script tries to fit a model or fetch extra data, stop it: "remove the modeling step and the extra download; this task is the pre-trends plot only." Recovery is trivial — delete `figs/` and rerun; nothing left the folder.
+
+**CLAUDE.md note:** add "Run and read the pre-trends event-study plot before fitting any DiD; a pre-trend divergence is a design failure, not a nuisance to control away."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** an LLM-generated DiD analysis plan for your drug (from Exercise 3, or a deliberately flawed one) for the TWFE trap and the parallel-trends defense.
+
+**Validation type:** identification-and-estimator audit. **Risk level:** high — a TWFE estimate under staggered adoption can be wrong in sign and magnitude, so a brief built on it misleads the partner about your drug's persistence.
+
+**Setup:** use your Exercise 3 memo, or generate a flawed artifact: ask the model to "write R code for a staggered DiD on Cardizem-X branded share across states with a single treated dummy and unit + year fixed effects" — it will likely hand you TWFE. Validate that.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 12 (Research Design / Public Data)
+For the pasted analysis plan or code, mark each Pass / Fail / Cannot-determine:
+
+- Correctness: does the design actually identify a causal effect, or is it association
+  with controls?
+- Completeness: identifying assumption stated, falsification diagnostic named, Evidence
+  Ladder ceiling stated, dataset limits listed?
+- Scope: public/synthetic data only; no partner-proprietary panel assumed?
+- Chapter-specific 1 (Estimator integrity): under staggered adoption, is the estimator
+  heterogeneity-robust (Callaway-Sant'Anna or peer) rather than plain two-way fixed effects?
+- Chapter-specific 2 (Parallel-trends defense): is there a pre-trend event-study plot and a
+  plain-English defense of why pre-entry trends should be parallel for this drug?
+- Failure-mode check: does the plan commit TWFE BIAS (single treated dummy + unit/year FE
+  under staggered timing) or FAILED PRE-TRENDS (leads not near zero, waved past)? Is it
+  fluent-but-wrong — confident code that quietly uses forbidden comparisons?
+- Ground truth: is the identifying assumption checkable against a named diagnostic, or is the
+  ground truth missing?
+```
+
+**What to do with findings:** all pass — advance the memo to the Chapter 13 portfolio card. One fail — fix it (replace TWFE with Callaway-Sant'Anna; add the event-study plot) and re-validate. Multiple fails — send it back to Exercise 3; a plan that fails both estimator and pre-trends checks is not patchable in prose.
+
+**AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your Chapter 12 work and the one judgment it could not make — for example, that you used Claude to draft the Callaway-Sant'Anna code and summarize the Part D dictionary for Cardizem-X, but you decided yourself whether parallel trends were defensible given the drug's specific patent and entry history, because that judgment requires the institutional context the model does not have.* (Mandatory.)
+
+**Series connection:** the failure mode is **TWFE bias / failed pre-trends**, and the validating judgment is **T7 Wisdom** — the identifying assumption and the estimator choice are the human contribution that the chapter exists to train.

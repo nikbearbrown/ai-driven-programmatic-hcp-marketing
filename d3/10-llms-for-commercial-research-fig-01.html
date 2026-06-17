@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Generation and verification are different acts</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{width:100%;max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:14px;fill:var(--color-ink);}
+  .node{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);font-weight:600;}
+  .sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .gap{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .cap{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {id:"draft",label:"LLM GENERATES DRAFT",sub:"fluent, plausibly sourced",accent:true},
+  {id:"harness",label:"VALIDATION HARNESS",sub:"resolve, score, flag, review",fill:true},
+  {id:"claim",label:"TRUSTWORTHY CLAIM",sub:"verified, attributed, reviewed"}
+];
+const wrap=d3.select("#wrap");
+function render(){
+  wrap.select("svg").remove();
+  const W=Math.max(420,Math.min(760,wrap.node().clientWidth||700)),H=420;
+  const svg=wrap.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Generation and verification are different acts");
+  svg.append("desc").attr("id","chart-desc").text("Left to right: an LLM generates a draft, a validation harness, then a trustworthy claim. A labeled gap separates generation from verification.");
+  svg.append("defs").html('<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--color-ink)"/></marker>');
+  svg.append("text").attr("class","title").attr("x",32).attr("y",28).text("Generation and verification are different acts");
+  const bw=Math.min(176,(W-64-2*24)/3), y=160, gap=24;
+  const total=bw*3+gap*2, startX=(W-total)/2;
+  const xs=[startX,startX+bw+gap,startX+2*(bw+gap)];
+  // gap band
+  svg.append("line").attr("x1",32).attr("y1",124).attr("x2",W-32).attr("y2",124)
+    .attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  svg.append("text").attr("class","gap").attr("x",W/2).attr("y",116).attr("text-anchor","middle")
+    .text("— the gap this chapter operationalizes —");
+  const g=svg.selectAll(".n").data(FALLBACK_DATA).join("g").attr("tabindex",0)
+    .attr("aria-label",d=>d.label+": "+d.sub);
+  g.append("rect").attr("x",(d,i)=>xs[i]).attr("y",y).attr("width",bw).attr("height",80).attr("rx",0)
+    .attr("fill",d=>d.fill?"var(--color-fill)":"var(--color-white)")
+    .attr("stroke",d=>d.accent?"var(--color-red)":(d.fill?"var(--color-ink)":"var(--color-border)"))
+    .attr("stroke-width",d=>(d.accent||d.fill)?1.5:1);
+  g.append("text").attr("class","node").attr("x",(d,i)=>xs[i]+bw/2).attr("y",y+34).attr("text-anchor","middle").text(d=>d.label);
+  g.append("text").attr("class","sub").attr("x",(d,i)=>xs[i]+bw/2).attr("y",y+54).attr("text-anchor","middle").text(d=>d.sub);
+  // arrows
+  for(let i=0;i<2;i++){
+    svg.append("line").attr("x1",xs[i]+bw).attr("y1",y+40).attr("x2",xs[i+1]-4).attr("y2",y+40)
+      .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  }
+  svg.append("text").attr("class","cap").attr("x",32).attr("y",300).text("A useful draft becomes a trustworthy claim only after every atomic assertion is verified");
+  svg.append("text").attr("class","cap").attr("x",32).attr("y",316).text("against a real, correctly attributed source and has cleared expert review.");
+  svg.append("text").attr("class","cap").attr("x",32).attr("y",372).text("Generation and verification are different acts. The harness is what fills the gap.");
+}
+render();
+new ResizeObserver(()=>render()).observe(wrap.node());
+</script>
+</body>
+</html>

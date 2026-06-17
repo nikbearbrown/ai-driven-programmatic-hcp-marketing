@@ -21,7 +21,14 @@ Before the mechanics, a structural fact worth holding clearly: the Fellow's job 
 
 The four-stage research-to-product pipeline maps cleanly to the Evidence Ladder. Stage 1 is open research — the Fellow's stage, public data and public methodology, topping out around Level 3. Stage 2 is proprietary replication — the *partner* re-runs the promising method on its internal data, running the prospective holdout the Fellow could only gesture at. Stage 3 is a working prototype inside the partner's environment. Stage 4 is a monitored, resourced deployment.
 
-<!-- → [TABLE: Four-stage pipeline — columns: Stage, What happens, Who owns it, Evidence Ladder level; rows: 1 Open research / Fellow tests on public data / Fellow / L0–L3; 2 Proprietary replication / Partner runs holdout on internal data / Partner / L4; 3 Prototype / Built artifact in client context / Partner / L5; 4 Resourced feature / Monitored deployment / Partner / L6; firewall indicated between Stages 1 and 2] -->
+| Stage | What happens | Who owns it | Evidence Ladder level |
+|---|---|---|---|
+| 1 — Open research | Fellow tests on public data | Fellow | L0–L3 |
+| 2 — Proprietary replication | Partner runs holdout on internal data | Partner | L4 |
+| 3 — Prototype | Built artifact in client context | Partner | L5 |
+| 4 — Resourced feature | Monitored deployment | Partner | L6 |
+
+*Table 14.1 — The four-stage research-to-product pipeline (firewall between Stages 1 and 2)*
 
 The Chapter 14 brief is precisely the gate-1-to-gate-2 handoff document. It answers one question: does this public-data result earn the partner's data and engineering investment? The Fellow who tries to build the feature has confused the role. Over-building is scope creep the firewall forbids — and, practically, a Fellow on public data *cannot* reach Levels 4 through 6, because those require proprietary data and a live client context that exist only inside the partner's walls.
 
@@ -42,6 +49,10 @@ The criteria are conjunctive, and this matters: a project must pass all of them 
 **Patient-welfare gate** is the subject of the next section. It is a required criterion, not an appendix, and it can veto.
 
 **Build cost** is an order-of-magnitude engineering estimate — data access for proprietary replication, model and infrastructure build, monitoring. A strong-evidence, high-cost project may still be TEST rather than BUILD. The Fellow gives an order of magnitude plus the questions for the partner's engineers, not a precise number that cannot be defended.
+
+![The TEST / BUILD / KILL decision tree: a top-down sequence of five conjunctive decision nodes from a scored project, where any failed criterion exits to a TEST or KILL verdict and the patient-welfare gate (in red) can veto a commercially excellent project.](images/14-prototype-to-product-decision-fig-01.png)
+
+*Figure 14.1 — The TEST / BUILD / KILL decision tree, with the welfare gate as veto*
 
 <!-- → [DIAGRAM: Decision tree — root: scored project; first branch: evidence strength ≥ L3? No → TEST or KILL; Yes → second branch: magnitude commercially meaningful? No → KILL; Yes → third branch: compliance risk manageable? No → TEST (flag first); Yes → fourth branch: welfare gate passed? No → KILL or escalate; Yes → fifth branch: build cost tractable? No → TEST; Yes → BUILD; welfare gate shown in red to signal veto power] -->
 
@@ -127,27 +138,6 @@ The third is partner-defensibility — whether the partner could defend the reco
 
 ---
 
-**Five-Part AI Exercise Block**
-
-**When to use AI here.** Drafting the brief's structure, turning a scored card into prose, drafting the client-pilot and monitoring sketch, generating the "what would change my mind" section. AI is useful for format and for surfacing criteria you might forget to address.
-
-**When NOT to use AI here.** The verdict, the welfare gate judgment, the evidence level, and the partner-defensibility call. These are the human judgments the entire book has been building toward. An LLM that defaults to BUILD on a positive result, or treats the welfare gate as a checkbox rather than a veto, has made the most important error in the chapter.
-
-**LLM exercise (copy-paste prompt):**
-> "Here is a scored project: [PASTE CARD]. Write a product-handoff brief recommending build, test, or kill. Apply the patient-welfare gate as a binding veto criterion, not a checkbox."
-
-Audit the output against three questions: Did it default to BUILD on a positive result? Did it apply the welfare gate as a veto or a footnote? Did it adjudicate compliance instead of routing it? Rewrite every place it overstepped, and note the specific judgment the model got wrong.
-
-**CLI exercise.** Use a script to assemble the brief from your Chapter 13 artifacts — pulling the scored card, the calibration plots, and the kill-criterion result into a single rendered document. The verdict must be computed from your stated criteria (so the logic is auditable) rather than asserted. If the kill criterion was met before the brief runs, the script should output KILL automatically; the human's job is to write the rationale, not to decide the verdict again.
-
-**AI validation exercise.** Run the brief through the Chapter 10 validation harness at a higher bar: every cited figure resolves and is correctly labeled vendor-sourced, independent, or contested; no causal claim exceeds the ladder level; the welfare gate is applied as a binding criterion; no legal conclusion is adjudicated. Document the one judgment the AI got fluently wrong — the place where it produced a confident, well-formatted, incorrect call.
-
-**AI Use Disclosure**
-
-*Write three sentences — one per judgment — naming what required human expertise the AI could not supply across the whole project: (1) the true evidence status of your result; (2) whether the effect is real or an artifact; (3) whether the partner could defend your recommendation to a regulator. These are the three places the book has been preparing you to stand, and they are the three places AI cannot stand for you.*
-
----
-
 **What Would Change My Mind**
 
 I would revise the claim that public-data work cannot reach Level 4 if a public dataset emerged with credible exposure-level and protected-attribute data that supported a prospective causal readout — that dataset does not exist today. I would revise the welfare gate as a binding veto if evidence showed that it systematically kills projects that, in proprietary replication, turn out welfare-neutral — the gate's design assumes that the cost of a false BUILD (a harmful shipped feature) exceeds the cost of a false KILL (a shelved good idea), and that assumption is itself contestable and should be tested empirically rather than accepted as given. I would revise the entire handoff architecture if the partner agreement did not materialize — in which case the honest response is to report that the lab's core mechanism is blocked, not to pretend the handoff is operational.
@@ -196,3 +186,156 @@ I would revise the claim that public-data work cannot reach Level 4 if a public 
 
 9. *(Open-ended — the exchange rate problem)* The welfare gate assumes that the cost of a false BUILD — a harmful shipped feature — exceeds the cost of a false KILL — a shelved good idea. Construct the strongest possible argument that this assumption is wrong in a specific commercial context, then construct the counterargument. On what empirical question does the exchange rate actually depend, and what data would you need to set it on something other than assumption?
    *What this tests: holding the welfare gate's design as a testable assumption rather than a moral given, and identifying the evidence that would adjudicate it.*
+
+---
+
+## Prompts
+
+### Figure 14.1 — The TEST / BUILD / KILL decision tree
+
+Build a top-down decision flowchart. The data is an ordered list of five conjunctive decision nodes, each with a Yes edge (continue downward) and a No edge (exit to a verdict). Root: a single box labeled "Scored project." Then, in order: (1) "Evidence strength ≥ L3?" — No exits to "TEST or KILL"; (2) "Magnitude commercially meaningful?" — No exits to "KILL"; (3) "Compliance risk manageable?" — No exits to "TEST (flag first)"; (4) "Welfare gate passed?" — No exits to "KILL or escalate"; (5) "Build cost tractable?" — No exits to "TEST". All-Yes terminus: a "BUILD" box. Marks: rectangular boxes for the root and verdict exits; diamond-or-box decision nodes for the five criteria; arrowed edges between them. Channels: vertical position encodes order (root at top, BUILD at bottom). Color the welfare-gate node (#4) red to signal its veto power; every other node and verdict exit stays ink/gray — red is reserved for the veto, never for danger or "kill." Label each edge Yes or No, placed beside the arrow, not on its centerline. Annotate that the criteria are conjunctive. Deliverable: a single self-contained HTML file with inline CSS, using D3 7.9.0 from cdnjs.
+
+---
+
+## Chapter 14 Exercises: From Prototype to Product Decision (The Fellow's Brief) — Capstone
+
+**Project:** One Drug, End to End
+**This chapter adds:** You make the TEST/BUILD/KILL decision for your drug — applying the conjunctive criteria and the patient-welfare veto — and assemble the integrated one-drug case study plus partner handoff: the terminal deliverable of the whole series.
+
+*Worked example throughout: **Cardizem-X**, the branded cardiometabolic drug carried since Chapter 11. This is the capstone: the four cards from Chapter 13, the Chapter 12 designs, and the Chapter 11 ladder placements all converge into one case study and one handoff. Swap in your own drug wherever the notes say so.*
+
+### Exercise 1 — When to Use AI
+
+A good "no" is as valuable as a build recommendation — and harder to write. Use AI to assemble and format the brief, where you can check the output against the four cards it draws from.
+
+1. **Turn four scored cards into one integrated case study.** Hand an LLM your Chapter 13 cards for Cardizem-X and ask it to draft the case-study narrative — what each track found, the honest ladder level, the through-line. *Why AI works here:* the inputs are fixed cards; you verify the narrative restates them faithfully, with no level or magnitude drifting upward from what the cards say.
+2. **Draft the brief structure and the "what would change the verdict" field.** *Why AI works here:* the brief's field set is fixed (verdict line first, evidence, magnitude, compliance routed, welfare gate, cost, recommendation) and the "what would change the verdict" field is a falsifiability statement you can check for being concrete rather than a hedge.
+
+**The tell:** in both tasks you can independently evaluate the output against the source cards and the chapter's brief template — the model assembles known inputs into a known structure; it does not reach the verdict.
+
+### Exercise 2 — When NOT to Use AI
+
+1. **The verdict and the patient-welfare veto.** *Why AI fails here:* an LLM defaults to BUILD on a positive result and treats the welfare gate as a checkbox rather than a veto — the single most important error the chapter names. The positive-but-vetoed case (a Cardizem-X co-pay program that lifts branded share by suppressing generic substitution) is a commercial win and a welfare kill, and only a human can hold that kill against the commercial number.
+2. **The true evidence status and the real-versus-noise call.** *Why AI fails here:* the model will accept a before/after comparison as Level 4 if you describe it confidently, and it cannot tell a result from a result-shaped number — a surrogate (engagement) that never connected to the outcome that matters (scripts).
+3. **The partner-defensibility judgment.** *Why AI fails here:* whether the partner could defend recommending Cardizem-X's coupon program to a regulator or audit committee depends on the partner's specific situation and the current regulatory environment, which the model does not have; and legal conclusions are routed to counsel, never adjudicated by Fellow or model.
+
+**The tell:** AI as *reason* vs. *tool* — if the brief says BUILD because the model scored it BUILD, AI has become the reason for a resource decision; it may only draft prose around a verdict you own. **Series connection:** these are the book's terminal **T7 Wisdom** judgments (true evidence status, signal-vs-noise, partner-defensibility) gated by a **T6 Collective** check — the welfare veto and the compliance routing are not one Fellow's private call but a standard the lab and counsel hold together, the human spine the whole series has been building toward.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building:** the capstone — the integrated one-drug case study for Cardizem-X plus a product-handoff brief that reaches a verdict with the welfare gate applied as a binding veto.
+
+**Tool:** Claude, continuing the **Claude Project** "One Drug — Cardizem-X." Persistent context is now load-bearing: the Project holds all four Chapter 13 cards, the Chapter 12 designs, and the Chapter 11 ladder placements, so the model can synthesize the case study from the actual artifacts instead of a summary you re-type.
+
+**The Prompt:**
+
+```
+Capstone for the One Drug project, Cardizem-X (branded cardiometabolic drug, two generics,
+one branded competitor, loss of exclusivity ~18 months out). Public data only. Reference
+"AI-Driven Programmatic HCP Marketing," Chapter 14 — the TEST/BUILD/KILL brief and the
+patient-welfare gate.
+
+Using my four Chapter 13 portfolio cards for Cardizem-X (Track A lift-selection audit,
+Track B loss-of-exclusivity persistence vs. ICER value, Track C ensemble-vs-routed benchmark,
+Track D co-pay coupon generic-suppression), produce TWO artifacts:
+
+1. AN INTEGRATED ONE-DRUG CASE STUDY (~500 words): the through-line across the four tracks —
+   what public data established about Cardizem-X, the honest Evidence-Ladder ceiling for each,
+   and what the partner would need proprietary data to settle.
+
+2. A PRODUCT-HANDOFF BRIEF for the ONE most decision-ready track, with: verdict on the FIRST
+   line (TEST / BUILD / KILL); evidence strength with honest ladder level; lift/association
+   magnitude; compliance flags ROUTED to counsel (not adjudicated); patient-welfare gate result
+   applied as a BINDING VETO (a commercial win can still be a welfare KILL); order-of-magnitude
+   build-cost note with questions for partner engineers; recommended next gate; and "what would
+   change the verdict."
+
+RULES: do NOT default to BUILD on a positive result. Apply the welfare gate as a veto, not a
+checkbox. Do NOT adjudicate any legal question — route it. Do NOT inflate any ladder level above
+what public data supports. Leave the FINAL verdict line as "[VERDICT — Fellow's call]" for me to
+fill; give your reasoning but not my decision. Flag uncertain figures with [verify].
+```
+
+**What this produces:** the integrated case study and a handoff brief for your drug, with the verdict line deliberately left for you — the capstone deliverable, assembled but not decided, by the model.
+
+**How to adapt:** swap Cardizem-X and its four tracks for your own drug; on ChatGPT or Gemini, paste all four cards each session since they lack the persistent Project. Whatever the tool, you fill the verdict line yourself.
+
+**Connection to previous chapters:** this brief is the gate-1-to-gate-2 handoff that Chapter 11's firewall defined, built on Chapter 12's identification arguments and Chapter 13's pre-registered cards; the welfare gate operationalizes the lift-vs-welfare critique the book has carried since Chapter 2.
+
+**Preview of next chapter:** this is the capstone — there is no next chapter. The brief you hold is the terminal deliverable of the series: the Fellow's defensible, honest, actionable handoff for one drug, end to end.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** the assembled capstone case file for your drug — case study, handoff brief, and the four source cards in one folder — with a script that *computes* the verdict from your stated criteria so the logic is auditable rather than asserted.
+
+**Tool:** **Cowork** — why: this is multi-file case-study assembly (case study + brief + four cards + a verdict-logic script) across a folder, which is precisely Cowork's multi-file orchestration strength; a single-thread tool would lose the cross-file coherence the capstone needs. · **Skill level:** intermediate.
+
+**Setup (3-item checklist):**
+- A Cowork session with `cardizem-x-capstone/` containing `cards/` (the four Chapter 13 cards), `case-study.md`, and `brief.md`.
+- A `CLAUDE.md` line: public/synthetic data only; the welfare gate is a binding veto; the verdict is computed from stated criteria, the human writes the rationale; never adjudicate a legal question.
+- Python 3 available.
+
+**The Task:**
+
+```
+In cardizem-x-capstone/, working across the folder:
+- READ the four cards in cards/ and the criteria I state at the top of brief.md (evidence
+  level, magnitude meaningful y/n, compliance manageable y/n, welfare gate passed y/n,
+  build cost tractable y/n);
+- WRITE only verdict.py and verdict-output.txt;
+- LEAVE case-study.md, brief.md, and the cards unedited.
+
+verdict.py reads the five conjunctive criteria from brief.md's header and computes the verdict:
+any failed criterion -> TEST or KILL per the chapter's tree; welfare-gate FAIL -> KILL/escalate
+regardless of the commercial criteria (the veto). All five pass -> BUILD. Print the verdict and
+which criterion, if any, forced it.
+
+STOP after verdict-output.txt is written. The script DECIDES the verdict from the criteria so
+the logic is auditable; it must NOT write the rationale — that is mine. VERIFY by setting the
+welfare gate to FAIL on an otherwise all-PASS brief and confirming the output is KILL (the veto
+works), then setting all PASS and confirming BUILD. Do not commit or push.
+```
+
+**Expected output:** `verdict.py` and `verdict-output.txt` showing the computed verdict and the criterion that forced it.
+
+**What to inspect:** the welfare-veto test — an all-PASS brief with the welfare gate set to FAIL must compute KILL, not BUILD. If a commercial win overrides the welfare gate, the conjunctive logic is broken and the brief would ship a vetoed feature.
+
+**If it goes wrong:** if the script returns BUILD when the welfare gate failed, the veto is being treated as one weighted input among five — tell Cowork "the welfare gate is a hard veto, not a weighted criterion; a welfare FAIL forces KILL regardless of the others." Recovery is local; nothing committed.
+
+**CLAUDE.md note:** add "The patient-welfare gate is a binding veto: a welfare FAIL forces KILL even when every commercial criterion passes. The script computes the verdict; the human writes the rationale and never re-decides it."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** the capstone product-handoff brief for your drug (from Exercise 3, or a deliberately flawed one) at the chapter's higher bar — verdict honesty, welfare-gate-as-veto, ladder integrity, and no adjudicated legal conclusion.
+
+**Validation type:** capstone decision audit (the terminal validation of the series). **Risk level:** highest — this brief recommends a real resource decision on your drug; a false BUILD ships a feature, and a welfare-gate bypass ships a harmful one.
+
+**Setup:** use your Exercise 3 brief, or generate a flawed artifact: ask the model to "write the BUILD brief for the Cardizem-X co-pay program — it lifts branded share, so recommend resourcing it." It will likely default to BUILD and treat the welfare gate as a footnote. Validate that.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 14 (Prototype-to-Product Decision, Capstone)
+For the pasted handoff brief, mark each Pass / Fail / Cannot-determine:
+
+- Correctness: does the verdict follow from the conjunctive criteria, or was it asserted?
+- Completeness: verdict first line; evidence strength + honest ladder level; magnitude;
+  compliance routed; welfare gate result; build-cost note; "what would change the verdict"?
+- Scope: public/synthetic data only; no ladder level above what public data supports; no legal
+  question adjudicated (all routed to counsel)?
+- Chapter-specific 1 (Welfare-gate-as-veto): is the welfare gate applied as a binding veto — a
+  commercial win that suppresses generics or moves a low-ICER-value drug forced to KILL?
+- Chapter-specific 2 (Verdict discipline): did the brief avoid defaulting to BUILD on a positive
+  result, and is engagement/surrogate movement NOT mistaken for incrementality?
+- Failure-mode check: does the brief commit WELFARE-GATE BYPASS (veto treated as a checkbox) or
+  AUTOMATION BIAS (a confident model BUILD accepted without the human verdict)? Is it fluent-but-
+  wrong — a well-formatted, confident, incorrect call?
+- Ground truth: is the verdict checkable against the stated criteria and the source cards, or is
+  the ground truth (the criteria, the cards) missing?
+```
+
+**What to do with findings:** all pass — the capstone case study and brief are complete; this is the terminal deliverable, ready for the partner handoff. One fail — restore the honest verdict (hold the welfare kill; a defensible KILL earns full marks) and re-validate. Multiple fails — return to Exercise 3; a brief that bypasses the welfare gate and defaults to BUILD is the exact failure the whole book trained you to catch, not an artifact to patch.
+
+**AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your capstone Chapter 14 work and the one judgment it could not make — for example, that you used Claude to assemble the integrated Cardizem-X case study and draft the handoff brief from your four cards, but you reached the verdict and held the patient-welfare veto yourself, because the model defaults to BUILD on a commercial win and cannot judge whether the partner could defend the recommendation to a regulator.* (Mandatory.)
+
+**Series connection:** the failure mode is **welfare-gate bypass / automation bias**, and the validating judgment is the series-terminal **T7 Wisdom** — true evidence status, signal-vs-noise, and partner-defensibility — held to a **T6 Collective** standard, since the welfare veto and the handoff are a standard the lab and counsel own together. This is where the One Drug project ends: one drug, carried end to end, decided by a human.

@@ -1,0 +1,61 @@
+<!--
+  Figure title: Four mechanisms inflate observed lift away from the true causal effect
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 05-the-evidence-problem
+  Figure: 01
+  Type: DIAGRAM
+  Generated: 2026-06-16
+  Source: chapters/05-the-evidence-problem.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-01" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-01">Four mechanisms inflate observed lift away from the true causal effect</title>
+  <desc>Four bias mechanisms — selection on the outcome, attribution circularity, absence of a control, publication asymmetry — feed arrows into an Observed Lift box. A separate True Causal Effect box is reachable only via design controls.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="05-the-evidence-problem" figure-number="01" figure-title="Four mechanisms inflate observed lift" figure-type="DIAGRAM" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/05-the-evidence-problem.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+    <marker id="arrowred" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#C8102E"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="32" y="28" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Four mechanisms push observed lift above the true causal effect</text>
+
+  <!-- four mechanism nodes, left column x=32 width=232 -->
+  <g font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">
+    <rect x="32" y="60"  width="232" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="44" y="80">1. Selection on the outcome</text>
+    <text x="44" y="98" font-size="11" fill="#545454">targets already-likely prescribers</text>
+
+    <rect x="32" y="128" width="232" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="44" y="148">2. Attribution circularity</text>
+    <text x="44" y="166" font-size="11" fill="#545454">server also measures the lift</text>
+
+    <rect x="32" y="196" width="232" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="44" y="216">3. Absence of a control</text>
+    <text x="44" y="234" font-size="11" fill="#545454">no held-out counterfactual</text>
+
+    <rect x="32" y="264" width="232" height="48" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+    <text x="44" y="284">4. Publication asymmetry</text>
+    <text x="44" y="302" font-size="11" fill="#545454">only the wins become case studies</text>
+  </g>
+
+  <!-- arrows into Observed Lift (red = inflation) -->
+  <line x1="264" y1="84"  x2="430" y2="190" stroke="#C8102E" stroke-width="1.5" marker-end="url(#arrowred)"/>
+  <line x1="264" y1="152" x2="430" y2="200" stroke="#C8102E" stroke-width="1.5" marker-end="url(#arrowred)"/>
+  <line x1="264" y1="220" x2="430" y2="210" stroke="#C8102E" stroke-width="1.5" marker-end="url(#arrowred)"/>
+  <line x1="264" y1="288" x2="430" y2="220" stroke="#C8102E" stroke-width="1.5" marker-end="url(#arrowred)"/>
+
+  <!-- Observed Lift box -->
+  <rect x="434" y="172" width="180" height="64" fill="#F5F5F5" stroke="#2a1a0e" stroke-width="1"/>
+  <text x="524" y="200" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">OBSERVED LIFT</text>
+  <text x="524" y="218" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">inflated, all four present</text>
+
+  <!-- True Causal Effect node, disconnected -->
+  <rect x="434" y="300" width="180" height="64" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="524" y="328" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">TRUE CAUSAL EFFECT</text>
+  <text x="524" y="346" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">unobserved without a holdout</text>
+
+  <!-- dashed link: only design controls connect them -->
+  <line x1="524" y1="300" x2="524" y2="236" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4" marker-end="url(#arrow)"/>
+  <text x="540" y="272" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">requires design controls</text>
+
+  <text x="668" y="408" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: CH.05 — THE EVIDENCE PROBLEM</text>
+</svg>

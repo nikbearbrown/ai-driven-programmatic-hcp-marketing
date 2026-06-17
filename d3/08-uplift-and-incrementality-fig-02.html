@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 8.2 — The Qini / uplift curve</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .axis-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .curve-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .curve-label.actual{fill:var(--color-red);}
+  .curve-label.perfect{fill:var(--color-ink);}
+  .tick-label{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .grid line{stroke:var(--color-border);stroke-width:0.5;}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .pt:focus{outline:none;}
+  .pt:focus circle{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">The Qini curve: how much incremental response a targeting ranking captures</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The shaded area between the actual model and the random diagonal is the Qini coefficient — a standard summary of uplift targeting quality.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+// Three curves sharing origin (0,0) and endpoint (1,1):
+// perfect (steep then flat, ink), actual (intermediate bow, red), random (diagonal, gray dashed).
+const FALLBACK_DATA = {
+  perfect: [
+    {x:0.00,y:0.00},{x:0.10,y:0.45},{x:0.20,y:0.72},{x:0.30,y:0.86},
+    {x:0.40,y:0.92},{x:0.50,y:0.95},{x:0.60,y:0.965},{x:0.70,y:0.975},
+    {x:0.80,y:0.985},{x:0.90,y:0.993},{x:1.00,y:1.00}
+  ],
+  actual: [
+    {x:0.00,y:0.00},{x:0.10,y:0.16},{x:0.20,y:0.32},{x:0.30,y:0.47},
+    {x:0.40,y:0.60},{x:0.50,y:0.71},{x:0.60,y:0.80},{x:0.70,y:0.87},
+    {x:0.80,y:0.92},{x:0.90,y:0.965},{x:1.00,y:1.00}
+  ],
+  random: [{x:0.00,y:0.00},{x:1.00,y:1.00}],
+  knee: {x:0.50, y:0.71, tip:"The knee of the actual curve: above it lie the persuadables (steep gains); below it the sure things (flat, diminishing returns)."},
+  marks: [
+    {id:"perfect", x:0.20, y:0.72, cls:"perfect", tip:"Perfect model: ranks every HCP correctly, capturing all incremental response in the first slice targeted."},
+    {id:"actual",  x:0.55, y:0.755, cls:"actual",  tip:"Actual model: bows above the random diagonal. Captures incremental response faster than chance, but below the perfect ceiling."},
+    {id:"random",  x:0.70, y:0.60, cls:"", tip:"Random targeting: the diagonal. Each fraction targeted yields a proportional fraction of incremental response — no skill."}
+  ]
+};
+
+const W=700,H=420;
+const M={top:48,right:40,bottom:56,left:64};
+const PW=W-M.left-M.right, PH=H-M.top-M.bottom;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The Qini curve: cumulative incremental response against fraction targeted, with perfect, actual, and random curves");
+svg.append("desc").attr("id","chart-desc").text("Three curves share an origin and endpoint: a perfect-model curve rising steeply then flattening, an actual-model curve bowing moderately above the diagonal, and a random-targeting straight diagonal. The shaded area between the actual curve and the diagonal is the Qini coefficient.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+
+const x=d3.scaleLinear().domain([0,1]).range([0,PW]);
+const y=d3.scaleLinear().domain([0,1]).range([PH,0]);   // zero-baseline
+
+function draw(){
+  svg.selectAll(".plot").remove();
+  const g=svg.append("g").attr("class","plot").attr("transform",`translate(${M.left},${M.top})`);
+
+  // chart-area background
+  g.append("rect").attr("x",0).attr("y",0).attr("width",PW).attr("height",PH)
+    .attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+
+  // gridlines
+  const grid=g.append("g").attr("class","grid").attr("aria-hidden","true");
+  y.ticks(5).forEach(t=>grid.append("line").attr("x1",0).attr("x2",PW).attr("y1",y(t)).attr("y2",y(t)));
+  x.ticks(5).forEach(t=>grid.append("line").attr("y1",0).attr("y2",PH).attr("x1",x(t)).attr("x2",x(t)));
+
+  // Qini shaded region: between actual curve and the diagonal
+  const areaPts = FALLBACK_DATA.actual;
+  const area=d3.area().x(d=>x(d.x)).y0(d=>y(d.x)).y1(d=>y(d.y)).curve(d3.curveBasis);
+  g.append("path").attr("aria-hidden","true").datum(areaPts)
+    .attr("fill","var(--color-red)").attr("fill-opacity",0.10).attr("d",area);
+
+  // axes
+  g.append("line").attr("x1",0).attr("y1",PH).attr("x2",PW).attr("y2",PH).attr("stroke","var(--color-ink)").attr("stroke-width",1.5);
+  g.append("line").attr("x1",0).attr("y1",PH).attr("x2",0).attr("y2",0).attr("stroke","var(--color-ink)").attr("stroke-width",1.5);
+
+  const line=d3.line().x(d=>x(d.x)).y(d=>y(d.y)).curve(d3.curveBasis);
+  const lineStraight=d3.line().x(d=>x(d.x)).y(d=>y(d.y));
+
+  // random diagonal (gray dashed)
+  g.append("path").attr("aria-hidden","true").datum(FALLBACK_DATA.random)
+    .attr("fill","none").attr("stroke","var(--color-secondary)").attr("stroke-width",1.5).attr("stroke-dasharray","5 4").attr("d",lineStraight);
+
+  // perfect model (ink, steep then flat)
+  g.append("path").attr("aria-hidden","true").datum(FALLBACK_DATA.perfect)
+    .attr("fill","none").attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("d",line);
+
+  // actual model (red, the single red data series)
+  g.append("path").attr("aria-hidden","true").datum(FALLBACK_DATA.actual)
+    .attr("fill","none").attr("stroke","var(--color-red)").attr("stroke-width",1.5).attr("d",line);
+
+  // knee annotation
+  g.append("line").attr("aria-hidden","true").attr("x1",x(FALLBACK_DATA.knee.x)).attr("y1",y(FALLBACK_DATA.knee.y))
+    .attr("x2",x(FALLBACK_DATA.knee.x)).attr("y2",PH).attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  g.append("text").attr("class","curve-label").attr("x",x(FALLBACK_DATA.knee.x)-6).attr("y",y(0.45)).attr("text-anchor","end").text("persuadables");
+  g.append("text").attr("class","curve-label").attr("x",x(FALLBACK_DATA.knee.x)+6).attr("y",y(0.45)).attr("text-anchor","start").text("sure things");
+  g.append("text").attr("class","curve-label").attr("x",x(FALLBACK_DATA.knee.x)+4).attr("y",y(FALLBACK_DATA.knee.y)-8).text("knee");
+
+  // Qini area label
+  g.append("text").attr("class","curve-label").attr("x",x(0.16)).attr("y",y(0.28)).text("Qini area");
+
+  // curve descriptors as interactive marks
+  const mg=g.selectAll(".pt").data(FALLBACK_DATA.marks.concat([{id:"knee",x:FALLBACK_DATA.knee.x,y:FALLBACK_DATA.knee.y,cls:"",tip:FALLBACK_DATA.knee.tip}])).join(
+    enter=>{
+      const grp=enter.append("g").attr("class","pt")
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.id+": "+d.tip);
+      grp.filter(d=>d.id==="knee"||d.id==="actual"||d.id==="perfect")
+        .append("circle").attr("cx",d=>x(d.x)).attr("cy",d=>y(d.y)).attr("r",3.5)
+        .attr("fill",d=>d.id==="actual"?"var(--color-red)":"transparent");
+      grp.append("text").attr("class",d=>"curve-label "+d.cls)
+        .attr("x",d=>x(d.x)).attr("y",d=>y(d.y)-8).attr("text-anchor","middle")
+        .text(d=>d.id==="knee"?"":d.id);
+      grp.append("circle").attr("aria-hidden","true").attr("fill","transparent")
+        .attr("cx",d=>x(d.x)).attr("cy",d=>y(d.y)).attr("r",11);
+      return grp;
+    }
+  );
+  function show(event,d){tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");}
+  function hide(){tip.style("opacity",0);}
+  mg.on("mousemove",show).on("mouseleave",hide)
+    .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+    .on("blur",hide)
+    .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+
+  // axis labels
+  g.append("text").attr("class","axis-label").attr("x",PW/2).attr("y",PH+28).attr("text-anchor","middle")
+    .text("fraction of population targeted");
+  svg.append("text").attr("class","axis-label").attr("text-anchor","middle")
+    .attr("transform",`translate(${M.left-28},${M.top+PH/2}) rotate(-90)`)
+    .text("cumulative incremental response");
+
+  // ticks
+  g.append("text").attr("class","tick-label").attr("x",x(0)).attr("y",PH+16).attr("text-anchor","middle").text("0");
+  g.append("text").attr("class","tick-label").attr("x",x(1)).attr("y",PH+16).attr("text-anchor","middle").text("1");
+  g.append("text").attr("class","tick-label").attr("x",-6).attr("y",y(0)+4).attr("text-anchor","end").text("0");
+  g.append("text").attr("class","tick-label").attr("x",-6).attr("y",y(1)+4).attr("text-anchor","end").text("1");
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 5.3 — Evidence-map construction (EHR co-pay)</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .st{font-size:12px;fill:var(--color-ink);}.ss{font-size:11px;fill:var(--color-secondary);}
+  .verd{font-size:14px;fill:var(--color-red);}.vsub{font-size:11px;fill:var(--color-secondary);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .step rect{cursor:pointer;}.step rect:focus{outline:2px solid var(--color-ochre);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Building the evidence map: the EHR co-pay-message program</p>
+  <div id="chart"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {n:1,t:"Name the dependent variable",s:"lift claim (incremental scripts) → requires a control group",d:"A lift claim asserts incremental prescribing, which cannot be graded without a counterfactual."},
+  {n:2,t:"Locate best available evidence",s:"vendor 19% NPI-level lift; no independent estimate exists",d:"The only number on offer is vendor-produced; no peer-reviewed estimate sits beside it."},
+  {n:3,t:"Grade on two axes",s:"design: unadjusted (low) · source: vendor (low) → min = weak",d:"Minimum-of-two rule: weakness on either axis caps the grade at weak."},
+  {n:4,t:"Identify bias mechanisms present",s:"selection · circularity · no control · publication — all four",d:"The maximal-bias case: every inflation mechanism is operating at once."},
+  {n:5,t:"State known vs. unknown",s:"known: little, with confidence · unknown: the true effect",d:"Naming an absence precisely is itself an actionable result."}
+];
+const data=FALLBACK_DATA;
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Evidence-map construction for the EHR co-pay program");
+  svg.append("desc").attr("id","chart-desc").text("Five-step flowchart ending in a WEAK, holdout-required verdict.");
+  const defs=svg.append("defs");
+  defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+    .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill",cv("--color-ink"));
+  const bx=Math.max(120,(W-460)/2),bw=Math.min(460,W-2*bx+(W-460>0?0:0)),bh=40,gap=20,top=44;
+  const bwReal=Math.min(460,W-2*120);
+  const xL=(W-bwReal)/2;
+  const cxMid=xL+bwReal/2;
+  const steps=svg.selectAll("g.step").data(data).join("g").attr("class","step");
+  steps.append("rect").attr("x",xL).attr("width",bwReal).attr("height",bh).attr("y",(d,i)=>top+i*(bh+gap))
+    .attr("fill",cv("--color-white")).attr("stroke",cv("--color-border")).attr("stroke-width",1)
+    .attr("tabindex",0).attr("aria-label",d=>`Step ${d.n}: ${d.t}. ${d.d}`)
+    .on("click",(e,d)=>toggle(d.n)).on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle(d.n);}});
+  steps.append("text").attr("class","st").attr("x",xL+12).attr("y",(d,i)=>top+i*(bh+gap)+18).text(d=>`${d.n}. ${d.t}`);
+  steps.append("text").attr("class","ss").attr("data-detail",d=>d.n).attr("x",xL+12).attr("y",(d,i)=>top+i*(bh+gap)+34).text(d=>d.s);
+  // connectors
+  for(let i=0;i<data.length-1;i++){
+    const y1=top+i*(bh+gap)+bh,y2=top+(i+1)*(bh+gap);
+    svg.append("line").attr("x1",cxMid).attr("y1",y1).attr("x2",cxMid).attr("y2",y2).attr("stroke",cv("--color-ink")).attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  }
+  const lastY=top+(data.length-1)*(bh+gap)+bh,vy=lastY+24;
+  svg.append("line").attr("x1",cxMid).attr("y1",lastY).attr("x2",cxMid).attr("y2",vy).attr("stroke",cv("--color-ink")).attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  svg.append("rect").attr("x",cxMid-150).attr("y",vy).attr("width",300).attr("height",46).attr("fill",cv("--color-fill")).attr("stroke",cv("--color-red")).attr("stroke-width",1.5);
+  svg.append("text").attr("class","verd").attr("text-anchor","middle").attr("x",cxMid).attr("y",vy+22).text("WEAK — HOLDOUT REQUIRED");
+  svg.append("text").attr("class","vsub").attr("text-anchor","middle").attr("x",cxMid).attr("y",vy+38).text("no post-hoc adjustment substitutes for a control");
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-32).attr("y",vy+62).text("SOURCE: CH.05");
+}
+function toggle(n){
+  const sel=d3.select(`text[data-detail='${n}']`);
+  const d=FALLBACK_DATA[n-1];
+  const showingDetail=sel.text()===d.d;
+  sel.text(showingDetail?d.s:d.d);
+}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

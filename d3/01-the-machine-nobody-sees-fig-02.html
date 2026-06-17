@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 1.2 — The two clinical interoperability rails commercial messages ride</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .lane{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;}
+  .step rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-white);}
+  .step.term rect{stroke:var(--color-red);stroke-width:1.5;}
+  .step-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);}
+  .step-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .step-sub.mono{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .step:focus{outline:none;}
+  .step:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Both rails were designed for safety alerts; both now carry commercial messages</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The two clinical interoperability rails commercial messages ride. Both were designed for safety alerts; both are now available to commercial messages delivered through approved app channels.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  lanes:[
+    {name:"CDS HOOKS — event-driven HTTP card", red:true, y:78, steps:[
+      {label:"Physician", sub:"opens chart", mono:false, tip:"A clinical workflow action — opening a patient chart."},
+      {label:"EHR fires hook", sub:"patient-view", mono:true, tip:"The EHR fires an HTTP request to a registered service on patient-view, order-select or order-sign."},
+      {label:"External service", sub:"returns a card", mono:false, tip:"A commercial service subscribes to the same triggers built for clinical alerts."},
+      {label:"Card renders", sub:"in sidebar", mono:false, term:true, tip:"The card renders inside the EHR, in the same visual tier as a safety alert."}
+    ]},
+    {name:"SMART ON FHIR — app launched inside the EHR", red:false, y:222, steps:[
+      {label:"App launch", sub:"in Hyperspace", mono:false, tip:"An approved third-party app launches embedded inside the EHR, typically in an iframe."},
+      {label:"OAuth 2.0", sub:"token exchange", mono:false, tip:"On launch the EHR passes a short-lived token via OAuth 2.0."},
+      {label:"FHIR context", sub:"patient / encounter / clinician", mono:false, tip:"The app receives context claims identifying patient, encounter and clinician."},
+      {label:"Branded panel", sub:"renders in iframe", mono:false, term:true, tip:"Doceree's Spark uses this identical protocol for branded engagement."}
+    ]}
+  ]
+};
+const W=700,H=480, BW=140, BH=48, GAP=24, X0=32;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The two clinical interoperability rails commercial messages ride");
+svg.append("desc").attr("id","chart-desc").text("Two horizontal sequences of four steps each: CDS Hooks and SMART on FHIR, both ending in a commercial card.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+
+function draw(){
+  svg.selectAll(".lane-g,.note").remove();
+  FALLBACK_DATA.lanes.forEach((lane,li)=>{
+    const g=svg.append("g").attr("class","lane-g");
+    g.append("text").attr("class","lane").attr("x",X0).attr("y",lane.y-12)
+      .attr("fill", lane.red?"var(--color-red)":"var(--color-ink)").text(lane.name);
+    lane.steps.forEach((s,i)=>{
+      const x=X0 + i*(BW+GAP);
+      const step=g.append("g").attr("class","step"+(s.term?" term":""))
+        .attr("tabindex",0).attr("role","img").attr("aria-label",s.label+" "+s.sub);
+      step.append("rect").attr("x",x).attr("y",lane.y).attr("width",BW).attr("height",BH).attr("rx",0);
+      step.append("text").attr("class","step-label").attr("x",x+BW/2).attr("y",lane.y+20).attr("text-anchor","middle").text(s.label);
+      step.append("text").attr("class","step-sub"+(s.mono?" mono":"")).attr("x",x+BW/2).attr("y",lane.y+36).attr("text-anchor","middle").text(s.sub);
+      if(i<lane.steps.length-1){
+        g.append("line").attr("aria-hidden","true").attr("x1",x+BW).attr("y1",lane.y+BH/2).attr("x2",x+BW+GAP-4).attr("y2",lane.y+BH/2)
+          .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+      }
+      step.on("mousemove",(event)=>tip.style("opacity",1).html(s.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+          .on("mouseleave",()=>tip.style("opacity",0))
+          .on("focus",function(){const r=this.getBoundingClientRect();tip.style("opacity",1).html(s.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+          .on("blur",()=>tip.style("opacity",0))
+          .on("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(s.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+    });
+  });
+  const note=svg.append("g").attr("class","note");
+  note.append("rect").attr("x",32).attr("y",320).attr("width",636).attr("height",56).attr("rx",0)
+    .attr("stroke","var(--color-border)").attr("stroke-width",1).attr("fill","var(--color-fill)");
+  note.append("text").attr("x",48).attr("y",344).attr("font-family","'Inter',-apple-system,'Helvetica Neue',sans-serif").attr("font-size",12).attr("font-weight",600).attr("fill","var(--color-ink)").text("Same visual tier as drug-interaction warnings and guideline alerts");
+  note.append("text").attr("x",48).attr("y",362).attr("font-family","'Inter',-apple-system,'Helvetica Neue',sans-serif").attr("font-size",11).attr("fill","var(--color-secondary)").text("The card looks like a clinical reminder because it arrives through the same plumbing as one.");
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

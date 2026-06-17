@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 1.1 — The split-agency structure that breaks consumer sovereignty</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .node rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-white);}
+  .node.decision rect{stroke:var(--color-red);stroke-width:1.5;}
+  .node-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;fill:var(--color-ink);}
+  .node-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .flow-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);}
+  .flow-missing{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-red);}
+  .mono{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:220px;}
+  .node:focus{outline:none;}
+  .node:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Four parties, four roles — and the cost-bearer never enters the decision</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The physician decides; the payer pays; neither holds complete information about the other's constraints. The party who pays is not at the table — the broken loop of consumer sovereignty.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  nodes:[
+    {id:"PHYSICIAN", sub:"decides — writes the script", x:64, y:80, decision:true, tip:"The physician is the patient's clinical agent — and the target of the commercial message."},
+    {id:"INSTITUTION", sub:"constrains the menu (PBM, formulary)", x:436, y:80, decision:false, tip:"Health systems, PBMs and formulary committees set the menu of what can be chosen."},
+    {id:"PATIENT", sub:"consumes — takes the drug", x:64, y:248, decision:false, tip:"The patient consumes the drug, downstream of both the decider and the payer."},
+    {id:"PAYER", sub:"pays the majority of the cost", x:436, y:248, decision:false, tip:"The payer absorbs most of the cost but has no voice in the decision — the absent party."}
+  ],
+  flows:[
+    {from:"PHYSICIAN", to:"PATIENT", label:"decision", missing:false},
+    {from:"INSTITUTION", to:"PHYSICIAN", label:"constrains menu", missing:false},
+    {from:"PAYER", to:"INSTITUTION", label:"payment", missing:false},
+    {from:"PAYER", to:"PHYSICIAN", label:"no voice in the decision", missing:true}
+  ]
+};
+const W=700,H=420, NW=200, NH=64;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The split-agency structure that breaks consumer sovereignty");
+svg.append("desc").attr("id","chart-desc").text("Four nodes connected by decision, payment and consumption flows; the payer has no return arrow into the decision node.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+function center(n){return {x:n.x+NW/2,y:n.y+NH/2};}
+function nodeById(id){return FALLBACK_DATA.nodes.find(n=>n.id===id);}
+
+function draw(){
+  svg.selectAll(".flow,.flowlabel").remove();
+  FALLBACK_DATA.flows.forEach(f=>{
+    const a=nodeById(f.from), b=nodeById(f.to), ca=center(a), cb=center(b);
+    // simple edge between box edges
+    let x1=ca.x,y1=ca.y,x2=cb.x,y2=cb.y;
+    if(Math.abs(ca.x-cb.x) < 10){ // vertical
+      y1 = a.y<b.y ? a.y+NH : a.y; y2 = a.y<b.y ? b.y : b.y+NH;
+      x1=x2=ca.x;
+    } else { // horizontal
+      x1 = a.x<b.x ? a.x+NW : a.x; x2 = a.x<b.x ? b.x : b.x+NW;
+      y1=y2=ca.y;
+    }
+    svg.append("line").attr("class","flow").attr("aria-hidden","true")
+      .attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2)
+      .attr("stroke", f.missing?"var(--color-border)":"var(--color-ink)")
+      .attr("stroke-width", f.missing?0.75:1.5)
+      .attr("stroke-dasharray", f.missing?"5 4":null)
+      .attr("marker-end", f.missing?null:"url(#arrow)");
+    svg.append("text").attr("class", f.missing?"flowlabel":"flowlabel")
+      .attr("x",(x1+x2)/2).attr("y",(y1+y2)/2-6).attr("text-anchor","middle")
+      .attr("class", f.missing?"flow-missing":"flow-label")
+      .text(f.label);
+  });
+
+  const g=svg.selectAll(".node").data(FALLBACK_DATA.nodes,d=>d.id).join(
+    enter=>{
+      const grp=enter.append("g").attr("class",d=>"node"+(d.decision?" decision":""))
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.id+": "+d.sub);
+      grp.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",NW).attr("height",NH).attr("rx",0);
+      grp.append("text").attr("class","node-label").attr("x",d=>d.x+NW/2).attr("y",d=>d.y+28).attr("text-anchor","middle").text(d=>d.id);
+      grp.append("text").attr("class","node-sub").attr("x",d=>d.x+NW/2).attr("y",d=>d.y+46).attr("text-anchor","middle").text(d=>d.sub);
+      return grp;
+    }
+  );
+  function show(event,d){
+    tip.style("opacity",1).html(d.tip)
+      .style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");
+  }
+  function hide(){tip.style("opacity",0);}
+  g.on("mousemove",show).on("mouseleave",hide)
+   .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+   .on("blur",hide)
+   .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

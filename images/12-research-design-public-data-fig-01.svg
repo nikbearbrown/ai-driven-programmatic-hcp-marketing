@@ -1,0 +1,57 @@
+<!--
+  figure-title: The fundamental problem of causal inference
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 12-research-design-public-data
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/12-research-design-public-data.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The fundamental problem of causal inference</title>
+  <desc>Two parallel timelines for one physician. World A — heavy detailing — is observed with a measured prescribing outcome. World B — no detailing — is an unobserved ghost box with the outcome missing. An arrow defines the causal effect as World A outcome minus World B outcome. Every design is a different argument for imputing the missing World B from other observable physicians.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="12-research-design-public-data" figure-number="01" figure-title="The fundamental problem of causal inference" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/12-research-design-public-data.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">One physician, two worlds — and you only ever see one of them</text>
+  <text x="32" y="54" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">For any physician, you observe either the detailed world or the undetailed world — never both.</text>
+
+  <!-- World A row (observed) -->
+  <rect x="32" y="84" width="636" height="92" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="48" y="106" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">WORLD A — heavy detailing</text>
+  <text x="48" y="124" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">observed</text>
+  <!-- timeline -->
+  <line x1="200" y1="148" x2="500" y2="148" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="200" y="166" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">t0</text>
+  <!-- observed outcome glyph -->
+  <rect x="520" y="120" width="120" height="44" rx="0" stroke="#2a1a0e" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="580" y="139" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">outcome Y(A)</text>
+  <text x="580" y="155" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">measured</text>
+
+  <!-- World B row (unobserved / ghost) -->
+  <rect x="32" y="200" width="636" height="92" rx="0" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4" fill="#FFFFFF"/>
+  <text x="48" y="222" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#C8102E" font-weight="600">WORLD B — no detailing</text>
+  <text x="48" y="240" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">unobserved — the missing counterfactual</text>
+  <line x1="200" y1="264" x2="500" y2="264" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="200" y="282" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">t0</text>
+  <!-- ghost/empty outcome glyph -->
+  <rect x="520" y="236" width="120" height="44" rx="0" stroke="#C8102E" stroke-width="0.75" stroke-dasharray="5 4" fill="#FFFFFF"/>
+  <text x="580" y="255" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">outcome Y(B)</text>
+  <text x="580" y="271" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#C8102E">missing</text>
+
+  <!-- Causal effect arrow connecting the two outcomes -->
+  <line x1="580" y1="164" x2="580" y2="236" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="408" y="182" width="94" height="32" fill="#FFFFFF"/>
+  <text x="500" y="194" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Causal effect =</text>
+  <text x="500" y="210" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Y(A) - Y(B)</text>
+
+  <!-- Footer note -->
+  <text x="32" y="332" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Every design is a different argument for how to impute World B from other observable physicians.</text>
+
+  <!-- Caption -->
+  <text x="32" y="372" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The missing counterfactual is the central problem. Adding covariates does not recover World B —</text>
+  <text x="32" y="388" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">structure does. Caption: the missing counterfactual is the problem; structure is the solution.</text>
+</svg>

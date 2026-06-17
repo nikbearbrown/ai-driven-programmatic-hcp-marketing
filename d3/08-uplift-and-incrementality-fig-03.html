@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 8.3 — The persuadables 2x2 matrix</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .cell rect{stroke:var(--color-border);stroke-width:1;}
+  .cell.focal rect{stroke:var(--color-ink);stroke-width:1.5;}
+  .cell-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-secondary);}
+  .cell-label.ink{fill:var(--color-ink);}
+  .cell-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .axis-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .box-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .box-label.ink{fill:var(--color-ink);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:240px;}
+  .cell:focus{outline:none;}
+  .cell:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">If you remember one picture: propensity targets sure things, uplift targets persuadables</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">Propensity targeting buys sure things (wasted spend, the source of inflated lift). Uplift targeting buys persuadables — the recommended move.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+// 2x2 persuadables matrix.
+// x = prescribes-if-treated (no -> yes); y = prescribes-if-untreated (yes top, no bottom).
+const CELL=140, X0=200, Y0=64;
+const FALLBACK_DATA = {
+  cells:[
+    {id:"sleeping dogs", sub:"(hazard)", x:X0,        y:Y0,        kind:"hazard", focal:false,
+     tip:"Sleeping dogs: prescribe if untreated, but treatment LOWERS prescribing. A hazard — targeting them backfires."},
+    {id:"sure things",   sub:"",          x:X0+CELL,   y:Y0,        kind:"wasted", focal:false,
+     tip:"Sure things: prescribe whether treated or not. Targeting them is wasted spend — the source of inflated lift."},
+    {id:"lost causes",   sub:"",          x:X0,        y:Y0+CELL,   kind:"wasted", focal:false,
+     tip:"Lost causes: never prescribe, treated or not. Targeting them is wasted spend."},
+    {id:"persuadables",  sub:"(only profitable)", x:X0+CELL, y:Y0+CELL, kind:"focal", focal:true,
+     tip:"Persuadables: prescribe only if treated. The only cell where treatment causes the prescription — the only profitable target."}
+  ],
+  arrows:[
+    {id:"propensity targeting", x:512, y:92,  red:false, x1:512, y1:120, x2:482, y2:132,
+     tip:"Propensity targeting selects high-likelihood HCPs — and lands on sure things, who would prescribe anyway. Inflated, non-incremental lift."},
+    {id:"uplift targeting",     x:512, y:276, red:true,  x1:512, y1:290, x2:482, y2:278,
+     tip:"Uplift targeting selects HCPs whose prescribing the treatment actually changes — landing on persuadables. The recommended move."}
+  ]
+};
+const BOXW=148, BOXH=40;
+
+const W=700,H=450;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The persuadables matrix: prescribe-if-treated versus prescribe-if-untreated, with propensity and uplift targeting arrows");
+svg.append("desc").attr("id","chart-desc").text("A two-by-two matrix of prescribes-if-treated against prescribes-if-untreated. Persuadables is the only profitable cell and is focal; sleeping dogs is the hazard cell; sure things and lost causes are wasted spend. A propensity-targeting arrow points to sure things; an uplift-targeting arrow points to persuadables.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+
+function cellFill(c){
+  if(c.kind==="hazard") return {fill:"var(--color-red)", op:0.18};
+  if(c.kind==="focal")  return {fill:"var(--color-red)", op:0.10};
+  return {fill:"var(--color-border)", op:0.35};
+}
+
+function draw(){
+  svg.selectAll(".matrix,.axes,.arrows").remove();
+
+  // axes labels group
+  const ax=svg.append("g").attr("class","axes");
+  ax.append("text").attr("class","axis-label").attr("x",X0+CELL).attr("y",Y0+2*CELL+28).attr("text-anchor","middle").text("prescribes if treated  →  yes");
+  ax.append("text").attr("class","axis-label").attr("x",X0).attr("y",Y0+2*CELL+28).attr("text-anchor","middle").text("no  ←");
+  ax.append("text").attr("class","axis-label").attr("text-anchor","middle")
+    .attr("transform",`translate(${X0-14},${Y0+70}) rotate(-90)`).text("untreated: yes  ↑");
+  ax.append("text").attr("class","axis-label").attr("text-anchor","middle")
+    .attr("transform",`translate(${X0-14},${Y0+CELL+70}) rotate(-90)`).text("no  ↓");
+
+  // cells (g-per-quadrant)
+  const g=svg.append("g").attr("class","matrix").selectAll(".cell").data(FALLBACK_DATA.cells,d=>d.id).join(
+    enter=>{
+      const grp=enter.append("g").attr("class",d=>"cell"+(d.focal?" focal":""))
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.id+": "+d.tip);
+      grp.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",CELL).attr("height",CELL).attr("rx",0)
+        .attr("fill",d=>cellFill(d).fill).attr("fill-opacity",d=>cellFill(d).op)
+        .attr("stroke",d=>d.focal?"var(--color-ink)":"var(--color-border)")
+        .attr("stroke-width",d=>d.focal?1.5:1);
+      grp.append("text").attr("class",d=>"cell-label"+(d.focal||d.kind==="hazard"?" ink":""))
+        .attr("x",d=>d.x+CELL/2).attr("y",d=>d.y+CELL/2+ (d.sub? -4:4)).attr("text-anchor","middle").text(d=>d.id);
+      grp.append("text").attr("class","cell-sub")
+        .attr("x",d=>d.x+CELL/2).attr("y",d=>d.y+CELL/2+12).attr("text-anchor","middle").text(d=>d.sub);
+      return grp;
+    }
+  );
+
+  // targeting arrow boxes
+  const arows=svg.append("g").attr("class","arrows").selectAll(".cell").data(FALLBACK_DATA.arrows,d=>d.id).join(
+    enter=>{
+      const grp=enter.append("g").attr("class","cell")
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.id+": "+d.tip);
+      grp.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",BOXW).attr("height",BOXH).attr("rx",0)
+        .attr("fill","var(--color-white)")
+        .attr("stroke",d=>d.red?"var(--color-red)":"var(--color-border)")
+        .attr("stroke-width",d=>d.red?1.5:1);
+      grp.append("text").attr("class",d=>"box-label"+(d.red?" ink":""))
+        .attr("x",d=>d.x+BOXW/2).attr("y",d=>d.y+16).attr("text-anchor","middle").text(d=>d.id.split(" ")[0]);
+      grp.append("text").attr("class",d=>"box-label"+(d.red?" ink":""))
+        .attr("x",d=>d.x+BOXW/2).attr("y",d=>d.y+32).attr("text-anchor","middle").text("targeting");
+      grp.append("line").attr("aria-hidden","true")
+        .attr("x1",d=>d.x1).attr("y1",d=>d.y1).attr("x2",d=>d.x2).attr("y2",d=>d.y2)
+        .attr("stroke",d=>d.red?"var(--color-red)":"var(--color-secondary)").attr("stroke-width",1.5)
+        .attr("fill","none").attr("marker-end","url(#arrow)");
+      return grp;
+    }
+  );
+
+  function show(event,d){tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");}
+  function hide(){tip.style("opacity",0);}
+  g.merge(arows).on("mousemove",show).on("mouseleave",hide)
+    .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+    .on("blur",hide)
+    .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

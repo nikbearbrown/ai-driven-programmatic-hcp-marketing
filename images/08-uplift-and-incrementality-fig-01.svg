@@ -1,0 +1,59 @@
+<!--
+  Title: The propensity-vs-incrementality inversion
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 08-uplift-and-incrementality
+  Figure: 01
+  Type: Statistical (curve chart)
+  Generated: 2026-06-16
+  Source: pantry/08-uplift-and-incrementality-cajal.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The propensity-versus-incrementality inversion: incremental effect peaks in the mid-propensity range</title>
+  <desc>An inverted-U curve of incremental effect against propensity score. The curve is near zero at the low-propensity left tail, peaks over the mid range, and falls toward zero at the high-propensity right tail. The peak zone is highlighted as profitable; both tails are muted as wasted spend.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="08-uplift-and-incrementality" figure-number="01" figure-title="The propensity-vs-incrementality inversion" figure-slug="propensity-incrementality-inversion" figure-type="Statistical" priority="Critical" author="Nik Bear Brown" date-generated="2026-06-16" source-file="pantry/08-uplift-and-incrementality-cajal.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The inversion: incremental return is highest in the middle, not at high propensity</text>
+
+  <!-- Plot area: top48 left64, width 596 to right40; here use x 64..660, y 56..356 -->
+  <!-- chart-area fill -->
+  <rect x="64" y="56" width="596" height="300" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- Three vertical zones: low (64-263), peak (263-461), high (461-660) -->
+  <!-- tail zones muted gray fill -->
+  <rect x="64" y="56" width="199" height="300" rx="0" fill="#D4D4D4" fill-opacity="0.35"/>
+  <rect x="461" y="56" width="199" height="300" rx="0" fill="#D4D4D4" fill-opacity="0.35"/>
+  <!-- peak zone subtle highlight -->
+  <rect x="263" y="56" width="198" height="300" rx="0" fill="#C8102E" fill-opacity="0.08"/>
+
+  <!-- axes -->
+  <line x1="64" y1="356" x2="660" y2="356" stroke="#2a1a0e" stroke-width="1.5"/>
+  <line x1="64" y1="356" x2="64" y2="56" stroke="#2a1a0e" stroke-width="1.5"/>
+
+  <!-- inverted-U curve: zero at x=64 (y=350), peak at x=362 (y=96), back to ~zero at x=660 (y=348) -->
+  <path d="M 64 350 Q 213 348 263 300 Q 320 100 362 96 Q 404 100 461 300 Q 511 348 660 348" fill="none" stroke="#C8102E" stroke-width="1.5"/>
+
+  <!-- peak marker -->
+  <circle cx="362" cy="96" r="3.5" fill="#C8102E"/>
+
+  <!-- axis labels -->
+  <text x="362" y="384" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">propensity score (likelihood to prescribe)</text>
+  <text x="40" y="206" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle" transform="rotate(-90 40 206)">incremental effect (CATE)</text>
+
+  <!-- ticks -->
+  <text x="64" y="372" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">0</text>
+  <text x="660" y="372" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="middle">1</text>
+  <text x="58" y="360" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="end">0</text>
+
+  <!-- zone descriptors (positional, not baked-in zone-name boxes) -->
+  <text x="163" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">lost causes</text>
+  <text x="362" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">persuadables</text>
+  <text x="561" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">sure things</text>
+
+  <!-- Caption -->
+  <text x="32" y="406" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The mid-propensity peak is the only profitable target; both tails are wasted spend. The chapter is built on this inversion.</text>
+</svg>

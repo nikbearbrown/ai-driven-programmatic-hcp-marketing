@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 4.2 — Omnichannel: sequencing and suppression</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+      --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}
+  }
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .panel{font-size:12px;fill:var(--color-ink);font-weight:bold;}
+  .panelsub{font-size:11px;fill:var(--color-secondary);}
+  .node text{font-size:11px;}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .legend{font-size:11px;fill:var(--color-ink);}
+  .node rect{cursor:pointer;}
+  .node rect:focus{outline:2px solid var(--color-ochre);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-size:12px;color:var(--color-ink);}
+  edge,line{transition:opacity 200ms cubic-bezier(0.2,0.8,0.2,1);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Omnichannel is a sequencing and suppression problem, not a reach problem</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const CHANNELS=["rep visit","virtual","email","EHR/POC","endemic","programmatic"];
+const FALLBACK_DATA={
+  fragmented:{active:["rep visit","virtual","email","EHR/POC","endemic","programmatic"]},
+  orchestrated:{active:["virtual","endemic"]}
+};
+const data=FALLBACK_DATA;
+const tip=d3.select("#tip");
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Omnichannel sequencing and suppression");
+  svg.append("desc").attr("id","chart-desc").text("Two hub-and-spoke diagrams of one HCP and six channels: fragmented fires all six, orchestrated keeps two and suppresses four.");
+
+  const cx1=W*0.26, cx2=W*0.74, cy=235, R=120;
+  function panel(cx,key,labelA,labelB){
+    const active=new Set(data[key].active);
+    const ang=d3.scalePoint().domain(CHANNELS).range([0,2*Math.PI]).padding(0).round(false);
+    // place channels around circle starting at top
+    const nodes=CHANNELS.map((c,i)=>{
+      const a=-Math.PI/2 + i*(2*Math.PI/CHANNELS.length);
+      return {name:c,x:cx+R*Math.cos(a),y:cy+R*Math.sin(a),on:active.has(c)};
+    });
+    const g=svg.append("g");
+    g.append("text").attr("class","panel").attr("text-anchor","middle").attr("x",cx).attr("y",40).text(labelA);
+    g.append("text").attr("class","panelsub").attr("text-anchor","middle").attr("x",cx).attr("y",56).text(labelB);
+    // spokes
+    g.selectAll("line.spoke").data(nodes).join("line").attr("class","spoke")
+      .attr("x1",cx).attr("y1",cy).attr("x2",d=>d.x).attr("y2",d=>d.y)
+      .attr("stroke",d=>d.on?cv("--color-red"):cv("--color-border"))
+      .attr("stroke-width",d=>d.on?1.5:0.75)
+      .attr("stroke-dasharray",d=>d.on?null:"5 4");
+    // channel nodes
+    const ng=g.selectAll("g.node").data(nodes).join("g").attr("class","node");
+    ng.append("rect").attr("x",d=>d.x-38).attr("y",d=>d.y-12).attr("width",76).attr("height",24)
+      .attr("fill",cv("--color-white")).attr("rx",0)
+      .attr("stroke",d=>d.on?cv("--color-ink"):cv("--color-border")).attr("stroke-width",1)
+      .attr("tabindex",0).attr("aria-label",d=>`${d.name}: ${d.on?"active":"suppressed"}`)
+      .on("mousemove",(e,d)=>showTip(e,d)).on("mouseleave",hideTip)
+      .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,d);}});
+    ng.append("text").attr("text-anchor","middle").attr("x",d=>d.x).attr("y",d=>d.y+4)
+      .attr("fill",d=>d.on?cv("--color-ink"):cv("--color-secondary")).text(d=>d.name);
+    // center HCP
+    g.append("rect").attr("x",cx-28).attr("y",cy-17).attr("width",56).attr("height",34)
+      .attr("fill",cv("--color-fill")).attr("stroke",cv("--color-ink")).attr("stroke-width",1);
+    g.append("text").attr("text-anchor","middle").attr("x",cx).attr("y",cy+4).attr("fill",cv("--color-ink")).text("HCP");
+  }
+  panel(cx1,"fragmented","FRAGMENTED","all six channels fire the same week");
+  panel(cx2,"orchestrated","ORCHESTRATED","two active, four suppressed by history");
+
+  svg.append("line").attr("x1",W/2).attr("y1",70).attr("x2",W/2).attr("y2",H-40)
+    .attr("stroke",cv("--color-border")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+
+  const lg=svg.append("g").attr("transform",`translate(${32},${H-14})`);
+  lg.append("line").attr("x1",0).attr("y1",-3).attr("x2",24).attr("y2",-3).attr("stroke",cv("--color-red")).attr("stroke-width",1.5);
+  lg.append("text").attr("class","legend").attr("x",30).text("active channel");
+  lg.append("line").attr("x1",160).attr("y1",-3).attr("x2",184).attr("y2",-3).attr("stroke",cv("--color-border")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  lg.append("text").attr("class","legend").attr("x",190).text("suppressed channel");
+
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-32).attr("y",H-4).text("SOURCE: CH.04");
+}
+function showTip(e,d){
+  tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px")
+    .html(`<strong>${d.name}</strong><br>${d.on?"active — engaged":"suppressed — low engagement"}`);
+}
+function hideTip(){tip.style("opacity",0);}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

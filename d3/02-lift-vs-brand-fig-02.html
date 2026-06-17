@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 2.2 — Choosing a primary outcome metric from a commercial goal</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .node rect{fill:var(--color-white);}
+  .node.q rect{stroke:var(--color-ink);stroke-width:1;}
+  .node.lift rect{stroke:var(--color-red);stroke-width:1.5;}
+  .node.out rect{stroke:var(--color-border);stroke-width:1;fill:var(--color-fill);}
+  .node.guard rect{stroke:var(--color-ochre);stroke-width:1;}
+  .nl{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);font-weight:600;}
+  .ns{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .edge-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .node:focus{outline:none;}
+  .node:focus rect{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">From a vague commercial goal to a metric, its study design, and a guardrail</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">Causation routes to a lift metric with a control group; association routes to a brand or NBRx metric, each paired with a guardrail that catches the failure mode the primary metric alone would miss.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA={
+  nodes:[
+    {id:"root", cls:"q", x:250, y:52, w:200, h:44, l:"Q1: Causation or association?", s:"", tip:"Start here: is your thread a causal lift question or an associational brand question?"},
+    {id:"lift", cls:"lift", x:64, y:144, w:220, h:44, l:"LIFT question", s:"needs a control / holdout group", tip:"Lift is inherently causal — it demands a group of physicians who were not exposed."},
+    {id:"liftout", cls:"out", x:64, y:232, w:220, h:44, l:"Output: incremental scripts", s:"vs. exposed-minus-control", tip:"The deliverable is incremental prescriptions above the counterfactual."},
+    {id:"q2", cls:"q", x:420, y:144, w:216, h:44, l:"Q2: Short or long horizon?", s:"and individual or market level?", tip:"For association, the horizon and level determine which metric and design to use."},
+    {id:"brand", cls:"out", x:376, y:232, w:130, h:60, l:"BRAND metric", s:"longitudinal design; brand share, SOMi", tip:"Brand is a longitudinal state — measured over months via brand share and share-of-mind."},
+    {id:"nbrx", cls:"out", x:536, y:232, w:100, h:60, l:"NBRx", s:"decisions now; leading indicator", tip:"NBRx is the leading indicator of decisions being made right now."},
+    {id:"guard", cls:"guard", x:64, y:336, w:572, h:60, l:"Always pair the primary metric with a guardrail", s:"e.g. NBRx + persistence over the next 2–3 fills — a metric without a named failure mode is a trap.", tip:"Every primary metric needs a named failure mode and a guardrail that catches it."}
+  ],
+  edges:[
+    {from:"root", to:"lift", label:"causation"},
+    {from:"lift", to:"liftout", label:""},
+    {from:"root", to:"q2", label:"association"},
+    {from:"q2", to:"brand", label:"long"},
+    {from:"q2", to:"nbrx", label:"short"}
+  ]
+};
+const W=700,H=480;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("Choosing a primary outcome metric from a commercial goal");
+svg.append("desc").attr("id","chart-desc").text("Decision tree branching on causation versus association into lift, brand and NBRx metrics with a guardrail.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+const byId=id=>FALLBACK_DATA.nodes.find(n=>n.id===id);
+
+function draw(){
+  svg.selectAll("g.edges,g.nodes").remove();
+  const eg=svg.append("g").attr("class","edges").attr("aria-hidden","true");
+  FALLBACK_DATA.edges.forEach(e=>{
+    const a=byId(e.from), b=byId(e.to);
+    const x1=a.x+a.w/2, y1=a.y+a.h, x2=b.x+b.w/2, y2=b.y;
+    eg.append("line").attr("x1",x1).attr("y1",y1).attr("x2",x2).attr("y2",y2-4)
+      .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    if(e.label) eg.append("text").attr("class","edge-label").attr("x",(x1+x2)/2).attr("y",(y1+y2)/2).attr("text-anchor","middle").text(e.label);
+  });
+  const ng=svg.append("g").attr("class","nodes");
+  const n=ng.selectAll(".node").data(FALLBACK_DATA.nodes,d=>d.id).join("g")
+    .attr("class",d=>"node "+d.cls).attr("tabindex",0).attr("role","img").attr("aria-label",d=>d.l+" "+d.s);
+  n.append("rect").attr("x",d=>d.x).attr("y",d=>d.y).attr("width",d=>d.w).attr("height",d=>d.h).attr("rx",0);
+  n.append("text").attr("class","nl").attr("x",d=>d.id==="guard"?d.x+16:d.x+d.w/2).attr("y",d=>d.y+20)
+    .attr("text-anchor",d=>d.id==="guard"?"start":"middle").text(d=>d.l);
+  n.append("text").attr("class","ns").attr("x",d=>d.id==="guard"?d.x+16:d.x+d.w/2).attr("y",d=>d.y+38)
+    .attr("text-anchor",d=>d.id==="guard"?"start":"middle").text(d=>d.s);
+  n.on("mousemove",(event,d)=>tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+   .on("mouseleave",()=>tip.style("opacity",0))
+   .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+   .on("blur",()=>tip.style("opacity",0))
+   .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

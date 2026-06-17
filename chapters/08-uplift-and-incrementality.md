@@ -23,6 +23,10 @@ This is why targeting on propensity and then measuring the treated group's outco
 
 A great predictor can be a terrible intervention target. Keep that sentence nearby. It is the inversion this chapter is built on, and it resolves the opening case in one step.
 
+![Two-axis plot — x: propensity score (0 to 1), y: incremental effect (CATE); curve peaks in the middle persuadable range and is near zero at both tails; annotations at high-propensity end read "sure things — wasted spend," at low end "lost causes — wasted spend," in middle "persuadables — the only profitable target".](images/08-uplift-and-incrementality-fig-01.png)
+
+*Figure 8.1 — The propensity-versus-incrementality inversion*
+
 <!-- → [DIAGRAM: Two-axis plot — x: propensity score (0 to 1), y: incremental effect (CATE); curve peaks in the middle persuadable range and is near zero at both tails; annotations at high-propensity end read "sure things — wasted spend," at low end "lost causes — wasted spend," in middle "persuadables — the only profitable target"] -->
 
 ---
@@ -35,7 +39,14 @@ This is the fundamental problem of causal inference. It is not a problem that mo
 
 Because the individual effect is unrecoverable, we settle for averages over comparable groups. The **average treatment effect** is $E[Y(1) - Y(0)]$ across a population — the mean lift, if you could run the experiment on everyone. The **conditional average treatment effect**, or **CATE**, is $E[Y(1) - Y(0) \mid X = x]$ — the effect conditional on a physician's covariates. CATE is the heterogeneous, individualized quantity that uplift modeling targets: it is why two physicians with different features get different predicted lifts from the same campaign. The marketing term "uplift modeling" and the econometrics term "CATE estimation" describe the same task in two vocabularies.
 
-<!-- → [TABLE: Terminology bridge — three columns: marketing term, econometrics term, what it means in plain language; rows: uplift model / CATE estimator / predicts the effect of treatment for a given physician; propensity score / P(treat|X) / probability of being treated; lift / ATE / average effect across the population; persuadables / high-CATE subgroup / physicians where the treatment actually moves the needle] -->
+| Marketing term | Econometrics term | What it means in plain language |
+| --- | --- | --- |
+| Uplift model | CATE estimator | Predicts the effect of treatment for a given physician |
+| Propensity score | $P(\text{treat} \mid X)$ | Probability of being treated |
+| Lift | ATE | Average effect across the population |
+| Persuadables | High-CATE subgroup | Physicians where the treatment actually moves the needle |
+
+*Table 8.1 — Terminology bridge: the same task in two vocabularies.*
 
 ---
 
@@ -69,7 +80,16 @@ The **R-learner** takes a different route: it residualizes out the propensity an
 
 Which estimator wins on your data is empirical, dataset-dependent, and not answerable in advance. A large benchmark on industrial marketing data compared S/T/X-learners and causal forests and found no universal winner; calibration and ranking quality matter as much as the estimator family. `[verify the Criteo Uplift v2.1 benchmark conclusions against the primary arXiv source]` Treat "which CATE estimator is best" as a question you test, not a setting you assume.
 
-<!-- → [TABLE: CATE estimator comparison — rows: S-learner, T-learner, X-learner, R-learner, causal forest, DR-learner; columns: key idea, when it works best, when it breaks, one-line failure mode] -->
+| Estimator | Key idea | When it works best | When it breaks | One-line failure mode |
+| --- | --- | --- | --- | --- |
+| S-learner | One model with treatment as a feature | Strong treatment signal | Weak treatment signal | Regularization shrinks the treatment coefficient toward zero |
+| T-learner | Two models, treated and control, differenced | Balanced groups | Imbalanced assignment | Variance in the difference overwhelms the signal |
+| X-learner | Cross-imputes counterfactuals, then averages | Unequal group sizes | Very noisy base models | Inherits base-learner error through imputation |
+| R-learner | Residualizes propensity and outcome (Neyman-orthogonal) | Either nuisance model is misspecified | Both nuisance models are poor | Double residualization cannot rescue two bad models |
+| Causal forest | Splits on treatment-effect heterogeneity directly | Low-dimensional settings | High dimensions | Inference more brittle, not assumption-lean |
+| DR-learner | Doubly robust: consistent if either model is right | Uncertain about either model | Both models wrong | No safety net when neither nuisance model holds |
+
+*Table 8.2 — CATE estimator comparison. Which one wins on your data is empirical and dataset-dependent.*
 
 ---
 
@@ -80,6 +100,10 @@ You cannot score an uplift model with ordinary accuracy, because the thing you a
 The standard solution is the **uplift curve** and its summary statistic, the **Qini coefficient**. Rank physicians by predicted uplift from highest to lowest. As you descend the ranking, plot the cumulative incremental response: treated-minus-control outcome, accumulated as you go down the list. A model that correctly identifies the persuadables concentrates incremental response at the top — the curve bows upward above the random-targeting diagonal. The Qini coefficient is the area between the model curve and the diagonal; more area means better uplift targeting.
 
 The intuition to hold: a useful uplift model lets you spend on the persuadables and skip the sure things. If a model cannot concentrate incremental response at the top of its ranking, it has not learned to distinguish persuadables from sure things, and it will not improve on random targeting even if its propensity predictions are excellent.
+
+![Uplift/Qini curve — x-axis: fraction of population targeted (0–1), y-axis: cumulative incremental response; three curves: perfect model (steep rise then flat), actual model (intermediate bow), random targeting (diagonal); shaded area between actual and diagonal labeled "Qini coefficient"; annotation: "sure things live below the knee; persuadables live above it".](images/08-uplift-and-incrementality-fig-02.png)
+
+*Figure 8.2 — The Qini curve: how much incremental response a ranking captures*
 
 <!-- → [CHART: Uplift/Qini curve — x-axis: fraction of population targeted (0–1), y-axis: cumulative incremental response; three curves: perfect model (steep rise then flat), actual model (intermediate bow), random targeting (diagonal); shaded area between actual and diagonal labeled "Qini coefficient"; annotation: "sure things live below the knee; persuadables live above it"] -->
 
@@ -98,6 +122,10 @@ Cross two binary questions: does this physician prescribe if treated? Does this 
 **Sleeping dogs** — sometimes called do-not-disturbs — are the counter-intuitive quadrant: treatment actively *reduces* the outcome. The message backfires. This happens in pharma contexts: a co-pay card for a drug a physician already resists prescribing on grounds of clinical inappropriateness may harden the resistance. A message that arrives in a crowded EHR workflow at the wrong moment may generate negative associations rather than positive ones. The sleeping-dog quadrant is a warning that uplift is directional, and that intervention can be harmful.
 
 Targeting on high propensity targets the sure things. Uplift targeting targets the persuadables. That reframing is the chapter's entire argument in business language.
+
+![Persuadables 2x2 — axes: "prescribes if treated" (yes/no) and "prescribes if untreated" (yes/no); four quadrants labeled persuadables, sure things, lost causes, sleeping dogs; arrows from "propensity targeting" pointing to sure-things quadrant; arrows from "uplift targeting" pointing to persuadables quadrant.](images/08-uplift-and-incrementality-fig-03.png)
+
+*Figure 8.3 — The persuadables 2×2: propensity targets sure things, uplift targets persuadables*
 
 <!-- → [DIAGRAM: Persuadables 2x2 — axes: "prescribes if treated" (yes/no) and "prescribes if untreated" (yes/no); four quadrants labeled persuadables, sure things, lost causes, sleeping dogs; arrows from "propensity targeting" pointing to sure-things quadrant; arrows from "uplift targeting" pointing to persuadables quadrant] -->
 
@@ -120,27 +148,6 @@ Take the next-best-action campaign and design the readout it should have had. Fr
 The headline collapses toward the holdout-corrected number, because the holdout strips out the three compounding biases from the opening case: it is drawn from the same propensity stratum, so targeting-on-outcome is gone; it experiences the same secular trend as the treated group, so trend confound is gone; and it is a randomized comparison rather than a self-referential platform baseline, so circularity is gone. The Qini curve then identifies where the campaign's real value was concentrated — in a persuadable minority — which is useful information for the next campaign's targeting.
 
 The limits worth naming. SUTVA can fail if treated and held-out physicians share a practice and talk. The window choice trades claims-lag bias against secular-trend bias. The holdout costs the brand the scripts it forgoes among true persuadables in the held-out group. A holdout is the gold standard, not a free lunch. And on public data you cannot run one at all — which is why the natural-experiment route exists, and why the absence of a peer-reviewed randomized evaluation of EHR advertising is the chapter's standing open question.
-
----
-
-**Five-Part AI Exercise Block**
-
-**When to use AI here.** Use an LLM to scaffold an analysis plan — which estimator, which assumption checks — to draft code for a holdout computation or a Qini curve, and to explain an unfamiliar estimator (say, the R-learner's residualization) in plain language before you read the primary paper.
-
-**When NOT to use AI here.** Do not let an LLM certify that an effect is causal. It will accept a before/after comparison as evidence if you phrase it confidently, and it cannot judge whether parallel trends hold in your data or whether a co-occurring policy change confounds your natural experiment. Identification is a human argument about the world, not a property of the code.
-
-**LLM exercise (copy-paste prompt):**
-> "Here is a 'lift' claim: [PASTE CLAIM]. List every reason this number might overstate the causal effect — name targeting-on-outcome, regression to the mean, attribution circularity, and absence of a control if they apply. Then state the minimal design that would make it credible."
-
-Check whether the model named all three compounding biases from the opening case, or stopped at a generic "needs more data."
-
-**CLI exercise.** On a public dataset with a treatment indicator and an outcome, compute: (a) naive before/after lift for the treated group; (b) holdout-corrected incremental effect as treated-mean minus control-mean. Report both numbers side by side. The gap between them is the chapter in one table. Note what fraction of the naive lift the holdout-corrected number represents.
-
-**AI validation.** Ask an LLM to estimate a treatment effect from observational data. Then independently check whether the unconfoundedness assumption it relied on is plausible given how treatment was assigned in that dataset. Log where the model assumed randomness the data did not have, and note whether it flagged the assumption or silently incorporated it.
-
-**AI Use Disclosure**
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to draft the code for the Qini curve computation and to scaffold the natural-experiment design; I determined myself whether the parallel-trends assumption was defensible in my data, because the model cannot reason about whether a co-occurring policy change confounded my estimate."*
 
 ---
 
@@ -192,3 +199,163 @@ The chapter's position is that propensity-based lift is structurally inflated an
 
 9. *(Open-ended — SUTVA and networks)* The chapter notes that SUTVA fails when physician networks create spillover. Propose a study design — using public data or a realistic hypothetical — that would (a) estimate how much spillover exists in a specific pharma marketing context and (b) correct the holdout-based incremental estimate for spillover contamination. Name the data you would need and the assumption your correction relies on.
    *What this tests: pushing past the standard holdout design to a harder real-world problem, and identifying the assumption that the fix introduces.*
+
+---
+
+## Prompts
+
+### Figure 8.1 — The propensity-versus-incrementality inversion
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 from the cdnjs CDN) rendering a line chart. Chart type: an inverted-U curve. X-axis: propensity score, scaleLinear 0 to 1, with axis label "propensity score (likelihood to prescribe)". Y-axis: incremental effect (CATE), scaleLinear, zero-baseline, label "incremental effect (CATE)". Marks: one red curve that is near zero at the left tail, peaks at mid-propensity, and falls toward zero at the right tail; a marked peak point. Channels: x position encodes propensity, y position encodes incremental effect. Shade three zones under the plot — left "lost causes" (muted gray), middle "persuadables" (red tint, the only profitable target), right "sure things" (muted gray). No sorting. Annotate that the mid-propensity peak is the only profitable target and both tails are wasted spend. viewBox 700×420, margins {top:48,right:40,bottom:56,left:64}. Deliverable: one HTML file, inline CSS, var(--color-*) tokens, light/dark theming, accessible title/desc, hover/focus tooltips.
+
+### Figure 8.2 — The Qini / uplift curve
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 CDN) rendering a cumulative-gain chart. X-axis: fraction of population targeted, scaleLinear 0 to 1. Y-axis: cumulative incremental response, scaleLinear, zero-baseline. Marks: three curves sharing origin (0,0) and endpoint (1,1) — a perfect-model curve (ink, steep then flat), an actual-model curve (red, intermediate bow above the diagonal, the single red series), and a random-targeting straight diagonal (gray, dashed). Shade the area between the actual curve and the diagonal as the Qini coefficient. Add a knee marker on the actual curve with a dashed drop-line and labels "persuadables" above the knee, "sure things" below. Channels: y position encodes captured incremental response. viewBox 700×420 (or 450 if needed), margins {top:48,right:40,bottom:56,left:64}. Deliverable: one HTML file, inline CSS, var(--color-*), light/dark theming, accessible title/desc, hover/focus tooltips.
+
+### Figure 8.3 — The persuadables 2×2
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 CDN) rendering a 2×2 matrix diagram. Axes (categorical, no scales): x = "prescribes if treated" (no → yes), y = "prescribes if untreated" (yes top, no bottom). Four equal quadrant cells: top-left sleeping dogs (hazard, red tint), top-right sure things (wasted, gray), bottom-left lost causes (wasted, gray), bottom-right persuadables (only profitable, red focal outline). Two labeled arrow callouts: "propensity targeting" (gray arrow) pointing to sure things; "uplift targeting" (red arrow) pointing to persuadables. Channels: fill tint encodes profitability/hazard; outline weight marks the focal cell. Annotate that propensity targeting buys sure things (inflated lift) and uplift targeting buys persuadables (the recommended move). viewBox 700×450. Deliverable: one HTML file, inline CSS, var(--color-*), light/dark theming, accessible title/desc, hover/focus tooltips.
+
+---
+
+## Chapter 8 Exercises: Uplift and Incrementality
+
+**Project:** One Drug, End to End
+**This chapter adds:** An estimate of persuadables versus sure-things among your drug's prescribers — a Qini-evaluated uplift view that corrects the inflated "lift" your propensity baseline would have credited.
+
+We carry **Jardiance (empagliflozin)** forward — branded SGLT2 inhibitor, branded rivals Farxiga and Invokana, generic alternatives metformin and sulfonylureas. Chapter 6 gave you a calibrated propensity baseline; Chapter 7 told you whether a vendor's "MoE" beat it. Both answer *who is likely to prescribe*. This chapter answers the harder, profitable question: *who would prescribe Jardiance only because you reached them* — the persuadables — and separates them from the sure things your propensity model loves.
+
+### Exercise 1 — When to Use AI
+
+1. Ask an LLM to scaffold an uplift analysis for a Jardiance natural experiment — draft the difference-in-differences setup, code the treated-minus-holdout incremental computation, and code a Qini curve from a dataframe with treatment and outcome columns. *Why AI works here:* code generation against a stated design — runnable output you can execute and read.
+2. Have it explain the X-learner's cross-imputation, or the R-learner's double residualization, in plain language before you read Nie & Wager. *Why AI works here:* concept exposition of documented estimators — checkable against the primary papers.
+
+**The tell:** you can independently evaluate the output — run the Qini code on synthetic data with a known effect, confirm the curve bows the right way; check the estimator explanation against the cited paper.
+
+### Exercise 2 — When NOT to Use AI
+
+1. Do not let the LLM certify that a Jardiance "lift" number is *causal*. It will accept a before/after or high-propensity-treated-vs-low-propensity-untreated comparison as evidence if you phrase it confidently — exactly the 44%-style trap. *Why AI fails here:* causal-ID — identification is an argument about how treatment was assigned in the world, not a property of the code.
+2. Do not let the LLM rank Jardiance prescribers by *propensity* and call it an uplift targeting list. A propensity ranking targets the sure things; only an uplift ranking finds persuadables. *Why AI fails here:* ground-truth — the individual treatment effect is never observed, so the model cannot verify its CATE ranking against any label and will happily substitute the propensity score it *can* compute.
+
+**The tell:** if the AI's "this lift is real" or "these are your high-uplift targets" is your *reason* to act, you have failed; if it is a *tool* output you then test against a holdout and a Qini curve, you are fine. **Series connection:** this is a **T7** judgment — propensity-mistaken-for-uplift. Confusing prediction for causation is the single most expensive error in the series, and no fluent output can resolve whether your parallel-trends assumption holds. The human owns the identification argument.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** an incrementality design for Jardiance — either a randomized-holdout readout (if a live system is in scope) or a public-data natural-experiment (a detailing-restriction or formulary shock) — with a named identifying assumption and a Qini-based persuadables view.
+
+**Tool:** Claude, run as a **Claude Project**. Persistent drug-context helps because this design reuses the Chapter 6 Jardiance propensity strata (the holdout must be drawn from the *same* propensity stratum to kill targeting-on-outcome) — a Project keeps that baseline and the Jardiance class context resident so the design stays consistent with what you already built.
+
+**The Prompt:**
+
+```
+You are designing an incrementality study for a running case on one branded drug
+carried end to end: Jardiance (empagliflozin), a branded SGLT2 inhibitor with
+branded competitors (Farxiga, Invokana) and generic alternatives (metformin,
+sulfonylureas). In Chapter 6 I built a calibrated propensity baseline for Jardiance
+new-to-brand starts on public Open Payments + Part D data.
+
+I want to separate PERSUADABLES (prescribe Jardiance only if reached) from SURE
+THINGS (prescribe regardless). Design BOTH options and tell me which fits public
+data:
+
+OPTION A — randomized holdout (only if a live targeting system is in scope):
+- From the high-propensity Jardiance target list, withhold the message from a
+  random 15% drawn from the SAME propensity stratum.
+- Define the primary outcome: incremental NBRx over a fixed window, with claims-lag
+  accounting.
+- Specify the CATE estimator (default X-learner with a gradient-boosted base, given
+  imbalanced treatment) and the Qini curve to locate the persuadables.
+
+OPTION B — natural experiment on PUBLIC data only:
+- Use a detailing-restriction or formulary shock as an as-good-as-random change in
+  Jardiance exposure.
+- Name the treated group, the matched control, the difference-in-differences
+  identifying assumption (parallel trends), and the single biggest threat to it.
+
+For whichever you recommend for a public-data Fellow, state explicitly: the
+identifying assumption, the threat I must defend in plain language, and what the
+Qini curve will and will NOT tell me. Flag any class or competitor claim as
+[verify]. Do NOT declare any effect causal — describe the argument I must make.
+
+ADAPTATION: replace Jardiance and its class with your own drug. In ChatGPT or
+Gemini, paste your Chapter 6 baseline strata at the top so the holdout is drawn
+from the right stratum.
+```
+
+**What this produces:** a concrete incrementality design naming its identifying assumption and its persuadables readout — the artifact Chapter 9 contrasts with brand association and Chapter 10 stress-tests against the literature.
+
+**How to adapt:** swap the drug; in ChatGPT/Gemini re-supply the Chapter 6 strata each session; in a Claude Project, store the baseline as Project knowledge.
+
+**Connection to previous chapters:** the holdout must be drawn from the same Chapter 6 propensity stratum — your baseline is now an *input* to the causal design, not a competitor to it. The 44%-style inflation this kills is the same vendor pattern you graded in Chapter 5.
+
+**Preview of next chapter:** uplift measures behavior change; Chapter 9 asks whether the *belief* behind the behavior — durable brand association — moved at all, and why a favorability spike without a control is as empty as a lift claim without a holdout.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** the chapter in one table — naive before/after Jardiance "lift" beside the holdout-corrected incremental effect, on a dataset with a treatment indicator.
+
+**Tool:** Claude Code (or Cowork) — it can read the file, compute both numbers, and emit the comparison. **Skill level:** beginner-to-intermediate.
+
+**Setup:**
+- [ ] A dataset (public or synthetic) with a treatment indicator and a binary/continuous outcome in `./data/`.
+- [ ] Python+pandas, or `csvkit`.
+- [ ] An `./outputs/` folder; source data read-only.
+
+**The Task:**
+
+```
+Read ONLY the dataset in ./data/ (do not modify it). Compute two numbers for a
+Jardiance-style treated group:
+(a) NAIVE before/after lift for the treated group only (post mean minus pre mean,
+    or treated post mean vs treated pre mean).
+(b) HOLDOUT-CORRECTED incremental effect = treated-group mean MINUS control/holdout
+    mean over the same window.
+
+Report both side by side and the ratio (corrected / naive) as a percentage. Write
+to ./outputs/incrementality-gap.txt. Do not write anywhere else. Stop when the file
+exists, then print it so I can verify the numbers myself.
+```
+
+**Expected output:** two numbers and a ratio — the holdout-corrected effect as a fraction of the naive figure, often a small fraction or inside the noise of zero.
+
+**What to inspect:** how much of the naive Jardiance "lift" survives the holdout correction? Is the control drawn comparably (same window, same stratum), or is it a non-comparable low-propensity group?
+
+**If it goes wrong:** if Claude Code computes "lift" against a non-comparable control (failure), restate that the holdout must be same-stratum and same-window, and re-run; if it reports only the naive number, require both side by side.
+
+**CLAUDE.md note:** add `Never report a lift number without its holdout-corrected counterpart and the comparability of the control group stated.`
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** the causal claim in your Ex3 design / Ex4 output — specifically whether the AI smuggled an unconfoundedness assumption the data does not support, or treated a propensity ranking as an uplift ranking.
+
+**Validation type:** identification-and-assumption audit of a causal artifact. **Risk level:** high — because a propensity-mistaken-for-uplift error sends the entire Jardiance budget at sure things while booking their inevitable scripts as campaign success, and the error is invisible in confident output.
+
+**Setup:** use your Ex3 design and Ex4 numbers. If you want a specific failure to practice on, ask the AI to "estimate the causal effect of Jardiance messaging" from observational data and watch whether it flags or silently assumes randomness.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 8 (Jardiance incrementality)
+
+Mark each Pass / Fail / Cannot-determine:
+- Correctness: Is the incremental effect computed as treated-minus-holdout (not a
+  before/after or non-comparable-group comparison)?
+- Completeness: Is the identifying assumption (unconfoundedness for a holdout,
+  parallel trends for a natural experiment) named explicitly?
+- Scope: Is the holdout drawn from the SAME propensity stratum, and the analysis on
+  public/synthetic data only?
+- Persuadables criterion: Does the ranking come from an uplift/CATE estimator and a
+  Qini curve — NOT from the Chapter 6 propensity score?
+- Threat criterion: Is the single biggest threat to identification named (spillover/
+  SUTVA, co-occurring shock) and addressed in plain language?
+- Failure-mode check: Look specifically for propensity-mistaken-for-uplift
+  (fluent-but-wrong: a propensity ranking presented as a persuadables list) and for
+  missing ground truth (a causal claim with no counterfactual / no named
+  assumption).
+```
+
+**What to do with findings:** all Pass — the design is defensible; the persuadables view is real. One Fail — repair it (draw the holdout from the right stratum, swap the propensity ranking for a CATE/Qini ranking) and re-validate. Multiple Fails — discard the causal claim entirely; an uplift estimate without a defensible counterfactual is not evidence.
+
+**AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to draft the Qini computation and the difference-in-differences scaffold for the Jardiance study; I decided whether the parallel-trends assumption was defensible and whether my ranking measured uplift rather than propensity, because the model cannot reason about whether a co-occurring shock confounded the estimate."* (Mandatory.)
+
+**Series connection:** the failure mode is **propensity-mistaken-for-uplift** at tier **T7** — the deepest error in the series, because prediction and causation feel identical in fluent output and only a counterfactual tells them apart.

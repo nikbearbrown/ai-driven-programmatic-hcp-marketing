@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 13.1 — The four tracks on the Evidence Ladder</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .tick{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .mono{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .track-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;fill:var(--color-ink);}
+  .track-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .ceiling-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;font-weight:600;fill:var(--color-red);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:240px;}
+  .track:focus{outline:none;}
+  .track:focus circle{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">The public-data ceiling: where every portfolio track tops out</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">Claims above the ceiling belong in the partner handoff, not in the portfolio. The public-data ceiling is the firewall made visible.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  levels:[0,1,2,3,4,5,6],
+  ceilingLevel:3,
+  tracks:[
+    {id:"A", name:"Track A", sub:"Lift", low:2, high:3, kind:"span",
+     tip:"Track A (Lift and attribution): public data reaches L2–L3. A script-lift audit quantifies selection inflation but cannot recover the true causal effect without exposure-level data."},
+    {id:"B", name:"Track B", sub:"Brand", low:2, high:3, kind:"span",
+     tip:"Track B (Brand and physician identity): L2–L3. Behavioral persistence proxies equity; associational by design, with the LOE event-study as the stronger companion."},
+    {id:"C", name:"Track C", sub:"Models", low:3, high:3, kind:"point",
+     tip:"Track C (Model architecture): L3. An offline benchmark — tuned tree ensemble vs routed model — with calibration and subgroup robustness. A 'no lift' result is a deliverable."},
+    {id:"D", name:"Track D", sub:"Ethics/Privacy", low:2, high:3, kind:"split",
+     splits:[{label:"D1/D3", level:2}, {label:"D2", level:3}],
+     tip:"Track D (Privacy, fairness, accountability): D1 and D3 top out at L2 (area-level proxies; normative framework); D2's coupon-suppression DiD reaches L3."}
+  ]
+};
+const W=700,H=480;
+const margin={top:48,right:40,bottom:56,left:64};
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The four tracks on the Evidence Ladder");
+svg.append("desc").attr("id","chart-desc").text("An Evidence Ladder with rungs L0 at the bottom up to L6 at the top. Track A and Track B span L2 to L3, Track C sits at L3, and Track D splits with D1 and D3 at L2 and D2 at L3. A red line above L3 labeled proprietary data required marks the public-data ceiling.");
+const tip=d3.select("#tooltip");
+
+function draw(){
+  svg.selectAll(".dyn").remove();
+  const data=FALLBACK_DATA;
+  const plotL=margin.left, plotR=W-margin.right, plotT=margin.top+12, plotB=H-margin.bottom;
+
+  // y scale: ordinal levels L0..L6, zero-baseline at bottom
+  const y=d3.scalePoint().domain(data.levels.slice().reverse()).range([plotT, plotB]).padding(0.5);
+  // x scale: tracks
+  const x=d3.scalePoint().domain(data.tracks.map(t=>t.id)).range([plotL+72, plotR-72]).padding(0.5);
+
+  svg.append("text").attr("class","dyn sub").attr("x",32).attr("y",30)
+    .text("Levels run L0 (bottom) to L6 (top); each track is placed at the level public data lets it reach.");
+
+  // plot fill
+  svg.append("rect").attr("class","dyn").attr("x",plotL).attr("y",plotT-12).attr("width",plotR-plotL).attr("height",(plotB)-(plotT-12))
+    .attr("rx",0).attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("aria-hidden","true");
+
+  // gridlines + tick labels
+  const grid=svg.append("g").attr("class","dyn").attr("aria-hidden","true");
+  data.levels.forEach(l=>{
+    grid.append("line").attr("x1",plotL).attr("x2",plotR).attr("y1",y(l)).attr("y2",y(l))
+      .attr("stroke","var(--color-border)").attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+    svg.append("text").attr("class","dyn tick").attr("text-anchor","end").attr("x",plotL-12).attr("y",y(l)+4).text("L"+l);
+  });
+
+  // ceiling line (red) just above L3
+  const ceilY=(y(data.ceilingLevel)+y(data.ceilingLevel+1))/2;
+  svg.append("line").attr("class","dyn").attr("x1",plotL).attr("x2",plotR).attr("y1",ceilY).attr("y2",ceilY)
+    .attr("stroke","var(--color-red)").attr("stroke-width",1.5);
+  svg.append("text").attr("class","dyn ceiling-label").attr("text-anchor","end").attr("x",plotR-4).attr("y",ceilY-6)
+    .text("proprietary data required");
+
+  // tracks
+  const g=svg.selectAll(".track").data(data.tracks,d=>d.id).join(
+    enter=>{
+      const grp=enter.append("g").attr("class","track dyn")
+        .attr("tabindex",0).attr("role","img")
+        .attr("aria-label",d=>d.name+" ("+d.sub+"): reaches level "+(d.kind==="split"?"L2 (D1/D3) and L3 (D2)":(d.low===d.high?("L"+d.high):("L"+d.low+" to L"+d.high))));
+      grp.each(function(d){
+        const sel=d3.select(this);
+        const cx=x(d.id);
+        if(d.kind==="split"){
+          // two offset markers
+          sel.append("circle").attr("cx",cx-16).attr("cy",y(d.splits[0].level)).attr("r",4).attr("fill","var(--color-secondary)");
+          sel.append("text").attr("class","mono").attr("text-anchor","middle").attr("x",cx-16).attr("y",y(d.splits[0].level)+20).text(d.splits[0].label);
+          sel.append("circle").attr("cx",cx+16).attr("cy",y(d.splits[1].level)).attr("r",4).attr("fill","var(--color-ink)");
+          sel.append("text").attr("class","mono").attr("text-anchor","middle").attr("x",cx+16).attr("y",y(d.splits[1].level)-10).text(d.splits[1].label);
+        } else if(d.kind==="point"){
+          sel.append("circle").attr("cx",cx).attr("cy",y(d.high)).attr("r",4).attr("fill","var(--color-ink)");
+        } else {
+          sel.append("line").attr("x1",cx).attr("x2",cx).attr("y1",y(d.low)).attr("y2",y(d.high))
+            .attr("stroke","var(--color-ink)").attr("stroke-width",1.5);
+          sel.append("circle").attr("cx",cx).attr("cy",y(d.low)).attr("r",4).attr("fill","var(--color-ink)");
+          sel.append("circle").attr("cx",cx).attr("cy",y(d.high)).attr("r",4).attr("fill","var(--color-ink)");
+        }
+        sel.append("text").attr("class","track-label").attr("text-anchor","middle").attr("x",cx).attr("y",plotB+24).text(d.name);
+        sel.append("text").attr("class","track-sub").attr("text-anchor","middle").attr("x",cx).attr("y",plotB+40).text(d.sub);
+      });
+      return grp;
+    }
+  );
+
+  function show(event,d){tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");}
+  function hide(){tip.style("opacity",0);}
+  g.on("mousemove",show).on("mouseleave",hide)
+   .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+   .on("blur",hide)
+   .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();show({pageX:this.getBoundingClientRect().left+window.scrollX,pageY:this.getBoundingClientRect().bottom+window.scrollY},d);}});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

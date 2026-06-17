@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 5.2 — Channel evidence-strength matrix</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .qlab{font-size:10px;fill:var(--color-secondary);}
+  .axis-title{font-size:12px;fill:var(--color-ink);}
+  .pt-label{font-size:11px;fill:var(--color-ink);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  circle.pt{cursor:pointer;}circle.pt:focus{outline:2px solid var(--color-ochre);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-size:12px;color:var(--color-ink);max-width:240px;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Channel evidence strength: design vs. source independence</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+// x = source independence 0..10, y = design strength 0..10
+const FALLBACK_DATA=[
+  {name:"Detailing",x:9,y:8,red:false,note:"systematic reviews; association evidence"},
+  {name:"Academic detailing (RCT)",x:8,y:9.2,red:false,note:"JAMA Netw Open + Cochrane RCTs"},
+  {name:"DeJong meals",x:7,y:5,red:false,note:"observational, dose-response (2016)"},
+  {name:"EHR / POC ads",x:1.5,y:1.5,red:true,note:"vendor 4-44% range [verify] — plotted as weak"}
+];
+const data=FALLBACK_DATA;const tip=d3.select("#tip");
+const margin={top:48,right:40,bottom:56,left:64};
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const iw=W-margin.left-margin.right,ih=H-margin.top-margin.bottom;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Channel evidence-strength matrix");
+  svg.append("desc").attr("id","chart-desc").text("Channels by source independence (x) and study-design strength (y); EHR point-of-care plotted weakest.");
+  const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const x=d3.scaleLinear().domain([0,10]).range([0,iw]);
+  const y=d3.scaleLinear().domain([0,10]).range([ih,0]);
+  g.append("rect").attr("width",iw).attr("height",ih).attr("fill",cv("--color-fill")).attr("stroke",cv("--color-border")).attr("stroke-width",0.75);
+  // quadrant dividers
+  g.append("line").attr("aria-hidden","true").attr("x1",x(5)).attr("y1",0).attr("x2",x(5)).attr("y2",ih).attr("stroke",cv("--color-border")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  g.append("line").attr("aria-hidden","true").attr("x1",0).attr("y1",y(5)).attr("x2",iw).attr("y2",y(5)).attr("stroke",cv("--color-border")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  g.append("text").attr("class","qlab").attr("x",6).attr("y",14).text("strong design, weak source — discount for conflict");
+  g.append("text").attr("class","qlab").attr("text-anchor","end").attr("x",iw-6).attr("y",14).text("strong design + independent — actionable");
+  g.append("text").attr("class","qlab").attr("x",6).attr("y",ih-8).text("weak design, weak source — not evidence");
+  g.append("text").attr("class","qlab").attr("text-anchor","end").attr("x",iw-6).attr("y",ih-8).text("weak design, independent — note the gap");
+  // points
+  const pts=g.selectAll("g.ptg").data(data).join("g").attr("class","ptg");
+  pts.append("circle").attr("class","pt").attr("cx",d=>x(d.x)).attr("cy",d=>y(d.y)).attr("r",7)
+    .attr("fill",d=>d.red?cv("--color-red"):cv("--color-ink")).attr("tabindex",0)
+    .attr("aria-label",d=>`${d.name}: source ${d.x}/10, design ${d.y}/10`)
+    .on("mousemove",(e,d)=>showTip(e,d)).on("mouseleave",hideTip)
+    .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,d);}});
+  pts.append("text").attr("class","pt-label").attr("x",d=>x(d.x)).attr("y",d=>y(d.y)-12)
+    .attr("text-anchor",d=>d.x>5?"end":"start").attr("fill",d=>d.red?cv("--color-red"):cv("--color-ink")).text(d=>d.name);
+  // axis titles
+  svg.append("text").attr("class","axis-title").attr("text-anchor","middle").attr("x",margin.left+iw/2).attr("y",H-16).text("Source independence  (low → high)");
+  svg.append("text").attr("class","axis-title").attr("text-anchor","middle").attr("transform",`translate(18,${margin.top+ih/2}) rotate(-90)`).text("Study-design strength  (low → high)");
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-margin.right).attr("y",H-2).text("SOURCE: CH.05 — EHR FIGURES UNVERIFIED, PLOTTED AS WEAK");
+}
+function showTip(e,d){tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px").html(`<strong>${d.name}</strong><br>${d.note}`);}
+function hideTip(){tip.style("opacity",0);}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

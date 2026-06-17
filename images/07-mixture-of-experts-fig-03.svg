@@ -1,0 +1,76 @@
+<!--
+  Title: The six buyer questions and the fast screen
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 07-mixture-of-experts
+  Figure: 03
+  Type: Infographic (vertical checklist + inset)
+  Generated: 2026-06-16
+  Source: chapters/07-mixture-of-experts.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
+  <title id="fig-title-03">The six buyer questions for auditing an MoE claim, with the fast three-criterion screen as an inset</title>
+  <desc>A vertical checklist of six audit questions about component models, training regime, shared interfaces, routing, meta-architecture, and an independent benchmark. Each row shows the opening-case platform's answer pointing toward stacking. An inset box lists the fast three-criterion screen: token-level routing, shared output space, jointly trained — three no answers means stacking.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="07-mixture-of-experts" figure-number="03" figure-title="The six buyer questions and the fast screen" figure-slug="six-buyer-questions-fast-screen" figure-type="Infographic" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/07-mixture-of-experts.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The six buyer questions and the fast screen</text>
+  <text x="32" y="58" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Answers shown are the opening-case platform's — every one points to stacking.</text>
+
+  <!-- column headers -->
+  <text x="48" y="86" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">QUESTION</text>
+  <text x="372" y="86" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">OPENING-CASE ANSWER</text>
+
+  <!-- Row 1 -->
+  <rect x="32" y="94" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="118" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">1. What are the component models?</text>
+  <rect x="368" y="94" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="380" y="118" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">XGBoost + bid model + rules engine</text>
+
+  <!-- Row 2 -->
+  <rect x="32" y="138" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="162" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">2. Trained jointly or independently?</text>
+  <rect x="368" y="138" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="380" y="162" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">Independently, then frozen</text>
+
+  <!-- Row 3 -->
+  <rect x="32" y="182" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="206" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">3. Shared interfaces, or aggregator translates?</text>
+  <rect x="368" y="182" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="380" y="206" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">Aggregator translates — no shared space</text>
+
+  <!-- Row 4 -->
+  <rect x="32" y="226" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="250" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">4. Routing learned jointly or assigned?</text>
+  <rect x="368" y="226" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="380" y="250" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">No token-level routing</text>
+
+  <!-- Row 5 -->
+  <rect x="32" y="270" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="294" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">5. Routing layer or meta-architecture?</text>
+  <rect x="368" y="270" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="380" y="294" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Meta-architecture — stacking</text>
+
+  <!-- Row 6 -->
+  <rect x="32" y="314" width="328" height="40" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="44" y="338" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">6. Benchmark vs tuned XGBoost ensemble?</text>
+  <rect x="368" y="314" width="300" height="40" rx="0" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="380" y="338" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">None offered — unverified</text>
+
+  <!-- verdict -->
+  <line x1="32" y1="370" x2="360" y2="370" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="32" y="392" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#C8102E">Verdict: stacking, not MoE — and no benchmark.</text>
+  <text x="32" y="412" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The label is wrong; whether the platform</text>
+  <text x="32" y="428" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">is good is a separate, unanswered question.</text>
+
+  <!-- Fast-screen inset -->
+  <rect x="368" y="368" width="300" height="100" rx="0" fill="#FFFFFF" stroke="#2a1a0e" stroke-width="1.5"/>
+  <text x="380" y="390" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">FAST SCREEN (when short on time)</text>
+  <text x="380" y="410" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">• Token-level routing?</text>
+  <text x="380" y="428" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">• Shared trunk and output space?</text>
+  <text x="380" y="446" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">• Jointly trained?</text>
+  <text x="380" y="464" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">Three "no" answers → stacking.</text>
+</svg>

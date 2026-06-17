@@ -1,0 +1,52 @@
+<!--
+  figure-title: Citation-fabrication rate by indication type
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 10-llms-for-commercial-research
+  Figure: 02
+  Type: chart
+  Generated: 2026-06-16
+  Source: chapters/10-llms-for-commercial-research.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">Citation-fabrication rate by indication type</title>
+  <desc>Vertical bar chart. A well-studied condition shows about 6 percent fabricated citations; niche conditions show about 28 to 29 percent. Figures are contested and marked verify.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="10-llms-for-commercial-research" figure-number="02" figure-title="Citation-fabrication rate by indication type" figure-type="chart" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/10-llms-for-commercial-research.md"/></metadata>
+  <defs></defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Fabrication is highest where the literature is thinnest</text>
+
+  <!-- plot area: left 64, top 48, right 40, bottom 56 => x 64..660, y 48..364 -->
+  <rect x="64" y="48" width="596" height="316" stroke="#D4D4D4" stroke-width="0.75" fill="#F5F5F5"/>
+
+  <!-- y gridlines + ticks (0..35), plot height 316 maps 0..35 -->
+  <!-- 0 -->
+  <line x1="64" y1="364" x2="660" y2="364" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="58" y="368" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">0</text>
+  <!-- 10 -> y = 364 - (10/35)*316 = 364-90.3=273.7 -->
+  <line x1="64" y1="274" x2="660" y2="274" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="58" y="278" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">10</text>
+  <!-- 20 -> 364-180.6=183.4 -->
+  <line x1="64" y1="183" x2="660" y2="183" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="58" y="187" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">20</text>
+  <!-- 30 -> 364-270.9=93.1 -->
+  <line x1="64" y1="93" x2="660" y2="93" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="58" y="97" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">30</text>
+
+  <!-- y axis label -->
+  <text x="32" y="206" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" transform="rotate(-90 32 206)">Fabricated citations (%)</text>
+
+  <!-- Bar 1: well-studied ~6% -> h=(6/35)*316=54.2 -> y=364-54=310 -->
+  <rect x="164" y="310" width="160" height="54" rx="0" fill="#C8102E"/>
+  <text x="244" y="300" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">~6%</text>
+  <text x="244" y="384" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Well-studied condition</text>
+
+  <!-- Bar 2: niche ~28.5% -> h=(28.5/35)*316=257.3 -> y=364-257=107 -->
+  <rect x="400" y="107" width="160" height="257" rx="0" fill="#C8102E"/>
+  <rect x="446" y="111" width="68" height="16" fill="#C8102E"/>
+  <text x="480" y="123" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#FFFFFF">~28–29%</text>
+  <text x="480" y="384" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Niche conditions</text>
+
+  <!-- source line -->
+  <text x="32" y="404" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: PMC12658395 — CONTESTED, [VERIFY]. TRUST THE MODEL LESS WHERE YOU WANT HELP MOST.</text>
+</svg>

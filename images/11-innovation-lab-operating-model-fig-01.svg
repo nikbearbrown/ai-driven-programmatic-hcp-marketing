@@ -1,0 +1,66 @@
+<!--
+  figure-title: The inbound innovation funnel and the IP firewall
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 11-innovation-lab-operating-model
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/11-innovation-lab-operating-model.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The inbound innovation funnel and the IP firewall</title>
+  <desc>External public research flows into the lab, which scouts, hypothesizes, tests, scores, and decides go or kill. A vertical dashed firewall separates the lab from the partner. A single handoff-brief arrow crosses the firewall into the partner's proprietary replication, prototype, and resourced-product stages.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="11-innovation-lab-operating-model" figure-number="01" figure-title="The inbound innovation funnel and the IP firewall" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/11-innovation-lab-operating-model.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The inbound innovation funnel — and the wall the work must cross</text>
+
+  <!-- LEFT: External source -->
+  <rect x="32" y="120" width="150" height="120" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="107" y="158" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">EXTERNAL</text>
+  <text x="107" y="182" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">research</text>
+  <text x="107" y="200" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">public data</text>
+  <text x="107" y="218" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">vendor claims</text>
+
+  <!-- arrow external -> lab -->
+  <line x1="182" y1="180" x2="222" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- CENTER: Lab (red accent — load-bearing) -->
+  <rect x="226" y="110" width="184" height="140" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="318" y="138" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">LAB</text>
+  <text x="318" y="162" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">scout</text>
+  <text x="318" y="180" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">hypothesize</text>
+  <text x="318" y="198" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">test</text>
+  <text x="318" y="216" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">score</text>
+  <text x="318" y="234" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#C8102E">go / kill</text>
+
+  <!-- FIREWALL: vertical dashed line -->
+  <line x1="452" y1="80" x2="452" y2="320" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="452" y="74" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">IP FIREWALL</text>
+
+  <!-- handoff brief arrow crossing the firewall (the only crossing) -->
+  <line x1="410" y1="180" x2="514" y2="180" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="483" y="160" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#2a1a0e">handoff</text>
+  <text x="483" y="172" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#2a1a0e">brief</text>
+
+  <!-- RIGHT: Partner -->
+  <rect x="518" y="110" width="150" height="140" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="593" y="138" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">PARTNER</text>
+  <text x="593" y="166" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">proprietary</text>
+  <text x="593" y="184" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">replication</text>
+  <text x="593" y="208" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">prototype</text>
+  <text x="593" y="232" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">resourced product</text>
+
+  <!-- side labels -->
+  <text x="318" y="284" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">public data &#183; Levels 0&#8211;3</text>
+  <text x="593" y="284" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">proprietary &#183; Levels 4&#8211;6</text>
+
+  <!-- Caption -->
+  <text x="32" y="360" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The lab pulls public research in, tests it cheaply, and routes survivors out. Only the handoff</text>
+  <text x="32" y="376" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">brief crosses the firewall — protecting the partner's IP and the Fellow's research independence.</text>
+
+  <text x="32" y="404" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing=".08em">SOURCE: CHAPTER 11, THE EXTERNAL INNOVATION LAB OPERATING MODEL</text>
+</svg>

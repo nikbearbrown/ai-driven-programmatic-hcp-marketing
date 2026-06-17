@@ -1,0 +1,58 @@
+<!--
+  figure-title: The natural experiment — estimated coupon effect on branded-drug volume
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 01-the-machine-nobody-sees
+  Figure: 03
+  Type: chart
+  Generated: 2026-06-16
+  Source: chapters/01-the-machine-nobody-sees.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
+  <title id="fig-title-03">The natural experiment — estimated coupon effect on branded-drug volume</title>
+  <desc>Vertical bar chart. Commercial segment (coupons permitted) shows an estimated 23 to 25 percent increase in quantity of drugs without generic substitutes; Medicare Advantage (coupons banned) is the zero baseline reference.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="01-the-machine-nobody-sees" figure-number="03" figure-title="The natural experiment — estimated coupon effect on branded-drug volume" figure-type="chart" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/01-the-machine-nobody-sees.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Estimated coupon effect: commercial vs. Medicare Advantage (Dafny et al.)</text>
+
+  <!-- plot region: top48 right40 bottom56 left64 -> x 64..660, y 48..364 -->
+  <rect x="64" y="48" width="596" height="316" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- Y axis gridlines and labels (0 to 30%) -->
+  <!-- 0% baseline at y=364, 30% at y=48 -> 316px span -->
+  <line x1="64" y1="364" x2="660" y2="364" stroke="#2a1a0e" stroke-width="1"/>
+  <line x1="64" y1="48" x2="64" y2="364" stroke="#2a1a0e" stroke-width="1"/>
+
+  <!-- gridlines at 10,20,30 -->
+  <line x1="64" y1="258.67" x2="660" y2="258.67" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <line x1="64" y1="153.33" x2="660" y2="153.33" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <line x1="64" y1="48" x2="660" y2="48" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+
+  <text x="58" y="368" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">0%</text>
+  <text x="58" y="262" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">10%</text>
+  <text x="58" y="157" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">20%</text>
+  <text x="58" y="52" text-anchor="end" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">30%</text>
+
+  <!-- Y axis title -->
+  <text x="32" y="206" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" transform="rotate(-90 32 206)">Estimated change in branded quantity</text>
+
+  <!-- Bars: two categories -->
+  <!-- Medicare Advantage = 0 (baseline, no bar) shown as a marker at baseline -->
+  <!-- Commercial = 24% (midpoint of 23-25), height = 24/30*316 = 252.8 -> y = 364-252.8 = 111.2 -->
+  <rect x="180" y="111.2" width="120" height="252.8" rx="0" fill="#C8102E"/>
+  <text x="240" y="103" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">+23–25%</text>
+  <text x="240" y="384" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Commercial</text>
+  <text x="240" y="398" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">coupons permitted</text>
+
+  <!-- Medicare Advantage: baseline reference (no measurable coupon-driven lift) -->
+  <rect x="424" y="360" width="120" height="4" rx="0" fill="#787878"/>
+  <text x="484" y="352" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">0% (banned)</text>
+  <text x="484" y="384" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Medicare Advantage</text>
+  <text x="484" y="398" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">coupons federally banned</text>
+
+  <!-- Source line -->
+  <text x="64" y="416" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: DAFNY, ODY &amp; SCHMITT, NBER W29735 — ESTIMATE FOR DRUGS WITHOUT GENERIC SUBSTITUTES</text>
+</svg>

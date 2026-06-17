@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 3.2 — The gap between event and targeting signal is where targeting error lives</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .lane{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;}
+  .day{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .ev{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .node:focus{outline:none;}
+  .node:focus circle{stroke:var(--color-ink);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Two paths from a clinical event to a targeting signal — one slow, one immediate</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The gap between event and targeting signal is where targeting error lives — a physician who switched in Q2 can still sit atop a Q2 list built from Q1 claims; the lag also distorts any measured "lift."</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA={
+  claims:{name:"CLAIMS-DATA LAG — the standard monthly cycle", y:120, x0:64, x1:640, nodes:[
+    {x:80, day:"Day 0", ev:"Rx written", red:false, tip:"A prescription is written — the actual clinical event."},
+    {x:200, day:"Day 1–3", ev:"pharmacy adj.", red:false, tip:"Pharmacy adjudication of the claim."},
+    {x:320, day:"Day 7–14", ev:"payer processing", red:false, tip:"The payer processes and de-identifies the claim."},
+    {x:440, day:"Day 14–30", ev:"broker aggregation", red:false, tip:"Brokers aggregate de-identified claims."},
+    {x:560, day:"monthly", ev:"model refresh → list deployed", red:true, tip:"The model refreshes monthly and the targeting list is deployed — weeks after the event."}
+  ]},
+  ehr:{name:"REAL-TIME EHR TRIGGER — dynamic NPI activation", y:286, x0:64, x1:320, nodes:[
+    {x:80, day:"Day 0", ev:"chart opened", red:false, tip:"A physician opens a chart for a patient with the eligible diagnosis."},
+    {x:300, day:"Day 0", ev:"bid fired", red:true, tip:"A bid fires the same day — no monthly lag. But this is where the PHI question becomes live."}
+  ]}
+};
+const W=700,H=420;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("The gap between event and targeting signal is where targeting error lives");
+svg.append("desc").attr("id","chart-desc").text("Two timelines comparing the multi-week claims lag against a same-day real-time EHR trigger.");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+const tip=d3.select("#tooltip");
+
+function track(t, redHead){
+  svg.append("text").attr("class","lane").attr("x",32).attr("y",t.y-52).attr("fill",redHead?"var(--color-red)":"var(--color-secondary)").text(t.name);
+  svg.append("line").attr("aria-hidden","true").attr("x1",t.x0).attr("y1",t.y).attr("x2",t.x1).attr("y2",t.y).attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  t.nodes.forEach(n=>{
+    const g=svg.append("g").attr("class","node").attr("tabindex",0).attr("role","img").attr("aria-label",n.day+" "+n.ev);
+    g.append("circle").attr("cx",n.x).attr("cy",t.y).attr("r",5).attr("fill",n.red?"var(--color-red)":"var(--color-ink)");
+    g.append("text").attr("class","day").attr("x",n.x).attr("y",t.y-16).attr("text-anchor","middle").text(n.day);
+    g.append("text").attr("class","ev").attr("x",n.x).attr("y",t.y+22).attr("text-anchor","middle").text(n.ev);
+    g.on("mousemove",(event)=>tip.style("opacity",1).html(n.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+     .on("mouseleave",()=>tip.style("opacity",0))
+     .on("focus",function(){const r=this.getBoundingClientRect();tip.style("opacity",1).html(n.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+     .on("blur",()=>tip.style("opacity",0))
+     .on("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(n.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+  });
+}
+function draw(){
+  svg.selectAll("g.node,line,text.lane,text.day,text.ev,rect.note,text.notetxt").remove();
+  track(FALLBACK_DATA.claims,false);
+  track(FALLBACK_DATA.ehr,true);
+  svg.append("rect").attr("class","note").attr("x",64).attr("y",340).attr("width",576).attr("height",40).attr("rx",0).attr("stroke","var(--color-border)").attr("stroke-width",1).attr("fill","var(--color-fill)");
+  svg.append("text").attr("class","notetxt ev").attr("x",80).attr("y",365).text("The gap between event and signal is where targeting error lives — stale lists, distorted lift.");
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

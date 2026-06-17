@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 1.3 — Estimated coupon effect on branded-drug volume</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .axis path,.axis line{stroke:var(--color-ink);}
+  .axis text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .grid line{stroke:var(--color-border);stroke-width:0.75;stroke-dasharray:5 4;}
+  .grid path{stroke:none;}
+  .bar-label{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-ink);}
+  .cat-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .cat-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .axis-title{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .source{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:230px;}
+  .bar:focus{outline:none;}
+  .bar:focus rect{stroke:var(--color-ink);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Estimated coupon effect: commercial vs. Medicare Advantage (Dafny et al.)</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">The natural experiment: commercial insurers allow coupons; Medicare Advantage does not. The gap isolates the coupon's estimated effect on branded-drug volume (drugs without generic substitutes). Estimate, not established fact.</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {cat:"Commercial", sub:"coupons permitted", value:24, label:"+23–25%", red:true, tip:"Commercial segment: estimated 23–25% increase in quantity of drugs without generic substitutes."},
+  {cat:"Medicare Advantage", sub:"coupons federally banned", value:0, label:"0% (banned)", red:false, tip:"Medicare Advantage bans coupons — the zero baseline against which the coupon effect is measured."}
+];
+const W=700,H=420, margin={top:48,right:40,bottom:56,left:64};
+const iw=W-margin.left-margin.right, ih=H-margin.top-margin.bottom;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("Estimated coupon effect on branded-drug volume");
+svg.append("desc").attr("id","chart-desc").text("Vertical bars comparing commercial (about 24 percent) against Medicare Advantage baseline of zero.");
+const tip=d3.select("#tooltip");
+
+function draw(){
+  svg.selectAll("g.root,text.src").remove();
+  const g=svg.append("g").attr("class","root").attr("transform",`translate(${margin.left},${margin.top})`);
+  g.append("rect").attr("x",0).attr("y",0).attr("width",iw).attr("height",ih).attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+  const x=d3.scaleBand().domain(FALLBACK_DATA.map(d=>d.cat)).range([0,iw]).padding(0.45);
+  const y=d3.scaleLinear().domain([0,30]).range([ih,0]);
+  g.append("g").attr("class","grid").call(d3.axisLeft(y).tickValues([10,20,30]).tickSize(-iw).tickFormat(""));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).tickValues([0,10,20,30]).tickFormat(d=>d+"%"));
+  const bars=g.selectAll(".bar").data(FALLBACK_DATA).join("g").attr("class","bar")
+    .attr("tabindex",0).attr("role","img").attr("aria-label",d=>d.cat+": "+d.label);
+  bars.append("rect")
+    .attr("x",d=>x(d.cat)).attr("width",x.bandwidth())
+    .attr("y",d=>d.value>0?y(d.value):ih-4).attr("height",d=>d.value>0?ih-y(d.value):4)
+    .attr("rx",0).attr("fill",d=>d.red?"var(--color-red)":"#787878");
+  bars.append("text").attr("class","bar-label").attr("x",d=>x(d.cat)+x.bandwidth()/2)
+    .attr("y",d=>(d.value>0?y(d.value):ih-4)-8).attr("text-anchor","middle").text(d=>d.label);
+  bars.append("text").attr("class","cat-label").attr("x",d=>x(d.cat)+x.bandwidth()/2).attr("y",ih+20).attr("text-anchor","middle").text(d=>d.cat);
+  bars.append("text").attr("class","cat-sub").attr("x",d=>x(d.cat)+x.bandwidth()/2).attr("y",ih+34).attr("text-anchor","middle").text(d=>d.sub);
+  g.append("text").attr("class","axis-title").attr("transform","rotate(-90)").attr("x",-ih/2).attr("y",-48).attr("text-anchor","middle").text("Estimated change in branded quantity");
+  bars.on("mousemove",(event,d)=>tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px"))
+      .on("mouseleave",()=>tip.style("opacity",0))
+      .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+      .on("blur",()=>tip.style("opacity",0))
+      .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+  svg.append("text").attr("class","src").attr("x",margin.left).attr("y",H-8).text("SOURCE: DAFNY, ODY & SCHMITT, NBER W29735 — DRUGS WITHOUT GENERIC SUBSTITUTES");
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

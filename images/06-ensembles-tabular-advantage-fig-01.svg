@@ -1,0 +1,67 @@
+<!--
+  Figure title: Adding models reduces variance but cannot reduce correlated error
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 06-ensembles-tabular-advantage
+  Figure: 01
+  Type: DIAGRAM
+  Generated: 2026-06-16
+  Source: chapters/06-ensembles-tabular-advantage.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-01" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-01">Adding models reduces variance but cannot reduce correlated error</title>
+  <desc>Three stacked-bar panels of the bias-variance-covariance decomposition. Single model: bias-squared plus variance. Ten-model ensemble: variance shrinks, covariance appears. N to infinity: bias-squared plus covariance, the covariance floor.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="06-ensembles-tabular-advantage" figure-number="01" figure-title="Bias-variance-covariance decomposition" figure-type="DIAGRAM" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/06-ensembles-tabular-advantage.md"/></metadata>
+  <defs></defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="64" y="30" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Ensemble error: bias<tspan baseline-shift="super" font-size="10">2</tspan> + (1/N)·var + (1-1/N)·covar</text>
+
+  <!-- plot area -->
+  <rect x="64" y="48" width="596" height="300" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- y baseline at 348, scale: total height 280 = error 1.0; segments in px -->
+  <!-- y ticks -->
+  <g font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">
+    <text x="56" y="352" text-anchor="end">0</text>
+    <line x1="64" y1="208" x2="660" y2="208" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="212" text-anchor="end">0.5</text>
+    <line x1="64" y1="68" x2="660" y2="68" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="56" y="72" text-anchor="end">1.0</text>
+  </g>
+
+  <!-- Panel 1: single model. bias 70px (348->278), var 140px (278->138) -->
+  <rect x="120" y="278" width="100" height="70"  fill="#2a1a0e"/>
+  <rect x="120" y="138" width="100" height="140" fill="#787878"/>
+  <text x="170" y="368" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">single model</text>
+  <text x="170" y="316" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">bias<tspan baseline-shift="super" font-size="8">2</tspan></text>
+  <text x="170" y="198" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">variance</text>
+
+  <!-- Panel 2: 10-model. bias 70px, var 14px, covar 60px -->
+  <rect x="300" y="278" width="100" height="70" fill="#2a1a0e"/>
+  <rect x="300" y="264" width="100" height="14" fill="#787878"/>
+  <rect x="300" y="204" width="100" height="60" fill="#C8102E"/>
+  <text x="350" y="368" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">10-model ensemble</text>
+  <text x="350" y="316" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">bias<tspan baseline-shift="super" font-size="8">2</tspan></text>
+  <text x="350" y="240" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">covar</text>
+  <text x="414" y="270" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">var ↓ 1/N</text>
+
+  <!-- Panel 3: N->inf. bias 70px, covar 67px (var gone) -->
+  <rect x="480" y="278" width="100" height="70" fill="#2a1a0e"/>
+  <rect x="480" y="211" width="100" height="67" fill="#C8102E"/>
+  <text x="530" y="368" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">N → large</text>
+  <text x="530" y="316" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">bias<tspan baseline-shift="super" font-size="8">2</tspan></text>
+  <text x="530" y="248" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#FFFFFF">covar</text>
+
+  <!-- covariance floor reference line -->
+  <line x1="480" y1="211" x2="650" y2="211" stroke="#C8102E" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="650" y="206" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#C8102E">the covariance floor</text>
+
+  <!-- legend -->
+  <rect x="64" y="392" width="11" height="11" fill="#2a1a0e"/>
+  <text x="80" y="401" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">bias<tspan baseline-shift="super" font-size="8">2</tspan></text>
+  <rect x="140" y="392" width="11" height="11" fill="#787878"/>
+  <text x="156" y="401" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">variance (shrinks as 1/N)</text>
+  <rect x="330" y="392" width="11" height="11" fill="#C8102E"/>
+  <text x="346" y="401" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">covariance (sets the floor)</text>
+
+  <text x="660" y="414" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: CH.06 — SCHEMATIC, NOT MEASURED</text>
+</svg>

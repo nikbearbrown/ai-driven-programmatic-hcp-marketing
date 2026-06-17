@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--
+  figure-title: The TEST / BUILD / KILL decision tree
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 14-prototype-to-product-decision
+  Figure: 01
+  Type: diagram (D3)
+  Generated: 2026-06-16
+  Source: chapters/14-prototype-to-product-decision.md
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The TEST / BUILD / KILL decision tree</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+    --font-title:'EB Garamond','Garamond',Georgia,serif;
+    --font-body:'Inter',-apple-system,'Helvetica Neue',sans-serif;
+    --font-mono:'JetBrains Mono','Fira Code','Courier New',monospace;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;
+  }}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{width:100%;max-width:760px;margin:0 auto;}
+  svg{display:block;width:100%;height:auto;}
+  .fig-title{font-family:var(--font-title);font-size:14px;fill:var(--color-ink);}
+  .node-label{font-family:var(--font-body);font-size:12px;fill:var(--color-ink);}
+  .node-strong{font-weight:600;}
+  .edge-label{font-family:var(--font-body);font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:var(--font-body);font-size:11px;fill:var(--color-secondary);}
+  .box{fill:var(--color-white);stroke:var(--color-border);stroke-width:1;}
+  .box-fill{fill:var(--color-fill);stroke:var(--color-border);stroke-width:1;}
+  .verdict{fill:var(--color-white);stroke:var(--color-secondary);stroke-width:1;}
+  .node{fill:var(--color-white);stroke:var(--color-ink);stroke-width:1.5;}
+  .node-welfare{fill:var(--color-white);stroke:var(--color-red);stroke-width:1.5;}
+  .edge{stroke:var(--color-ink);stroke-width:1.5;fill:none;}
+  .node:focus,.node-welfare:focus{outline:2px solid var(--color-ochre);outline-offset:2px;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  root: "Scored project",
+  terminus: "BUILD",
+  nodes: [
+    { id:1, q:"Evidence strength ≥ L3?", noExit:"TEST or KILL", welfare:false },
+    { id:2, q:"Magnitude commercially meaningful?", noExit:"KILL", welfare:false },
+    { id:3, q:"Compliance risk manageable?", noExit:"TEST (flag first)", welfare:false },
+    { id:4, q:"Welfare gate passed?", noExit:"KILL or escalate", welfare:true },
+    { id:5, q:"Build cost tractable?", noExit:"TEST", welfare:false }
+  ],
+  caption1:"The criteria are conjunctive — one failed criterion produces a non-BUILD result. The patient-welfare gate (red)",
+  caption2:"can veto a commercially excellent project."
+};
+
+const VBW = 700, VBH = 560;
+
+function render(data){
+  const wrap = d3.select("#wrap");
+  wrap.selectAll("svg").remove();
+
+  const svg = wrap.append("svg")
+    .attr("viewBox", `0 0 ${VBW} ${VBH}`)
+    .attr("role","img")
+    .attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("The TEST / BUILD / KILL decision tree");
+  svg.append("desc").attr("id","chart-desc")
+    .text("A top-down decision tree from a scored project through five conjunctive criteria; each No edge exits to a verdict and all Yes edges continue to BUILD. The patient-welfare gate node is red to signal veto power.");
+
+  const defs = svg.append("defs");
+  defs.append("marker")
+    .attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6)
+    .attr("refX",7).attr("refY",3).attr("orient","auto")
+    .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+
+  svg.append("rect").attr("x",0).attr("y",0).attr("width",VBW).attr("height",VBH).attr("fill","var(--color-white)");
+
+  svg.append("text").attr("class","fig-title").attr("x",32).attr("y",30)
+    .text("The TEST / BUILD / KILL decision tree — criteria are conjunctive");
+
+  // Geometry
+  const cx = 300, nodeW = 220, nodeH = 42;
+  const rootY = 46, rootH = 40, rootW = 200;
+  const firstNodeY = 112, rowStride = 68;
+  const exitX = 502, exitW = 166;
+
+  // Root box
+  svg.append("rect").attr("class","box-fill")
+    .attr("x", cx - rootW/2).attr("y", rootY).attr("width", rootW).attr("height", rootH);
+  svg.append("text").attr("class","node-label node-strong").attr("x", cx).attr("y", rootY + 25)
+    .attr("text-anchor","middle").text(data.root);
+
+  // Edge root -> node1
+  svg.append("line").attr("class","edge")
+    .attr("x1",cx).attr("y1",rootY+rootH).attr("x2",cx).attr("y2",firstNodeY-2)
+    .attr("marker-end","url(#arrow)");
+
+  const nodeG = svg.selectAll("g.decision").data(data.nodes).join("g").attr("class","decision");
+
+  nodeG.each(function(d,i){
+    const g = d3.select(this);
+    const y = firstNodeY + i*rowStride;
+    const ymid = y + nodeH/2 + 4;
+
+    // decision node (interactive)
+    g.append("rect")
+      .attr("class", d.welfare ? "node-welfare" : "node")
+      .attr("x", cx - nodeW/2).attr("y", y).attr("width", nodeW).attr("height", nodeH)
+      .attr("tabindex",0)
+      .attr("role","group")
+      .attr("aria-label", `Criterion ${d.id}: ${d.q} If no, ${d.noExit}.${d.welfare ? " Patient-welfare gate, can veto." : ""}`);
+    g.append("text")
+      .attr("class", d.welfare ? "node-label node-strong" : "node-label")
+      .attr("x", cx).attr("y", ymid).attr("text-anchor","middle").text(d.q);
+
+    // No edge -> exit
+    g.append("line").attr("class","edge")
+      .attr("x1", cx + nodeW/2).attr("y1", y + nodeH/2)
+      .attr("x2", exitX - 2).attr("y2", y + nodeH/2)
+      .attr("marker-end","url(#arrow)");
+    g.append("text").attr("class","edge-label")
+      .attr("x", (cx + nodeW/2 + exitX)/2).attr("y", y + nodeH/2 - 7)
+      .attr("text-anchor","middle").text("No");
+
+    // Exit verdict box
+    g.append("rect").attr("class","verdict")
+      .attr("x", exitX).attr("y", y).attr("width", exitW).attr("height", nodeH);
+    g.append("text").attr("class","node-label node-strong")
+      .attr("x", exitX + exitW/2).attr("y", ymid).attr("text-anchor","middle").text(d.noExit);
+
+    // Yes edge downward (to next node or to BUILD)
+    const yesTargetY = (i < data.nodes.length - 1) ? (firstNodeY + (i+1)*rowStride - 2) : (firstNodeY + data.nodes.length*rowStride - 16);
+    g.append("line").attr("class","edge")
+      .attr("x1", cx).attr("y1", y + nodeH).attr("x2", cx).attr("y2", yesTargetY)
+      .attr("marker-end","url(#arrow)");
+    g.append("text").attr("class","edge-label")
+      .attr("x", cx + 12).attr("y", y + nodeH + 16).attr("text-anchor","start").text("Yes");
+  });
+
+  // BUILD terminus
+  const buildY = firstNodeY + data.nodes.length*rowStride - 14;
+  svg.append("rect").attr("class","box-fill").attr("stroke","var(--color-ink)").attr("stroke-width",1.5)
+    .attr("x", cx - rootW/2).attr("y", buildY).attr("width", rootW).attr("height", 44);
+  svg.append("text").attr("class","node-label node-strong").attr("x", cx).attr("y", buildY + 27)
+    .attr("text-anchor","middle").attr("font-size","13px").text(data.terminus);
+
+  // Caption
+  svg.append("text").attr("class","caption").attr("x",32).attr("y", VBH - 36).text(data.caption1);
+  svg.append("text").attr("class","caption").attr("x",32).attr("y", VBH - 20).text(data.caption2);
+}
+
+render(FALLBACK_DATA);
+
+if (typeof ResizeObserver !== "undefined") {
+  const ro = new ResizeObserver(() => render(FALLBACK_DATA));
+  ro.observe(document.getElementById("wrap"));
+}
+</script>
+</body>
+</html>

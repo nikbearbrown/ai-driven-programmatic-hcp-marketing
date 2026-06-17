@@ -17,6 +17,10 @@ Confusing the two — trying to build the platform — is how a lab loses its in
 
 The management literature has a name for this structure: open innovation — "a distributed innovation process based on purposively managed knowledge flows across organizational boundaries" (Bogers, Chesbrough & Moedas, *California Management Review*, 2018). In pharma, this is not exotic. Industry-reported figures suggest roughly 45% of large-biopharma pipelines were externally sourced around 2020, through licensing, university partnerships, and M&A. `[verify this figure against primary industry sources]` Named structures — Takeda's Center for External Innovation is one example — exist to manage exactly this flow. The lab is the inbound half of that flow, specialized to commercial measurement rather than drug development.
 
+![Inbound innovation funnel showing external research and public data flowing into the lab, which scouts, hypothesizes, tests, scores, and decides go or kill; a vertical dashed IP firewall separates the lab from the partner, with a single handoff brief arrow crossing it into the partner's proprietary replication, prototype, and resourced-product stages.](images/11-innovation-lab-operating-model-fig-01.png)
+
+*Figure 11.1 — The inbound innovation funnel and the IP firewall*
+
 <!-- → [DIAGRAM: Inbound innovation funnel — left side labeled "External research / public data / vendor claims," center labeled "Lab: scout → hypothesize → test → score → go/kill," right side labeled "Partner: proprietary replication → prototype → resourced product"; firewall drawn as a vertical line between lab and partner; arrows cross the firewall only via the handoff brief] -->
 
 ---
@@ -41,7 +45,17 @@ The funnel exists to make cheap mistakes instead of expensive ones.
 
 The Evidence Ladder is the lab's shared vocabulary for where any artifact stands. It is not a citation to an external standard; it is this book's own construct, synthesized from two well-established axes: a maturity axis adapted from NASA's Technology Readiness Levels (TRL 1–9, basic principles through flight-proven) and an evidential-strength axis adapted from the Oxford Centre for Evidence-Based Medicine Levels of Evidence (OCEBM 2011, from systematic reviews of RCTs down to mechanism-based reasoning). Both axes matter, because the lab needs to talk about how mature an idea is *and* how strong the evidence for it is, in one breath.
 
-<!-- → [TABLE: Evidence Ladder 0–6 — columns: Level, Evidence, What it unlocks; rows: 0 = interesting paper or vendor claim / Watch only; 1 = plausible hypothesis mapped to a KPI / Fellow brief; 2 = reproducible benchmark or simulation on public data / Internal discussion; 3 = small offline test that beats the baseline / Product discovery; 4 = prospective pilot or holdout study / Product resourcing; 5 = client-validated incremental impact / Roadmap candidate; 6 = monitored deployment with compliance and patient-welfare checks / Product feature] -->
+| Level | Evidence | What it unlocks |
+| --- | --- | --- |
+| 0 | Interesting paper or vendor claim | Watch only |
+| 1 | Plausible hypothesis mapped to a KPI | Fellow brief |
+| 2 | Reproducible benchmark or simulation on public data | Internal discussion |
+| 3 | Small offline test that beats the baseline | Product discovery |
+| 4 | Prospective pilot or holdout study | Product resourcing |
+| 5 | Client-validated incremental impact | Roadmap candidate |
+| 6 | Monitored deployment with compliance and patient-welfare checks | Product feature |
+
+*Table 11.1 — The Evidence Ladder (this book's own construct). Levels 0–3 are reachable on public data; Levels 4–6 require the partner's proprietary data and infrastructure.*
 
 Two rules make the ladder operational.
 
@@ -64,6 +78,10 @@ The ladder describes evidence; the four-stage productization pipeline describes 
 **Stage 4 — resourced.** A funded product effort with an owner.
 
 The Fellow owns Stage 1 and writes the handoff that recommends whether Stage 2 should happen. The Fellow does not do Stage 2. That is the operational meaning of "test on public data, hand off for proprietary replication" — not a modest self-limitation, but the precise definition of the role.
+
+![Four-stage productization pipeline running left to right: Stage 1 (Fellow, open research on public data, Evidence Ladder Levels 1 to 3), a handoff brief crossing a vertical dashed IP firewall, then Stage 2 (Partner internal proprietary replication, Level 4), Stage 3 (Partner prototype, Level 5), and Stage 4 (Partner production, Level 6). The firewall sits between Stage 1 and Stage 2.](images/11-innovation-lab-operating-model-fig-02.png)
+
+*Figure 11.2 — The four-stage productization pipeline*
 
 <!-- → [DIAGRAM: Four-stage pipeline — horizontal flow: Stage 1 (Fellow) → handoff brief crossing firewall → Stage 2 (Partner internal) → Stage 3 (Partner prototype) → Stage 4 (Partner production); Evidence Ladder levels annotated under each stage: 1–3 under Stage 1, 4 under Stage 2, 5 under Stage 3, 6 under Stage 4; firewall drawn between Stage 1 and Stage 2] -->
 
@@ -119,27 +137,6 @@ The still-puzzling question the chapter cannot close: the firewall keeps the Fel
 
 ---
 
-**Five-Part AI Exercise Block**
-
-**When to use AI here.** Scouting and clustering candidate findings, drafting first-pass hypotheses, generating handoff-brief boilerplate, surfacing compliance-flag candidates for human routing. AI is a fast first-pass clerk for the parts of the funnel that benefit from breadth before depth.
-
-**When NOT to use AI here.** Deciding the go or kill, setting the kill criterion, adjudicating a compliance flag, or asserting an Evidence Ladder level. These are human judgments the brief must own. An LLM that assigns a public-data result to Level 4 or 5 has violated the firewall ceiling — and catching that violation is exactly the load-bearing human correction in this workflow.
-
-**LLM exercise (copy-paste prompt):**
-> "Here are three findings from recent research: [PASTE THREE]. For each, draft a riskiest-assumption-plus-KPI hypothesis in two sentences. Then suggest the cheapest test that could falsify the assumption, naming the public dataset you would use. Do not assign an Evidence Ladder level — that comes after the test runs."
-
-Keep the best hypothesis from the model's output. Rewrite the rest yourself, noting where the model missed the riskiest assumption and substituted a safer one.
-
-**CLI exercise.** Build a template script that emits an empty eight-field handoff-brief skeleton as a text file and validates, before "submission," that no field is blank and that the Evidence Ladder level is a number between 0 and 6. Run it on your own thread's brief. If any field is blank or the level is out of range, the script should refuse to produce the output file.
-
-**AI validation exercise.** Ask an LLM to assign an Evidence Ladder level to one of your artifacts, given its data source and test design. Check the answer against the firewall rule: if the model placed a public-data result at Level 4 or above, you have caught a specific, correctable error — document it and note what the correct level is and why the ceiling holds.
-
-**AI Use Disclosure**
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to draft first-pass hypotheses for three of the ten papers and to generate handoff-brief boilerplate; I determined myself whether the kill criterion was genuinely falsifying or had been weakened after seeing the preliminary results, because the model cannot distinguish a criterion written before from one rationalized after."*
-
----
-
 **What Would Change My Mind**
 
 If a public dataset emerged that credibly supported a prospective, client-validated incremental result — Level 4 or above — without touching proprietary data, the Level-3 public-data ceiling would move up. Today no such dataset exists for HCP commercial outcomes; Levels 4 through 6 inherently require the partner's data and operational infrastructure, which is why the firewall ceiling holds. A change in what public data makes available — a large, prospective, openly published HCP-level prescribing panel with treatment assignment recorded — would change the ceiling, but that is a dataset that does not exist.
@@ -188,3 +185,164 @@ If a public dataset emerged that credibly supported a prospective, client-valida
 
 9. *(Open-ended — the asymmetry problem)* The lab cannot see its own results from Stage 2 onward. Propose a mechanism — a reporting structure, a pre-registered protocol, or a contractual arrangement — that would give the lab meaningful evidentiary discipline across the firewall without violating the IP boundary or compromising the partner's operational confidentiality. Name the assumption your mechanism relies on and the way it could still fail.
    *What this tests: thinking structurally about the firewall's unresolved asymmetry, not just accepting it as a given.*
+
+---
+
+## Prompts
+
+### Figure 11.1 — The inbound innovation funnel and the IP firewall
+
+Generate a horizontal left-to-right process diagram (not a chart; no quantitative axes, so zero-baseline is n/a). Data shape: three primary nodes in sequence — "External" (research, public data, vendor claims), "Lab" (containing the ordered steps scout, hypothesize, test, score, and a terminal go/kill decision), and "Partner" (proprietary replication, prototype, resourced product) — plus one vertical firewall divider positioned between the Lab and Partner nodes, and two arrow edges (External→Lab, and Lab→Partner labeled "handoff brief"). Marks: rectangles for nodes (rx=0, no rounding), straight line segments for edges, a vertical dashed line for the firewall, text for labels. Channels: horizontal position encodes pipeline order; stroke color distinguishes the Lab (red accent, load-bearing) from neutral nodes; the dashed style encodes the firewall boundary. Sort: fixed pipeline order, no data-driven sorting. Annotations: firewall label "IP FIREWALL"; under-node side labels "public data · Levels 0–3" and "proprietary · Levels 4–6"; the single crossing arrow labeled "handoff brief"; a two-line caption. Deliverable: a single self-contained HTML file with inline CSS, D3 7.9.0 loaded from cdnjs, color via CSS variables, ResizeObserver redraw, and accessible title/desc.
+
+### Figure 11.2 — The four-stage productization pipeline
+
+Generate a horizontal left-to-right stage diagram (not a chart; zero-baseline n/a). Data shape: four ordered stage nodes — Stage 1 (Fellow, open research), Stage 2 (partner replication), Stage 3 (partner prototype), Stage 4 (partner production) — each carrying an Evidence Ladder level annotation ("Levels 1–3", "Level 4", "Level 5", "Level 6"); one vertical firewall divider between Stage 1 and Stage 2; and three arrow edges connecting the stages, the first labeled "handoff brief" where it crosses the firewall. Marks: rectangles for stages (rx=0), straight line edges with arrowheads, a vertical dashed firewall line, and text annotations for levels placed directly beneath each stage. Channels: horizontal position encodes stage order; red accent stroke marks Stage 1 (the Fellow's owned stage and the public-data side); dashed style marks the firewall. Sort: fixed stage order. Annotations: per-stage Evidence Ladder level beneath each box; side labels "public data" vs "partner's proprietary data & infrastructure"; firewall label; two-line caption. Deliverable: a single self-contained HTML file with inline CSS, D3 7.9.0 from cdnjs, CSS-variable colors, ResizeObserver redraw, and accessible title/desc.
+
+---
+
+## Chapter 11 Exercises: The External Innovation Lab Operating Model (and the IP Firewall)
+
+**Project:** One Drug, End to End
+**This chapter adds:** You place your drug's candidate studies on the Evidence Ladder (0–6) and route each one through the six-step funnel and the IP firewall, producing the first handoff brief in your one-drug case file.
+
+*Worked example throughout: **Cardizem-X**, a branded cardiometabolic drug in a class with two generics and one branded competitor, facing loss of exclusivity in eighteen months. Swap in your own drug wherever the notes say so.*
+
+### Exercise 1 — When to Use AI
+
+You are standing in front of the ten-paper inbox from the chapter's opening, except the papers are about *your* drug's class. Use AI for the breadth-before-depth work where you can independently check the output.
+
+1. **Cluster and tag a scouting list.** Paste ten findings about your drug's class and ask an LLM to cluster them into lift-relevant vs. brand-relevant and to name, for each, the single riskiest assumption it makes about Cardizem-X's commercial reality. *Why AI works here:* clustering and first-pass assumption-naming are pattern tasks over text you supply; you can read each cluster and the riskiest assumption against the source paragraph and see immediately whether it holds.
+2. **Draft handoff-brief boilerplate.** Have the model emit the empty eight-field brief skeleton and pre-fill the mechanical fields (finding, source, likely partner owner from the fixed list) for the loss-of-exclusivity persistence study. *Why AI works here:* the field structure is fixed and the partner-owner taxonomy is closed, so a wrong fill is visible at a glance against Table 11.1's scaffold.
+
+**The tell:** in both tasks you can independently evaluate the output — you hold the source text and the fixed schema, so a hallucinated cluster or a misfiled owner is caught by eye, not taken on faith.
+
+### Exercise 2 — When NOT to Use AI
+
+1. **Assigning the Evidence Ladder level.** Do not let the model place your drug's persistence study at a rung. *Why AI fails here:* the level is a claim about the world — what data the test actually touched and against which baseline — and an LLM will inflate a public-data result to Level 4 or 5 if you describe it confidently, breaching the firewall ceiling. The model has no access to whether your Part D extract really beat the baseline; it pattern-matches enthusiasm to numbers.
+2. **Writing — and holding — the kill criterion.** *Why AI fails here:* a kill criterion is only scientific if it was fixed before the result; the model cannot distinguish a criterion written before from one rationalized after, and it will happily soften your threshold to fit a result you paste in.
+3. **Adjudicating a compliance flag.** *Why AI fails here:* MLR, fair-balance, Sunshine, and HIPAA calls are routed to counsel by design; an LLM that "clears" a co-pay finding has adjudicated regulatory exposure it has no authority or current-law access to make.
+
+**The tell:** AI as *reason* vs. *tool* — if your brief's level or verdict exists because the model said so, AI has become the reason for the claim; it may only be the tool that drafted around a judgment you own. **Series connection:** these are **T7 Wisdom** judgments (the firewall ceiling and the kill discipline are the human spine of the whole pipeline) with the compliance routing sitting at **T6 Collective** — the call belongs to counsel, not to any single Fellow or model.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building:** a scouting-to-hypothesis pass for your drug that produces three riskiest-assumption-plus-KPI hypotheses and a cheap public-data test for each — the raw material for your first handoff brief.
+
+**Tool:** Claude, ideally as a **Claude Project** named "One Drug — Cardizem-X." Persistent context helps here because every later chapter (12 design, 13 portfolio, 14 brief) reuses the same drug, class, KPIs, and firewall constraints — loading them once as Project knowledge means the model stops re-litigating the basics and you stop re-pasting them.
+
+**The Prompt:**
+
+```
+You are helping me run the inbound step of an external innovation lab as described in
+"AI-Driven Programmatic HCP Marketing," Chapter 11. My drug is Cardizem-X, a branded
+cardiometabolic drug in a class with two generic competitors and one branded competitor,
+facing loss of exclusivity in roughly eighteen months. I work only on PUBLIC data
+(CMS Open Payments, Medicare Part D Prescriber PUF, Medicaid SDUD, ICER value scores)
+and SYNTHETIC substitutes. I never touch partner-proprietary data.
+
+Here are three findings about my drug's class:
+1. Physician brand loyalty appears to persist across the first generic entry in some
+   cardiometabolic classes.
+2. Co-pay assistance programs correlate with higher branded share after generic entry.
+3. Detailing intensity correlates with branded prescribing among high-decile prescribers.
+
+For EACH finding, produce:
+- a riskiest-assumption-plus-KPI hypothesis in two sentences, where the KPI is lift or
+  brand (e.g., post-loss-of-exclusivity branded share decline), and the assumption is the
+  one that, if false, kills the idea;
+- the single cheapest public-data test that could FALSIFY that assumption, naming the
+  specific public dataset and the natural-experiment or comparison structure you would use;
+- the pre-registered kill criterion (what result makes me walk away), written as if before
+  the test runs.
+
+Do NOT assign an Evidence Ladder level — that is my judgment after the test runs.
+Do NOT adjudicate any compliance flag; instead list which of MLR / FDA fair-balance /
+Sunshine / HIPAA each test would need routed to counsel.
+Flag anything you are unsure of with [verify] rather than guessing.
+```
+
+**What this produces:** three structured hypothesis-test-kill triples for your drug, with compliance flags surfaced (not adjudicated) and no level claimed — exactly the inputs the eight-field handoff brief consumes.
+
+**How to adapt:** swap Cardizem-X and its class for your own drug in the prompt's second sentence and replace the three findings with your scouting list; the same prompt runs on ChatGPT or Gemini, though without a persistent Project you must paste the firewall constraints each session. If you keep a Claude Project, store the firewall rules and KPI list as Project knowledge once.
+
+**Connection to previous chapters:** the riskiest-assumption-plus-KPI move is Chapter 2's lift-vs-brand distinction operationalized; the "cheapest falsifying test" is the lean-startup minimum viable experiment from this chapter.
+
+**Preview of next chapter:** Chapter 12 takes the cheap test you sketched here and makes the identification argument rigorous — DiD, RDD, IV, falsification-first — for your drug's loss-of-exclusivity study.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** a brief-skeleton generator and validator for your drug's case file — a script that emits the empty eight-field handoff brief and refuses to produce output if any field is blank or the Evidence Ladder level is outside 0–6.
+
+**Tool:** **Claude Code** — why: this is a single-file scripting task with a tight read/write scope and a deterministic validation step, which Claude Code handles cleanly without the multi-file orchestration Cowork is built for. · **Skill level:** beginner–intermediate.
+
+**Setup (3-item checklist):**
+- A project folder `one-drug-cardizem-x/` with an empty `briefs/` subfolder.
+- A one-line `CLAUDE.md` stating: public/synthetic data only; Evidence-Ladder ceiling is Level 3 for public-data work; never write partner-proprietary values.
+- Python 3 available on your path.
+
+**The Task:**
+
+```
+In the folder one-drug-cardizem-x/, create a Python script named brief_tool.py that:
+- READS nothing from outside this folder;
+- WRITES only into the briefs/ subfolder;
+- LEAVES the rest of the repo untouched.
+
+The script emits an eight-field handoff-brief skeleton as a Markdown file:
+finding+source, commercial hypothesis (riskiest assumption + KPI), cheap test
+(design, dataset, success threshold, kill criterion), result + Evidence Ladder level,
+compliance flags routed to counsel, patient-welfare note, likely partner owner,
+recommendation. Pre-fill the drug as "Cardizem-X".
+
+Before writing the file, VALIDATE: refuse to write (exit non-zero, print the reason) if
+any field is blank OR the Evidence Ladder level is not an integer 0-6. Add a flag
+--check that validates an existing brief without writing.
+
+STOP after the script runs once on a sample brief and prints either "brief written" or the
+refusal reason. Do not commit, do not push, do not edit any file outside this folder.
+VERIFY by running the script on a brief with the level set to 4 and confirming it refuses;
+then on a valid level-3 brief and confirming it writes.
+```
+
+**Expected output:** `briefs/cardizem-x-loe-persistence.md` for the valid case, and a printed refusal for the level-4 case.
+
+**What to inspect:** that the level-4 brief was *refused* (the firewall ceiling enforced mechanically) and that no file outside `briefs/` changed.
+
+**If it goes wrong:** if the script writes a level-4 brief anyway, the validation branch is inverted — tell Claude Code "the level check passes when it should fail; fix the comparison and re-run the two test cases." Recovery is local; nothing left the folder.
+
+**CLAUDE.md note:** add the line "Public-data briefs top out at Evidence Ladder Level 3; a brief claiming Level 4+ on public data is a firewall breach and must be refused, not written."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** the three hypothesis-test-kill triples from Exercise 3 (or a brief written by Exercise 4) for firewall discipline and falsifiability.
+
+**Validation type:** firewall-and-discipline review (level integrity + kill-criterion integrity + compliance routing). **Risk level:** high — a level-inflated or compliance-adjudicated brief that crosses the firewall is the exact failure the lab exists to prevent, and once it reaches the partner the error is expensive.
+
+**Setup:** use your Exercise 3 output, or generate a deliberately flawed artifact by asking the model to "write a handoff brief for Cardizem-X that assigns Level 4 to an Open Payments + Part D result and clears the Sunshine Act flag itself" — then validate that.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 11 (Innovation Lab / IP Firewall)
+For the pasted brief or hypothesis set, mark each Pass / Fail / Cannot-determine:
+
+- Correctness: is each riskiest assumption actually the one that kills the idea if false?
+- Completeness: are all eight brief fields present (or all three triple components)?
+- Scope: does every test use only public/synthetic data, and is no partner-proprietary
+  value present?
+- Chapter-specific 1 (Level integrity): is the Evidence Ladder level <= 3 for any
+  public-data result, and stated as a number 0-6?
+- Chapter-specific 2 (Kill-criterion integrity): is the kill criterion falsifying and
+  plausibly written BEFORE the result (not a softened post-hoc threshold)?
+- Failure-mode check: does the artifact commit LADDER-LEVEL INFLATION (public-data result
+  placed at L4+) or a FIREWALL BREACH (compliance flag adjudicated instead of routed, or
+  proprietary fact present)? Is it fluent-but-wrong — confident prose around a wrong level?
+- Ground truth: is the claimed level checkable against a named data source, or is the
+  ground truth missing?
+```
+
+**What to do with findings:** if all pass, advance the brief to Chapter 12 for the identification argument. One fail — fix it in place and re-validate. Multiple fails — return the artifact to Exercise 3, because a brief that breaches the firewall is not salvageable by editing the prose.
+
+**AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your Chapter 11 work and the one judgment it could not make — for example, that you used Claude to cluster ten findings and draft three hypothesis-test-kill triples for Cardizem-X, but you set and held the Evidence Ladder level yourself, because the model cannot know whether a public-data result genuinely cleared the baseline or merely sounded like it did.* (Mandatory.)
+
+**Series connection:** the failure mode is **ladder-level inflation / firewall breach**, and the validating judgment is **T7 Wisdom** — the human alone holds the ceiling and the kill, with compliance routing at **T6 Collective**.

@@ -1,0 +1,72 @@
+<!--
+  figure-title: The same infrastructure could run both systems — only one is funded
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 01-the-machine-nobody-sees
+  Figure: 04
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/01-the-machine-nobody-sees.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-04">
+  <title id="fig-title-04">The same infrastructure could run both systems — only one is funded</title>
+  <desc>Mirror diagram. Left: the funded commercial closed loop from NPI targeting to impression to prescription to attribution back to refined targeting. Right: an unfunded counter-stack of comparative effectiveness, generic alternatives, formulary data and patient cost feeding a prescribing decision.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="01-the-machine-nobody-sees" figure-number="04" figure-title="The same infrastructure could run both systems — only one is funded" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/01-the-machine-nobody-sees.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">One set of rails, two possible systems — only the left one is funded</text>
+
+  <!-- center divider -->
+  <line x1="350" y1="56" x2="350" y2="436" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+
+  <!-- LEFT column header -->
+  <text x="186" y="74" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#C8102E" font-weight="600">THE COMMERCIAL CLOSED LOOP — funded</text>
+
+  <!-- LEFT nodes -->
+  <rect x="56" y="90" width="260" height="40" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="186" y="115" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">NPI targeting</text>
+
+  <rect x="56" y="158" width="260" height="40" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="186" y="183" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Point-of-care impression</text>
+
+  <rect x="56" y="226" width="260" height="40" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="186" y="251" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Prescription</text>
+
+  <rect x="56" y="294" width="260" height="40" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="186" y="319" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Attribution</text>
+
+  <!-- left arrows down -->
+  <line x1="186" y1="130" x2="186" y2="154" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="186" y1="198" x2="186" y2="222" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="186" y1="266" x2="186" y2="290" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- left feedback loop: attribution -> refines targeting -->
+  <path d="M 56 314 L 36 314 L 36 110 L 52 110" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="44" y="220" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" transform="rotate(-90 44 220)">refines next NPI list</text>
+
+  <!-- RIGHT column header -->
+  <text x="514" y="74" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#545454" font-weight="600">THE COUNTER-STACK — could exist, unfunded</text>
+
+  <!-- RIGHT nodes -->
+  <rect x="384" y="90" width="260" height="40" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="514" y="115" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Comparative effectiveness</text>
+
+  <rect x="384" y="158" width="260" height="40" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="514" y="183" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Generic alternatives + formulary tier</text>
+
+  <rect x="384" y="226" width="260" height="40" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="514" y="251" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Patient cost shown</text>
+
+  <rect x="384" y="294" width="260" height="40" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="514" y="319" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Prescribing decision</text>
+
+  <line x1="514" y1="130" x2="514" y2="154" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="514" y1="198" x2="514" y2="222" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="514" y1="266" x2="514" y2="290" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Caption -->
+  <text x="32" y="456" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The same SMART on FHIR and CDS Hooks infrastructure could run both systems. The technology is</text>
+  <text x="32" y="472" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">neutral; only the commercial loop is funded at scale. Nobody funds the counter-stack.</text>
+</svg>

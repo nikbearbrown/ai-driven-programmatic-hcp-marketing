@@ -1,0 +1,67 @@
+<!--
+  figure-title: The gap between event and targeting signal is where targeting error lives
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 03-the-hcp-identity-graph
+  Figure: 02
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/03-the-hcp-identity-graph.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">The gap between event and targeting signal is where targeting error lives</title>
+  <desc>Two parallel timelines. The top track shows the claims-data lag from prescription written on day 0 through pharmacy adjudication, payer processing, broker aggregation, monthly model refresh, to targeting list deployment. The bottom track shows a real-time EHR trigger going from day 0 directly to a bid.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="03-the-hcp-identity-graph" figure-number="02" figure-title="The gap between event and targeting signal is where targeting error lives" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/03-the-hcp-identity-graph.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Two paths from a clinical event to a targeting signal — one slow, one immediate</text>
+
+  <!-- TOP track: claims lag -->
+  <text x="32" y="68" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#545454" font-weight="600">CLAIMS-DATA LAG — the standard monthly cycle</text>
+
+  <!-- baseline line -->
+  <line x1="64" y1="120" x2="640" y2="120" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ticks/nodes -->
+  <!-- node positions x: 80,200,320,440,560 -->
+  <circle cx="80" cy="120" r="5" fill="#2a1a0e"/>
+  <text x="80" y="104" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 0</text>
+  <text x="80" y="142" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Rx written</text>
+
+  <circle cx="200" cy="120" r="5" fill="#2a1a0e"/>
+  <text x="200" y="104" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 1–3</text>
+  <text x="200" y="142" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">pharmacy adj.</text>
+
+  <circle cx="320" cy="120" r="5" fill="#2a1a0e"/>
+  <text x="320" y="104" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 7–14</text>
+  <text x="320" y="142" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">payer processing</text>
+
+  <circle cx="440" cy="120" r="5" fill="#2a1a0e"/>
+  <text x="440" y="104" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 14–30</text>
+  <text x="440" y="142" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">broker aggregation</text>
+
+  <circle cx="560" cy="120" r="5" fill="#C8102E"/>
+  <text x="560" y="104" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">monthly</text>
+  <text x="560" y="142" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">model refresh →</text>
+  <text x="560" y="156" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">list deployed</text>
+
+  <!-- BOTTOM track: real-time EHR -->
+  <text x="32" y="234" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#C8102E" font-weight="600">REAL-TIME EHR TRIGGER — dynamic NPI activation</text>
+
+  <line x1="64" y1="286" x2="320" y2="286" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <circle cx="80" cy="286" r="5" fill="#2a1a0e"/>
+  <text x="80" y="270" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 0</text>
+  <text x="80" y="308" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">chart opened</text>
+
+  <circle cx="300" cy="286" r="5" fill="#C8102E"/>
+  <text x="300" y="270" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">Day 0</text>
+  <text x="300" y="308" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">bid fired</text>
+
+  <!-- error-window callout -->
+  <rect x="64" y="336" width="576" height="48" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="80" y="362" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The gap between event and targeting signal is where targeting error lives — a physician who switched in</text>
+  <text x="80" y="376" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Q2 can still sit atop a Q2 list built from Q1 claims; the lag also distorts any measured "lift."</text>
+</svg>

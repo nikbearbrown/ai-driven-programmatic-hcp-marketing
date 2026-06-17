@@ -1,0 +1,61 @@
+<!--
+  figure-title: The split-agency structure that breaks consumer sovereignty
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 01-the-machine-nobody-sees
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/01-the-machine-nobody-sees.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The split-agency structure that breaks consumer sovereignty</title>
+  <desc>Four nodes — physician, patient, payer, institution — connected by a decision flow, a consumption flow and a payment flow. The payer's payment arrow has no return arrow into the decision node.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="01-the-machine-nobody-sees" figure-number="01" figure-title="The split-agency structure that breaks consumer sovereignty" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/01-the-machine-nobody-sees.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Four parties, four roles — and the cost-bearer never enters the decision</text>
+
+  <!-- Physician node (top-left, the decision node) -->
+  <rect x="64" y="80" width="200" height="64" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="164" y="108" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">PHYSICIAN</text>
+  <text x="164" y="126" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">decides — writes the script</text>
+
+  <!-- Institution node (top-right) -->
+  <rect x="436" y="80" width="200" height="64" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="536" y="108" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">INSTITUTION</text>
+  <text x="536" y="126" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">constrains the menu (PBM, formulary)</text>
+
+  <!-- Patient node (bottom-left) -->
+  <rect x="64" y="248" width="200" height="64" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="164" y="276" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">PATIENT</text>
+  <text x="164" y="294" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">consumes — takes the drug</text>
+
+  <!-- Payer node (bottom-right) -->
+  <rect x="436" y="248" width="200" height="64" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="536" y="276" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">PAYER</text>
+  <text x="536" y="294" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">pays the majority of the cost</text>
+
+  <!-- Decision flow: physician -> patient (consumption guided) -->
+  <line x1="164" y1="144" x2="164" y2="244" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="118" y="200" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">decision</text>
+
+  <!-- Institution constrains physician menu -->
+  <line x1="432" y1="112" x2="268" y2="112" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="350" y="104" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">constrains menu</text>
+
+  <!-- Payment flow: payer -> reimburses (toward the drug / institution) -->
+  <line x1="536" y1="244" x2="536" y2="148" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="582" y="200" text-anchor="start" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">payment</text>
+
+  <!-- Missing return arrow: payer back to decision node (drawn as dashed, broken) -->
+  <line x1="432" y1="280" x2="280" y2="280" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+  <text x="356" y="272" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">no voice in the decision</text>
+  <text x="356" y="304" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">— missing return arrow —</text>
+
+  <!-- Caption -->
+  <text x="32" y="372" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The physician decides; the payer pays; neither holds complete information about the other's</text>
+  <text x="32" y="388" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">constraints. The party who pays is not at the table — the broken loop of consumer sovereignty.</text>
+</svg>

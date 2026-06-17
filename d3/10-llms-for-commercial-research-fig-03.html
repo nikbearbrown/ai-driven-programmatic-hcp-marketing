@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>The four-layer validation harness</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{width:100%;max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:14px;fill:var(--color-ink);}
+  .node{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);font-weight:600;}
+  .side{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .sidered{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-red);}
+  .hd{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:.08em;}
+  .cap{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {n:"1 · Citation verification",catches:"fabricated + real-but-wrong",limit:"cannot judge generalization"},
+  {n:"2 · Groundedness scoring",catches:"overstated summaries",limit:"weak on complex queries"},
+  {n:"3 · Compliance flag",catches:"fair-balance, off-label drift",limit:"flags only — never approves"},
+  {n:"4 · Human capstone",catches:"what all others miss",limit:"scarce expert attention",accent:true}
+];
+const wrap=d3.select("#wrap");
+function render(){
+  wrap.select("svg").remove();
+  const W=Math.max(420,Math.min(760,wrap.node().clientWidth||700)),H=480;
+  const svg=wrap.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("The four-layer validation harness");
+  svg.append("desc").attr("id","chart-desc").text("Four stacked layers: citation verification, groundedness scoring, compliance flag, human capstone. Each shows what it catches and its limit.");
+  svg.append("defs").html('<marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="var(--color-ink)"/></marker>');
+  svg.append("text").attr("class","title").attr("x",32).attr("y",28).text("The four-layer validation harness");
+  const cx=W/2, bw=Math.min(180,W*0.32);
+  svg.append("text").attr("class","hd").attr("x",cx-bw/2-90).attr("y",58).attr("text-anchor","middle").text("CATCHES");
+  svg.append("text").attr("class","hd").attr("x",cx+bw/2+90).attr("y",58).attr("text-anchor","middle").text("LIMIT");
+  const y0=72, bh=56, gap=24;
+  const g=svg.selectAll(".layer").data(FALLBACK_DATA).join("g").attr("tabindex",0)
+    .attr("aria-label",d=>d.n+". catches: "+d.catches+". limit: "+d.limit);
+  g.append("rect").attr("x",cx-bw/2).attr("y",(d,i)=>y0+i*(bh+gap)).attr("width",bw).attr("height",bh).attr("rx",0)
+    .attr("fill","var(--color-white)")
+    .attr("stroke",d=>d.accent?"var(--color-red)":"var(--color-border)")
+    .attr("stroke-width",d=>d.accent?1.5:1);
+  g.append("text").attr("class","node").attr("x",cx).attr("y",(d,i)=>y0+i*(bh+gap)+bh/2+4).attr("text-anchor","middle").text(d=>d.n);
+  g.append("text").attr("class",d=>d.accent?"sidered":"side").attr("x",cx-bw/2-90).attr("y",(d,i)=>y0+i*(bh+gap)+bh/2+4).attr("text-anchor","middle").text(d=>d.catches);
+  g.append("text").attr("class","side").attr("x",cx+bw/2+90).attr("y",(d,i)=>y0+i*(bh+gap)+bh/2+4).attr("text-anchor","middle").text(d=>d.limit);
+  for(let i=0;i<3;i++){
+    const yb=y0+i*(bh+gap)+bh;
+    svg.append("line").attr("x1",cx).attr("y1",yb).attr("x2",cx).attr("y2",yb+gap-4)
+      .attr("stroke","var(--color-ink)").attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+  }
+  svg.append("text").attr("class","cap").attr("x",32).attr("y",H-26).text("The harness does not make the LLM trustworthy. It makes the LLM useful by removing");
+  svg.append("text").attr("class","cap").attr("x",32).attr("y",H-10).text("the errors it hides — placing human judgment where automated reliability is lowest.");
+}
+render();
+new ResizeObserver(()=>render()).observe(wrap.node());
+</script>
+</body>
+</html>

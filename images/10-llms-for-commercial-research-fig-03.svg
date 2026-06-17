@@ -1,0 +1,52 @@
+<!--
+  figure-title: The four-layer validation harness
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 10-llms-for-commercial-research
+  Figure: 03
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/10-llms-for-commercial-research.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
+  <title id="fig-title-03">The four-layer validation harness</title>
+  <desc>A vertical stack of four layers — citation verification, groundedness scoring, compliance flag, and human capstone — each annotated with what it catches on the left and its limit on the right. The human capstone is the load-bearing layer.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="10-llms-for-commercial-research" figure-number="03" figure-title="The four-layer validation harness" figure-type="diagram" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/10-llms-for-commercial-research.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="34" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">The four-layer validation harness</text>
+  <text x="120" y="58" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">CATCHES</text>
+  <text x="580" y="58" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">LIMIT</text>
+
+  <!-- Layer 1 -->
+  <rect x="260" y="72" width="180" height="56" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="350" y="105" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">1 · Citation verification</text>
+  <text x="120" y="104" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">fabricated + real-but-wrong</text>
+  <text x="580" y="104" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">cannot judge generalization</text>
+  <line x1="350" y1="128" x2="350" y2="148" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer 2 -->
+  <rect x="260" y="152" width="180" height="56" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="350" y="185" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">2 · Groundedness scoring</text>
+  <text x="120" y="184" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">overstated summaries</text>
+  <text x="580" y="184" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">weak on complex queries</text>
+  <line x1="350" y1="208" x2="350" y2="228" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer 3 -->
+  <rect x="260" y="232" width="180" height="56" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#FFFFFF"/>
+  <text x="350" y="265" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">3 · Compliance flag</text>
+  <text x="120" y="264" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">fair-balance, off-label drift</text>
+  <text x="580" y="264" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">flags only — never approves</text>
+  <line x1="350" y1="288" x2="350" y2="308" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Layer 4 (red, load-bearing) -->
+  <rect x="260" y="312" width="180" height="56" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="350" y="345" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">4 · Human capstone</text>
+  <text x="120" y="344" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">what all others miss</text>
+  <text x="580" y="344" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">scarce expert attention</text>
+
+  <text x="32" y="406" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The harness does not make the LLM trustworthy. It makes the LLM useful by removing</text>
+  <text x="32" y="422" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">the errors it hides — placing human judgment where automated reliability is lowest.</text>
+</svg>

@@ -1,0 +1,77 @@
+<!--
+  Title: The brand-formation loop
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 09-brand-association
+  Figure: 01
+  Type: Cycle (process chain closing into a loop)
+  Generated: 2026-06-16
+  Source: pantry/09-brand-association-cajal.md
+-->
+<svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-01">
+  <title id="fig-title-01">The brand-formation loop: from clinical evidence through the durable mental association to repeat prescribing and back</title>
+  <desc>A directed process chain that closes into a loop. Clinical evidence and label flow through KOL interpretation and the promotional layer into a central HCP mental-association node, then to first trial, observed outcome, repeat-or-abandon, and habit and loyalty, which loops back. The association node is the focal mechanism node where marketing acts.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" book-slug="ai-driven-programmatic-hcp-marketing" chapter="09-brand-association" figure-number="01" figure-title="The brand-formation loop" figure-slug="brand-formation-loop" figure-type="Cycle" priority="Critical" author="Nik Bear Brown" date-generated="2026-06-16" source-file="pantry/09-brand-association-cajal.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+
+  <!-- Title -->
+  <text x="32" y="40" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">How a brand association forms: marketing acts at the mental-association node</text>
+
+  <!-- Top row, left to right: evidence -> KOL -> promotion -> ASSOCIATION (focal) -->
+  <rect x="32" y="80" width="120" height="44" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="92" y="100" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">clinical evidence</text>
+  <text x="92" y="115" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">+ label</text>
+
+  <line x1="152" y1="102" x2="188" y2="102" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="192" y="80" width="120" height="44" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="252" y="100" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">KOL + guideline</text>
+  <text x="252" y="115" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">interpretation</text>
+
+  <line x1="312" y1="102" x2="348" y2="102" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="352" y="80" width="120" height="44" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="412" y="100" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">detailing · CME</text>
+  <text x="412" y="115" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">congress</text>
+
+  <!-- marketing-acts arrow into the focal node (emphasis red) -->
+  <line x1="472" y1="102" x2="512" y2="150" stroke="#C8102E" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+  <text x="500" y="118" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">marketing acts here</text>
+
+  <!-- FOCAL: HCP mental association (largest, anchor) -->
+  <rect x="488" y="156" width="168" height="76" rx="0" fill="#F5F5F5" stroke="#2a1a0e" stroke-width="1.5"/>
+  <text x="572" y="184" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" text-anchor="middle">HCP mental association</text>
+  <text x="572" y="202" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">"Brand X is for this</text>
+  <text x="572" y="216" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">kind of patient"</text>
+
+  <!-- down to first trial -->
+  <line x1="572" y1="232" x2="572" y2="268" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <!-- Bottom row, right to left: first trial -> outcome+access -> repeat/abandon -> habit/loyalty -->
+  <rect x="512" y="272" width="144" height="44" rx="0" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="584" y="292" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">first patient trial</text>
+  <text x="584" y="307" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">→ outcome + access</text>
+
+  <line x1="512" y1="294" x2="476" y2="294" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="332" y="272" width="144" height="44" rx="0" fill="#FFFFFF" stroke="#787878" stroke-width="1"/>
+  <text x="404" y="292" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">repeat prescribing</text>
+  <text x="404" y="307" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">or abandonment</text>
+
+  <line x1="332" y1="294" x2="296" y2="294" stroke="#2a1a0e" stroke-width="1.5" fill="none" marker-end="url(#arrow)"/>
+
+  <rect x="152" y="272" width="144" height="44" rx="0" fill="#FFFFFF" stroke="#787878" stroke-width="1"/>
+  <text x="224" y="292" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">habit · loyalty</text>
+  <text x="224" y="307" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">advocacy or switching</text>
+
+  <!-- loop-back to the association node (single-headed) -->
+  <path d="M 152 286 L 92 286 L 92 178 L 488 178" fill="none" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="100" y="240" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">loop-back</text>
+
+  <!-- Caption -->
+  <line x1="32" y1="344" x2="668" y2="344" stroke="#D4D4D4" stroke-width="0.75"/>
+  <text x="32" y="364" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Marketing content acts at the mental-association node; prescriptions are the lagging proof. Whether this brand equity</text>
+  <text x="32" y="380" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">tracks a drug's clinical value is an untested open question, not a measured relationship.</text>
+</svg>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!--
+  figure-title: The inbound innovation funnel and the IP firewall
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 11-innovation-lab-operating-model
+  Figure: 01
+  Type: diagram
+  Generated: 2026-06-16
+  Source: chapters/11-innovation-lab-operating-model.md
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figure 11.1 — The inbound innovation funnel and the IP firewall</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media(prefers-color-scheme:dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);}
+  #chart{width:100%;max-width:900px;margin:0 auto;}
+  .fig-title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:14px;fill:var(--color-ink);}
+  .node-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);font-weight:600;}
+  .node-sub{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .step{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .step-accent{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-red);}
+  .edge-label{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-ink);}
+  .firewall-label{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .source{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:.08em;}
+  .node-box{fill:var(--color-white);stroke:var(--color-border);stroke-width:1;}
+  .node-box.accent{stroke:var(--color-red);stroke-width:1.5;}
+  .edge{stroke:var(--color-ink);stroke-width:1.5;fill:none;}
+  .firewall{stroke:var(--color-border);stroke-width:0.75;stroke-dasharray:5 4;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="chart"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  nodes: [
+    {id:"external", x:32,  y:120, w:150, h:120, label:"EXTERNAL", lines:["research","public data","vendor claims"], accent:false},
+    {id:"lab",      x:226, y:110, w:184, h:140, label:"LAB", steps:["scout","hypothesize","test","score"], gate:"go / kill", accent:true},
+    {id:"partner",  x:518, y:110, w:150, h:140, label:"PARTNER", lines:["proprietary","replication","prototype","resourced product"], accent:false}
+  ],
+  edges: [
+    {x1:182,y1:180,x2:222,y2:180,label:null},
+    {x1:410,y1:180,x2:514,y2:180,label:"handoff brief"}
+  ],
+  firewall: {x:452, y1:80, y2:320, label:"IP FIREWALL"},
+  sideLabels: [
+    {x:318, y:284, text:"public data · Levels 0–3"},
+    {x:593, y:284, text:"proprietary · Levels 4–6"}
+  ]
+};
+
+const W = 700, H = 420;
+
+function render(data){
+  const root = d3.select("#chart");
+  root.selectAll("svg").remove();
+  const svg = root.append("svg")
+    .attr("viewBox", `0 0 ${W} ${H}`)
+    .attr("role","img")
+    .attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("The inbound innovation funnel and the IP firewall");
+  svg.append("desc").attr("id","chart-desc").text("External public research flows into the lab, which scouts, hypothesizes, tests, scores, and decides go or kill. A vertical dashed firewall separates the lab from the partner; only the handoff brief crosses it into the partner's proprietary stages.");
+
+  const defs = svg.append("defs");
+  defs.append("marker")
+    .attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6)
+    .attr("refX",7).attr("refY",3).attr("orient","auto")
+    .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+
+  svg.append("rect").attr("x",0).attr("y",0).attr("width",W).attr("height",H).attr("fill","var(--color-white)");
+
+  svg.append("text").attr("class","fig-title").attr("x",32).attr("y",34)
+    .text("The inbound innovation funnel — and the wall the work must cross");
+
+  // firewall
+  svg.append("line").attr("class","firewall")
+    .attr("x1",data.firewall.x).attr("y1",data.firewall.y1)
+    .attr("x2",data.firewall.x).attr("y2",data.firewall.y2);
+  svg.append("text").attr("class","firewall-label").attr("x",data.firewall.x).attr("y",data.firewall.y1-6).attr("text-anchor","middle").text(data.firewall.label);
+
+  // edges
+  svg.selectAll("line.edge").data(data.edges).join("line")
+    .attr("class","edge")
+    .attr("x1",d=>d.x1).attr("y1",d=>d.y1).attr("x2",d=>d.x2).attr("y2",d=>d.y2)
+    .attr("marker-end","url(#arrow)");
+  svg.selectAll("text.edge-label").data(data.edges.filter(d=>d.label)).join("text")
+    .attr("class","edge-label").attr("text-anchor","middle")
+    .attr("x",d=>(d.x1+d.x2)/2).attr("y",d=>d.y1-10).text(d=>d.label);
+
+  // nodes
+  const g = svg.selectAll("g.node").data(data.nodes).join("g").attr("class","node")
+    .attr("tabindex",0)
+    .attr("aria-label",d=> d.id==="lab" ? "Lab: scout, hypothesize, test, score, go or kill" : d.label + ": " + (d.lines||[]).join(", "));
+  g.append("rect")
+    .attr("class",d=>d.accent?"node-box accent":"node-box")
+    .attr("x",d=>d.x).attr("y",d=>d.y).attr("width",d=>d.w).attr("height",d=>d.h).attr("rx",0);
+  g.append("text").attr("class","node-label").attr("text-anchor","middle")
+    .attr("x",d=>d.x+d.w/2).attr("y",d=>d.y+28).text(d=>d.label);
+
+  // lab steps
+  g.each(function(d){
+    const sel = d3.select(this);
+    if(d.steps){
+      d.steps.forEach((s,i)=>{
+        sel.append("text").attr("class","step").attr("text-anchor","middle")
+          .attr("x",d.x+d.w/2).attr("y",d.y+52+i*18).text(s);
+      });
+      sel.append("text").attr("class","step-accent").attr("text-anchor","middle")
+        .attr("x",d.x+d.w/2).attr("y",d.y+52+d.steps.length*18).text(d.gate);
+    } else if(d.lines){
+      d.lines.forEach((s,i)=>{
+        sel.append("text").attr("class","node-sub").attr("text-anchor","middle")
+          .attr("x",d.x+d.w/2).attr("y",d.y+50+i*18).text(s);
+      });
+    }
+  });
+
+  // side labels
+  svg.selectAll("text.side").data(data.sideLabels).join("text")
+    .attr("class","node-sub").attr("text-anchor","middle")
+    .attr("x",d=>d.x).attr("y",d=>d.y).text(d=>d.text);
+
+  // caption
+  svg.append("text").attr("class","caption").attr("x",32).attr("y",360)
+    .text("The lab pulls public research in, tests it cheaply, and routes survivors out. Only the handoff");
+  svg.append("text").attr("class","caption").attr("x",32).attr("y",376)
+    .text("brief crosses the firewall — protecting the partner's IP and the Fellow's research independence.");
+  svg.append("text").attr("class","source").attr("x",32).attr("y",404)
+    .text("SOURCE: CHAPTER 11, THE EXTERNAL INNOVATION LAB OPERATING MODEL");
+}
+
+render(FALLBACK_DATA);
+const ro = new ResizeObserver(()=>render(FALLBACK_DATA));
+ro.observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!--
+  Figure title: Tree-based vs. deep-learning methods on medium tabular data
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 06-ensembles-tabular-advantage
+  Figure: 02
+  Type: CHART
+  Generated: 2026-06-16
+  Source: chapters/06-ensembles-tabular-advantage.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-02" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-02">Tree-based vs. deep-learning methods on medium tabular data</title>
+  <desc>Horizontal bar chart, qualitative reproduction of Grinsztajn et al. 2022 Figure 1. Tree-based methods cluster at the top of average normalized performance across 45 tabular datasets; deep-learning methods fall lower. Bar heights are qualitative, not exact published values.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="06-ensembles-tabular-advantage" figure-number="02" figure-title="Tree-based vs deep-learning on tabular data" figure-type="CHART" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/06-ensembles-tabular-advantage.md"/></metadata>
+  <defs></defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="170" y="28" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Average normalized performance across 45 tabular datasets</text>
+  <text x="170" y="44" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Qualitative reproduction of Grinsztajn et al., NeurIPS 2022, Fig. 1 — [verify] against paper</text>
+
+  <!-- plot area: bars horizontal. left label gutter at x=170, plot x 170..640, y 56..356 -->
+  <rect x="170" y="56" width="470" height="300" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
+
+  <!-- x axis 0..1 normalized; scale 470px -->
+  <g font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454">
+    <text x="170" y="372">0</text>
+    <line x1="405" y1="56" x2="405" y2="356" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="405" y="372" text-anchor="middle">0.5</text>
+    <line x1="640" y1="56" x2="640" y2="356" stroke="#D4D4D4" stroke-width="0.75" stroke-dasharray="5 4"/>
+    <text x="640" y="372" text-anchor="end">1.0</text>
+  </g>
+
+  <!-- bars: 8 methods, rowheight ~33, start y=70. tree=red, DL=ink/gray. values qualitative -->
+  <!-- XGBoost 0.95 -->
+  <rect x="170" y="68"  width="446" height="22" fill="#C8102E"/>
+  <text x="166" y="83" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">XGBoost (GBT)</text>
+  <!-- GBT 0.93 -->
+  <rect x="170" y="102" width="437" height="22" fill="#C8102E"/>
+  <text x="166" y="117" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Gradient Boosting</text>
+  <!-- Random Forest 0.89 -->
+  <rect x="170" y="136" width="418" height="22" fill="#C8102E"/>
+  <text x="166" y="151" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Random Forest</text>
+  <!-- FT-Transformer 0.78 -->
+  <rect x="170" y="170" width="367" height="22" fill="#2a1a0e"/>
+  <text x="166" y="185" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">FT-Transformer</text>
+  <!-- SAINT 0.72 -->
+  <rect x="170" y="204" width="338" height="22" fill="#2a1a0e"/>
+  <text x="166" y="219" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">SAINT</text>
+  <!-- ResNet 0.66 -->
+  <rect x="170" y="238" width="310" height="22" fill="#787878"/>
+  <text x="166" y="253" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">ResNet (tabular)</text>
+  <!-- MLP 0.58 -->
+  <rect x="170" y="272" width="273" height="22" fill="#787878"/>
+  <text x="166" y="287" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">MLP</text>
+  <!-- Transformer (vanilla) 0.50 -->
+  <rect x="170" y="306" width="235" height="22" fill="#787878"/>
+  <text x="166" y="321" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Transformer</text>
+
+  <!-- cluster brackets -->
+  <text x="632" y="98" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#C8102E">tree-based: the bar to beat</text>
+  <text x="630" y="320" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454">deep learning — scattered lower</text>
+
+  <text x="405" y="396" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">normalized test performance (qualitative)</text>
+  <text x="640" y="412" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: GRINSZTAJN ET AL. 2022 — QUALITATIVE REPRODUCTION</text>
+</svg>

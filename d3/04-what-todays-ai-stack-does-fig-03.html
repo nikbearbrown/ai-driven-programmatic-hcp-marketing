@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 4.3 — The five-question audit rubric</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+      --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}
+  }
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .qtitle{font-size:12px;fill:var(--color-ink);}
+  .qsub{font-size:11px;fill:var(--color-secondary);}
+  .brn{font-size:10px;fill:var(--color-secondary);}
+  .verd{font-size:12px;}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  .qbox rect{cursor:pointer;}
+  .qbox rect:focus{outline:2px solid var(--color-ochre);}
+  rect.qb,line.flow{transition:opacity 200ms cubic-bezier(0.2,0.8,0.2,1);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Run this rubric on every vendor claim before citing any number</p>
+  <div id="chart"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {n:1,q:"What KPI does it move — lift or engagement?",s:"engagement is a leading indicator; lift needs a counterfactual"},
+  {n:2,q:"What data feeds it, and who measures?",s:"serving party = measuring party means attribution circularity"},
+  {n:3,q:"What evidence — holdout or case study?",s:"vendor case study and paid recognition are not validation"},
+  {n:4,q:"Deployed, emerging, or aspirational?",s:"place the claim on the maturity ladder"},
+  {n:5,q:"Real architecture, or a relabel?",s:"MoE / federated / agentic may name something real — or not"}
+];
+const data=FALLBACK_DATA;
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=480;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Five-question audit rubric");
+  svg.append("desc").attr("id","chart-desc").text("Vertical flowchart of five audit questions, each branching to answered-clearly or circular, converging on a verdict band.");
+
+  const bx=32,bw=Math.min(380,W*0.56),bh=46,gap=32,top=20;
+  const boxes=svg.selectAll("g.qbox").data(data).join("g").attr("class","qbox");
+  boxes.append("rect").attr("class","qb").attr("x",bx).attr("width",bw).attr("height",bh)
+    .attr("y",(d,i)=>top+i*(bh+gap)).attr("fill",cv("--color-white"))
+    .attr("stroke",cv("--color-border")).attr("stroke-width",1).attr("rx",0)
+    .attr("tabindex",0).attr("aria-label",d=>`Question ${d.n}: ${d.q}`)
+    .on("click",(e,d)=>highlight(d.n))
+    .on("keydown",(e,d)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();highlight(d.n);}});
+  boxes.append("text").attr("class","qtitle").attr("x",bx+12).attr("y",(d,i)=>top+i*(bh+gap)+20).text(d=>`${d.n}. ${d.q}`);
+  boxes.append("text").attr("class","qsub").attr("x",bx+12).attr("y",(d,i)=>top+i*(bh+gap)+37).text(d=>d.s);
+
+  // flow connectors
+  const cxMid=bx+bw/2;
+  for(let i=0;i<data.length-1;i++){
+    const y1=top+i*(bh+gap)+bh, y2=top+(i+1)*(bh+gap);
+    svg.append("line").attr("class","flow").attr("data-step",i+2)
+      .attr("x1",cxMid).attr("y1",y1).attr("x2",cxMid).attr("y2",y2)
+      .attr("stroke",cv("--color-ink")).attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+    svg.append("text").attr("class","brn").attr("x",bx+bw+8).attr("y",(y1+y2)/2+3).text("answered clearly");
+  }
+  // arrowhead def
+  const defs=svg.append("defs");
+  defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6)
+    .attr("refX",7).attr("refY",3).attr("orient","auto")
+    .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill",cv("--color-ink"));
+
+  // circular failure path (red, right side)
+  const failX=Math.min(bx+bw+108,W-40);
+  const yA=top+1*(bh+gap)+bh/2, yB=top+2*(bh+gap)+bh/2, vy=top+data.length*(bh+gap)+10;
+  svg.append("line").attr("x1",bx+bw).attr("y1",yA).attr("x2",failX).attr("y2",yA).attr("stroke",cv("--color-red")).attr("stroke-width",1.5);
+  svg.append("line").attr("x1",bx+bw).attr("y1",yB).attr("x2",failX).attr("y2",yB).attr("stroke",cv("--color-red")).attr("stroke-width",1.5);
+  svg.append("line").attr("x1",failX).attr("y1",yA).attr("x2",failX).attr("y2",vy).attr("stroke",cv("--color-red")).attr("stroke-width",1.5);
+  svg.append("text").attr("class","brn").attr("fill",cv("--color-red")).attr("x",failX+8).attr("y",(yA+yB)/2).text("not answered /");
+  svg.append("text").attr("class","brn").attr("fill",cv("--color-red")).attr("x",failX+8).attr("y",(yA+yB)/2+13).text("circular");
+
+  // converge arrow from last box to verdict
+  const lastY=top+(data.length-1)*(bh+gap)+bh;
+  svg.append("line").attr("x1",cxMid).attr("y1",lastY).attr("x2",cxMid).attr("y2",vy).attr("stroke",cv("--color-ink")).attr("stroke-width",1.5).attr("marker-end","url(#arrow)");
+
+  // verdict band
+  svg.append("rect").attr("x",32).attr("y",vy).attr("width",W-64).attr("height",34)
+    .attr("fill",cv("--color-fill")).attr("stroke",cv("--color-ink")).attr("stroke-width",1);
+  const verdicts=[["TEST IT",cv("--color-ink")],["WATCH IT",cv("--color-ink")],["BELIEVE IT",cv("--color-ink")],["ROUTE TO CH.7",cv("--color-red")]];
+  const step=(W-64)/4;
+  verdicts.forEach((v,i)=>{
+    svg.append("text").attr("class","verd").attr("text-anchor","middle")
+      .attr("x",32+step*(i+0.5)).attr("y",vy+22).attr("fill",v[1]).text(v[0]);
+  });
+
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-32).attr("y",vy+50).text("SOURCE: CH.04");
+}
+function highlight(n){
+  d3.selectAll("line.flow").attr("opacity",l=>l<n?0.25:1);
+  d3.selectAll("g.qbox rect.qb").attr("opacity",function(d){return d.n<=n?1:0.45;});
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

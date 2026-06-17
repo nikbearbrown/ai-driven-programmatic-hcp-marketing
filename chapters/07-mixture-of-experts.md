@@ -25,6 +25,10 @@ $$G(x) = \text{Softmax}(\text{Top-}k(H(x))), \qquad H(x) = x \cdot W_{\text{gate
 
 where $\epsilon$ is Gaussian noise added to help balance load across experts (Shazeer et al. 2017), and Top-$k$ zeros out all but the $k$ largest scores before the softmax. That zeroing is the whole trick. It makes activation **sparse**: only $k$ of the $N$ experts fire for any given input. Model capacity — the total number of parameters — can grow with the number of experts while the compute per forward pass stays roughly flat, because you only ever run $k$ of them.
 
+![Single input x flowing into a gating network that produces a weight vector; only k of N expert boxes are highlighted (active); their outputs combine via weighted sum to produce y. Sparse activation: N experts exist, k fire. Capacity scales with N; compute scales with k.](images/07-mixture-of-experts-fig-01.png)
+
+*Figure 7.1 — Sparse activation in a MoE layer: gating fires only k of N experts*
+
 <!-- → [DIAGRAM: Single input x flowing into a gating network that produces a weight vector; only k of N expert boxes are highlighted (active); their outputs combine via weighted sum to produce y. Caption: "Sparse activation: N experts exist, k fire. Capacity scales with N; compute scales with k."] -->
 
 The single most important structural fact hides in plain sight. All experts share identical input and output dimensionality. That is why the weighted sum is mathematically clean — it is a convex combination in a shared vector space. If the experts emitted different output shapes, you could not add them; you would need a translation layer first. This property — output standardization — is the crux of the entire chapter. It is exactly what the opening-case platform lacked.
@@ -43,7 +47,16 @@ Both MoE and ensemble stacking combine multiple components, so "it has multiple 
 
 If a platform's components were trained separately and combined afterward, it is stacking. That single test resolves most "MoE" claims.
 
-<!-- → [TABLE: MoE vs. stacking — rows: output dimensionality, training regime, gradient flow, routing mechanism, specialization source, tabular-data performance. Columns: genuine MoE, stacked ensemble. Caption: "The two distinctions that matter. Everything else — number of components, presence of a meta-learner — is shared between the architectures."] -->
+| Property | Genuine MoE | Stacked ensemble |
+| --- | --- | --- |
+| Output dimensionality | All experts share one input-output space | Components emit incommensurable formats (probability, score, log-odds) |
+| Training regime | Gating and experts trained jointly, end to end | Base models trained and frozen before the meta-learner sees them |
+| Gradient flow | Differentiable w.r.t. gating weights and expert parameters | Blocked — meta-learner must translate formats first |
+| Routing mechanism | Learned, token-level, sparse top-$k$ | Learned aggregator over frozen outputs; no token-level routing |
+| Specialization source | Emergent from co-adaptation of router and experts | None — separately trained artifacts combined after the fact |
+| Tabular-data performance | No regime advantage; tree ensembles remain state of the art | Legitimate, well-understood; often the right tool |
+
+*Table 7.1 — The two distinctions that matter. Everything else — number of components, presence of a meta-learner — is shared between the architectures.*
 
 ---
 
@@ -70,6 +83,10 @@ Here intuition fails almost everyone. The natural image — one expert handles m
 Interpretability work on Mixtral 8x7B finds that experts specialize in **syntactic and computational patterns — token type — far more than semantic domains.** A punctuation token routes differently from a verb regardless of the topic sentence it lives in. The routing geometry reflects surface-level token structure, not the kind of topic-level functional diversity the architecture appears to promise. More troubling: in some trained MoE models, experts converge to greater than 99 percent representational similarity. The architecture's promised functional diversity quietly becomes redundancy.
 
 Now carry that finding to pharma. NPI prediction operates on tabular feature vectors — prescribing history, demographic signals, Open Payments data, behavioral indicators. There is no token sequence and no syntactic structure. The mechanism by which MoE experts develop specialization — routing on token type within a sequence — has no natural analogue in a physician feature vector. What would "specialization" even mean for an expert routing on NPI features? If routing on tabular data found stable, interpretable physician archetypes, that would be a genuinely new finding. But the null result is more likely: routing degenerates into the same near-redundancy the interpretability work already warns about.
+
+![Two panels. Left: sequence input (tokens) flowing through a MoE layer — color-coded by token type showing which expert each route takes. Right: tabular NPI input (feature vector) flowing toward the same architecture — question mark over the routing, captioned "no syntactic structure to route on." MoE routing specializes on token type in sequential models. What it routes on in a feature-vector regime is an open question — and probably not 'physician archetypes.'](images/07-mixture-of-experts-fig-02.png)
+
+*Figure 7.2 — What MoE routes on: token type versus a feature vector with no structure*
 
 <!-- → [INFOGRAPHIC: Two panels. Left: sequence input (tokens) flowing through a MoE layer — color-coded by token type showing which expert each route takes. Right: tabular NPI input (feature vector) flowing toward the same architecture — question mark over the routing, captioned "no syntactic structure to route on." Caption: "MoE routing specializes on token type in sequential models. What it routes on in a feature-vector regime is an open question — and probably not 'physician archetypes.'"] -->
 
@@ -119,6 +136,10 @@ Return to the opening-case platform. Run the six questions that form the reusabl
 
 There is also a fast three-criterion screen for when you are short on time: *token-level routing? shared trunk and output space? jointly trained?* Three "no" answers means stacking.
 
+![Six-question audit as a vertical checklist with yes/no branches. Fast screen as a three-item inset box. The six buyer questions and the fast screen. A vendor that cannot answer questions 2, 3, and 4 transparently has answered them.](images/07-mixture-of-experts-fig-03.png)
+
+*Figure 7.3 — The six buyer questions and the fast screen*
+
 <!-- → [INFOGRAPHIC: Six-question audit as a vertical checklist with yes/no branches. Fast screen as a three-item inset box. Caption: "The six buyer questions and the fast screen. A vendor that cannot answer questions 2, 3, and 4 transparently has answered them."] -->
 
 The audit does not require the platform's internals. The answers a vendor gives — or refuses to give — are themselves the evidence. Every honest answer for the opening-case platform points the same direction: stacking, not MoE, with no independent benchmark showing it beats the tuned ensemble.
@@ -134,22 +155,6 @@ The chapter's position — that MoE is usually the wrong tool for NPI prediction
 ## Still puzzling
 
 What would specialization mean for experts routing on NPI feature vectors, where there is no sequence and no syntactic structure? If fine-grained experts on tabular data discovered stable, interpretable physician archetypes via routing geometry, that would be a genuinely new finding — and there is at least a theoretical argument that the routing pressure in joint training could discover such archetypes where hand-crafted segmentation fails. Whether routing on tabular data degenerates into the near-redundancy the greater-than-99-percent similarity result warns about, or whether it finds something real, is open.
-
----
-
-**LLM exercise (copy-paste prompt):**
-
-> "Here is a vendor's public description of its AI targeting architecture: [PASTE]. Answer the following six questions using only what the text states. For anything not stated, write 'undisclosed' — do not infer. (1) What are the component models or algorithms? (2) Were they trained jointly or independently? (3) Do they share an input-output interface, or does an aggregator translate their formats? (4) Is routing learned jointly with the models or assigned separately? (5) Does 'MoE' describe a routing layer within one model or a meta-architecture across separate models? (6) What independent benchmark compares performance against a tuned gradient-boosted ensemble?"
-
-After receiving the answers, check whether the model honored the "undisclosed" instruction or filled gaps by inference.
-
-**CLI exercise.** Using a notebook, train a tuned gradient-boosted baseline (XGBoost or LightGBM) on a public tabular dataset with a structure similar to prescriber data — rows are entities, columns are behavioral and demographic features, target is a binary outcome. Record calibrated AUC and Brier score. This is the number any "MoE" platform claim must beat — the literal artifact behind buyer question six.
-
-**AI Validation exercise.** Ask an LLM three specific factual questions about MoE systems — for example, DeepSeek-V3's expert count, Mixtral's routing scheme, whether Qwen3 uses a shared expert. Then locate the primary tech report for each and verify or correct the model's answer. Log every correction. This trains the verify-not-trust reflex the audit depends on.
-
-**AI Use Disclosure**
-
-*Write two sentences naming exactly what an AI tool did in your work for this chapter and what judgment you supplied that the AI could not. The judgment most specific to this chapter: whether the claim is genuine MoE or relabeled stacking, and whether the architecture is even the right tool for the prediction task at hand — both require reading primary sources and demanding a baseline benchmark, and neither can be certified by the model.*
 
 ---
 
@@ -180,3 +185,158 @@ After receiving the answers, check whether the model honored the "undisclosed" i
 **Challenge**
 
 9. *(Challenge — design a benchmark)* Design a study that would produce credible evidence that a genuine MoE system outperforms a tuned XGBoost ensemble on an NPI propensity task. Specify: the dataset, the evaluation metrics (and why headline AUC is insufficient), the randomization or holdout structure, and the primary threat to validity you would need to address. You do not need to run it — specify it precisely enough that a data-science team could. *What this tests: whether you can articulate the evidence standard the market currently lacks and understand why producing it is hard.*
+
+---
+
+## Prompts
+
+### Figure 7.1 — Sparse activation in a MoE layer
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 from the cdnjs CDN) rendering a left-to-right process diagram of one Mixture-of-Experts layer. Marks: one input node `x` → a `gating network` box → a fan of dashed hairline arrows to a vertical column of eight stacked expert boxes, of which exactly two are highlighted (filled ink) as active and connected by solid arrows; the two active experts converge into a `weighted sum` node → output `y`. Below, a magnitude band of two horizontal bars sharing a zero baseline: a long red bar "capacity scales with N (total parameters)" and a short ink bar "compute scales with k (active per pass)". Channels: fill encodes active vs inactive; bar length encodes magnitude. No sorting; bars zero-based. Annotate that eight experts and top-2 are an illustrative count, not a claimed configuration. viewBox 700×420. Deliverable: one HTML file, inline CSS, var(--color-*) tokens, light/dark theming, accessible title/desc, hover/focus tooltips.
+
+### Figure 7.2 — What MoE routes on: token type versus a feature vector
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 CDN) rendering a two-panel contrast diagram. Left panel: a short token sequence (verb, punctuation, noun) → a `gate` → distinct solid routes to two color-distinct expert boxes, labeling this routing on token type. Right panel: a tabular NPI feature vector (Rx, geo, pay, spec cells in one row) → a `gate` → a red "?" mark over a dashed route into two dashed "expert ?" boxes, labeling "no syntactic structure to route on". Channels: solid vs dashed strokes encode established vs uncertain routing; color separates the two sequence experts. No axes. Annotate that "physician archetypes" via routing is an open question, probably near-redundancy, and token labels are illustrative. viewBox 700×420. Deliverable: one HTML file, inline CSS, var(--color-*), light/dark theming, accessible title/desc, hover/focus tooltips.
+
+### Figure 7.3 — The six buyer questions and the fast screen
+
+Generate a single self-contained HTML file (inline CSS, D3 7.9.0 CDN) rendering a vertical six-row checklist plus a boxed inset. Each row pairs an audit question (left cell) with the opening-case platform's answer (right cell); rows for questions 2, 3, and 4 are outlined red to mark the answers that point to stacking. Below the checklist a verdict line reads "stacking, not MoE — and no benchmark," with a note that the label is wrong but platform quality is a separate question. The inset box lists the three-criterion fast screen (token-level routing? shared trunk and output space? jointly trained?) and the rule "three no answers → stacking". Channels: red outline encodes the disqualifying answers. No sorting beyond question order; no axes. viewBox 700×480. Deliverable: one HTML file, inline CSS, var(--color-*), light/dark theming, accessible title/desc, hover/focus tooltips.
+
+---
+
+## Chapter 7 Exercises: Mixture of Experts and Related Routing Models
+
+**Project:** One Drug, End to End
+**This chapter adds:** A six-buyer-question verdict on whether a vendor's "Mixture of Experts" engine would actually improve targeting for your drug — or is stacking in a transformer-era costume.
+
+We continue with **Jardiance (empagliflozin)** — branded SGLT2 inhibitor, branded rivals Farxiga and Invokana, generic alternatives metformin and sulfonylureas. In Chapter 6 you built the calibrated propensity baseline. Now a vendor wants to sell you an "adaptive MoE targeting engine" for Jardiance. This chapter's piece: run the audit and deliver the verdict.
+
+### Exercise 1 — When to Use AI
+
+1. Paste a vendor's public "MoE-powered" platform description and ask the LLM to extract, verbatim, what the text states for each of the six buyer questions — component models, joint vs. independent training, shared output space, routing mechanism, what "MoE" denotes, and any independent benchmark — marking anything not stated as "undisclosed." *Why AI works here:* structured extraction from a fixed text — a task type where the source is in front of you and the output is checkable line by line.
+2. Ask the LLM to explain the math of sparse top-k gating in plain language before you read Shazeer et al. *Why AI works here:* concept exposition of a well-documented, stable idea — verifiable against the primary paper.
+
+**The tell:** you can independently evaluate the output — every extracted answer is checkable against the vendor's exact words, and every concept against the primary source.
+
+### Exercise 2 — When NOT to Use AI
+
+1. Do not let the LLM render the verdict — "this is genuine MoE" or "this is stacking" — as your conclusion. That verdict turns on architectural facts (was it jointly trained? is there a shared output space?) the public text usually omits, and on whether MoE's advantages even apply to tabular Jardiance prediction. *Why AI fails here:* hallucination — the model will fill the "undisclosed" gaps with plausible inference, manufacturing an architecture the vendor never described.
+2. Do not let the LLM certify the vendor's benchmark claim ("22% better than gradient boosting"). Whether that beats *your* Chapter 6 Jardiance baseline requires a head-to-head on the same task with the same split discipline. *Why AI fails here:* ground-truth — there is no benchmark in the text for the model to verify against, so any endorsement is fabricated.
+
+**The tell:** if the LLM's "it's stacking" is your *reason*, you have laundered an inference into a fact; if it is a *tool* output you then confirm against the vendor's actual disclosures and your own baseline, you are fine. **Series connection:** this is a **T5** judgment — MoE-relabel laundering. A vendor relabels stacking as MoE; an uncritical AI relabels the AI's guess as the architecture. Both launder. The human owns the architecture call and the benchmark demand.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** a filled six-buyer-question audit plus a two-sentence verdict on a real vendor's "MoE" targeting claim for a Jardiance-style brand.
+
+**Tool:** Claude, run as a **Claude Project**. Persistent drug-context helps because the verdict references your Chapter 6 Jardiance baseline as the bar the vendor must beat — keeping the baseline definition resident in the Project means the audit stays anchored to the same case rather than a generic one.
+
+**The Prompt:**
+
+```
+You are auditing a vendor's AI targeting claim for a running case study on one
+branded drug carried end to end: Jardiance (empagliflozin), a branded SGLT2
+inhibitor with branded competitors (Farxiga, Invokana) and generic alternatives
+(metformin, sulfonylureas). In Chapter 6 of this case I built a calibrated,
+out-of-time-validated gradient-boosted tree baseline for Jardiance propensity on
+public Open Payments + Part D data. That baseline AUC is the bar.
+
+Here is the vendor's public description of an "adaptive Mixture-of-Experts" HCP
+targeting engine: [PASTE VENDOR TEXT]
+
+Using ONLY what the text states, answer the six buyer questions. Write "undisclosed"
+for anything not stated — do not infer:
+1. What are the component models or algorithms?
+2. Were they trained jointly or independently?
+3. Do they share an input-output interface, or does an aggregator translate formats?
+4. Is routing learned jointly with the models, or assigned separately?
+5. Does "MoE" describe a routing layer within ONE model, or a meta-architecture
+   across SEPARATE models?
+6. What independent benchmark compares performance against a tuned gradient-boosted
+   ensemble on the SAME task?
+
+Then run the three-criterion fast screen (token-level routing? shared trunk and
+output space? jointly trained?). Then write a two-sentence verdict in one of two
+registers: "not MoE / not obviously better than a tuned ensemble — demand a
+benchmark against my Chapter 6 Jardiance baseline" OR "genuine MoE — verify the
+benchmark." Flag every claim of effectiveness as [verify].
+
+ADAPTATION: replace Jardiance and its class with your own drug; the six questions
+and the screen are drug-agnostic. In ChatGPT or Gemini, paste your Chapter 6
+baseline summary at the top so the verdict stays anchored.
+```
+
+**What this produces:** a completed audit instrument with a defensible verdict that names exactly which disclosures are missing — the artifact you hand a procurement committee.
+
+**How to adapt:** swap the drug and paste your own vendor text; in ChatGPT/Gemini, re-supply the Chapter 6 baseline each session; in a Claude Project, store the baseline summary as Project knowledge.
+
+**Connection to previous chapters:** the verdict's teeth come from Chapter 6 — without your honest baseline AUC, buyer question six has no bar to point at, and the vendor's number floats free exactly as the Chapter 1 and 5 vendor claims did.
+
+**Preview of next chapter:** even a genuine MoE that ranks Jardiance prescribers well still answers a *prediction* question; Chapter 8 shows why ranking the likely is the wrong target and uplift is the right one.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building:** the literal artifact behind buyer question six — a tuned, calibrated gradient-boosted baseline on a Jardiance-shaped tabular dataset, with the AUC and Brier score any "MoE" claim must beat.
+
+**Tool:** Claude Code (or Cowork) — it can scaffold the notebook, train the model, and emit the metrics in one loop. **Skill level:** intermediate (comfortable with a Python ML notebook).
+
+**Setup:**
+- [ ] A public tabular dataset shaped like prescriber data (rows = entities, columns = behavioral + demographic features, binary target) — or your Chapter 6 Jardiance extract.
+- [ ] `xgboost` or `lightgbm` plus `scikit-learn` installed.
+- [ ] An `./outputs/` folder; the source data read-only.
+
+**The Task:**
+
+```
+Read ONLY the dataset in ./data/ (do not modify it). Train a tuned gradient-boosted
+tree baseline (XGBoost or LightGBM) on a binary target, using an out-of-time or
+grouped split, NOT a random shuffle. Calibrate the probabilities (isotonic or
+Platt) on a held-out fold. Report AUC and Brier score.
+
+Write the metrics and the split description to ./outputs/moe-baseline-bar.txt.
+This number is the bar any vendor "MoE" claim must beat. Do not write anywhere
+else. Stop when the file exists, then print it so I can verify the numbers.
+```
+
+**Expected output:** a single text file stating the baseline AUC, Brier score, and the split used — the empirical answer to "better than what?"
+
+**What to inspect:** is the split out-of-time, not random? Is the Brier score reported alongside AUC (calibration, not just ranking)? Is the source data untouched?
+
+**If it goes wrong:** if Claude Code uses a random split (failure), restate the out-of-time requirement and re-run; if it reports AUC without calibration, ask it to add the isotonic step and the Brier score.
+
+**CLAUDE.md note:** add `Baselines must use an out-of-time split and report a calibration metric (Brier), never AUC alone.`
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** the AI's six-question audit output from Ex3 — specifically whether it honored "undisclosed" or quietly inferred an architecture, and whether its verdict is laundered guesswork.
+
+**Validation type:** inference-discipline audit of a generated classification. **Risk level:** high — because a false "genuine MoE" verdict justifies real spend on an engine that may be no better than your Chapter 6 baseline, and the error hides inside a fluent, confident teardown.
+
+**Setup:** use your Ex3 audit. If you want a specific failure to practice on, ask the AI to audit a deliberately vague vendor blurb and watch whether it invents answers for the undisclosed questions.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 7 (Jardiance MoE vendor audit)
+
+Mark each Pass / Fail / Cannot-determine:
+- Correctness: Does each of the six answers cite only words actually in the vendor
+  text?
+- Completeness: Are all six buyer questions AND the three-criterion fast screen
+  answered?
+- Scope: Are genuinely unstated items marked "undisclosed" rather than inferred?
+- MoE-vs-stacking criterion: Does the verdict rest on the two real distinctions
+  (shared output space, joint end-to-end training), not just "it has multiple
+  models"?
+- Benchmark criterion: Does the verdict explicitly demand a head-to-head against
+  my Chapter 6 Jardiance baseline?
+- Failure-mode check: Look specifically for MoE-relabel laundering — the AI
+  treating an inferred architecture as disclosed fact (fluent-but-wrong) — and for
+  missing ground truth (a benchmark endorsed with no benchmark in the text).
+```
+
+**What to do with findings:** all Pass — the verdict is sound; forward it with the benchmark demand attached. One Fail — correct the inferred answer to "undisclosed" and re-issue. Multiple Fails — discard the AI verdict and re-run the audit yourself from the vendor text, treating the original as a laundering exhibit.
+
+**AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to extract the vendor's stated answers to the six buyer questions for the Jardiance MoE pitch; I decided whether it was genuine MoE or relabeled stacking, and whether it could beat my baseline, because both require the two architectural distinctions and a benchmark the public text never supplied."* (Mandatory.)
+
+**Series connection:** the failure mode is **MoE-relabel laundering** at tier **T5** — relabeling that survives only because no one demanded the baseline comparison the rest of the series is built to provide.

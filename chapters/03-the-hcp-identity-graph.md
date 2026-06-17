@@ -19,6 +19,9 @@ Now trace a single statin prescription through this machine. A patient fills a s
 
 The result is not anonymous data. It is data that is anonymous with respect to the *patient* and fully identified with respect to the *physician*. The output of that de-identification step is: "NPI 1234567890 wrote 47 statin scripts last month." The patient is gone. The doctor is named — numerically, but named.
 
+![Two-column pipeline: patient identifiers struck through at the payer de-identification step while the NPI persists through broker, model and bid.](images/03-the-hcp-identity-graph-fig-01.png)
+*Figure 3.1 — De-identification removes the patient and leaves the prescriber*
+
 <!-- → [DIAGRAM: Two-column pipeline diagram — left column shows patient data being stripped at the payer step (fields crossed out: name, DOB, address); right column shows NPI persisting through every subsequent step — broker, pharma buyer, model, bid. Caption: "De-identification removes the patient and leaves the prescriber. This asymmetry is the legal foundation of NCP targeting."] -->
 
 ---
@@ -53,7 +56,16 @@ Open Payments data encodes not *what patients need* but *how receptive this phys
 
 Make it concrete. Two cardiologists. Identical patient mixes — same age distribution, same comorbidity burden, same proportion of patients likely to benefit from the drug being promoted. But one has a three-year history of industry meals; the other has none. A propensity model with Open Payments as a weighted feature may rank the meal-history physician higher — not because that physician's patients are better candidates, but because that physician has historically been *more moveable by industry contact.*
 
-<!-- → [TABLE: Side-by-side comparison of two hypothetical physicians — Physician A (high Open Payments history, same patient mix) vs. Physician B (no Open Payments history, same patient mix). Columns: specialty, patient mix proxy, Open Payments meals (last 3 years), predicted propensity score. Point: propensity diverges despite identical clinical context.] -->
+
+| | Physician A | Physician B |
+|---|---|---|
+| Specialty | Cardiology | Cardiology |
+| Patient-mix proxy (eligible for the promoted drug) | Identical — same age distribution, comorbidity burden, share of likely-to-benefit patients | Identical — same age distribution, comorbidity burden, share of likely-to-benefit patients |
+| Open Payments meals (last 3 years) | Many — a three-year history of industry meals and speaking invitations | None — has declined all industry contact |
+| Predicted propensity score | Higher | Lower |
+
+*Table 3.1 — Identical clinical context, divergent propensity: when Open Payments history is a weighted feature, the model partly predicts targetability — how moveable the physician is — rather than patient need.*
+
 
 Whether this actually describes how real propensity models are weighted is, honestly, an open empirical question. Including a feature is not the same as weighting it heavily. But the question is answerable on public data — Open Payments is public, Medicare Part D prescribing is public — and the fact that it has not been systematically examined is itself worth noting. [The susceptibility-proxy construct is the book's position, flagged not asserted — see pantry; it is the seed for the Chapter 13 Track D proxy-discrimination study.]
 
@@ -67,6 +79,9 @@ The effect on measurement compounds this. If the targeting list is built from st
 
 The industry's frontier response to claims lag is **dynamic NPI activation**: ingesting real-time clinical signals — EHR-derived, from platforms like OptimizeRx's DAAP — to identify physicians at the moment of actual clinical relevance rather than on a monthly refresh cycle. Instead of "this physician was a high-volume prescriber last month," the trigger becomes "this physician just opened a chart for a patient with the eligible diagnosis." That is a meaningfully different signal. It is also, as Chapter 1 discussed, the point where the question of whether PHI is leaving the EHR becomes live again.
 
+![Two parallel timelines: a multi-week claims-data lag from prescription to deployed targeting list, contrasted with a same-day real-time EHR trigger that goes straight from chart-open to bid.](images/03-the-hcp-identity-graph-fig-02.png)
+*Figure 3.2 — The gap between event and targeting signal is where targeting error lives*
+
 <!-- → [DIAGRAM: Timeline diagram showing claims-data lag: prescription written (Day 0) → pharmacy adjudication (Day 1-3) → payer processing (Day 7-14) → broker aggregation (Day 14-30) → model refresh (monthly) → targeting list deployed. Contrast with a parallel "real-time EHR trigger" track showing Day 0 → bid. Caption: "The gap between event and targeting signal is where targeting error lives."] -->
 
 ---
@@ -76,6 +91,9 @@ The identity graph does not sit dormant between targeting campaigns. It is conti
 CRM systems — Veeva, IQVIA OCE+, Salesforce Life Sciences Cloud — surface next-best-action recommendations to sales representatives. Endemic media platforms — Medscape, WebMD, specialty journals — serve targeted display advertising inside environments physicians associate with clinical information. EHR-integrated platforms fire promotions at the moment of clinical decision, triggered by diagnosis codes and prescribing context. The coordination of all three is what vendors call **omnichannel orchestration**: one physician, across every touchpoint, from a unified profile.
 
 The feature worth understanding here is not the sophistication of any individual channel but the feedback structure of the system as a whole. Every engagement signal — whether a rep's call got answered, whether a Medscape banner got clicked, whether an EHR prompt was dismissed — flows back into the profile. The propensity model that targets Dr. Martinez today is partly built from how Dr. Martinez responded to being targeted last month. This is not a static dataset that gets queried. It is a continuously updating portrait, enriched by its own use.
+
+![A circular feedback loop with an NPI profile at the center and spokes to CRM rep-call logs, endemic-media click data and EHR prompt responses, each returning an engagement signal that updates the model.](images/03-the-hcp-identity-graph-fig-03.png)
+*Figure 3.3 — The graph is enriched by targeting; each campaign refines the next*
 
 <!-- → [DIAGRAM: Circular feedback loop — NPI profile at center, with spokes to: CRM (rep call logs), endemic media (click data), EHR triggers (prompt responses). Each spoke has a return arrow labeled "engagement signal → model feature update." Caption: "The graph is enriched by targeting. Each campaign refines the model that drives the next one."] -->
 
@@ -96,23 +114,6 @@ What this chapter has built is a complete causal chain from a single prescriptio
 The gap between how completely the system knows a physician and how little the physician knows about the system is not a malfunction. It is a design feature of a decades-old commercial infrastructure that has been optimized, legally insulated, and technically refined across multiple generations of data technology.
 
 What the system does not know — what it cannot know without being asked and then checked — is whether it is targeting physicians because their patients will benefit or because the physicians are moveable. The propensity model optimizes for predicted prescribing. Whether predicted prescribing tracks patient need or tracks susceptibility to influence is a question the model itself cannot answer. It is the question Chapter 13 will test on public data.
-
-**Five-part AI exercise block**
-
-**When to use AI.** Use an LLM to summarize the 18 HIPAA Safe Harbor identifiers, to draft a first-pass classification of feature-vector components, or to explain the *Sorrell* holding in plain language. These are well-documented facts the model can retrieve and structure, and you can verify them against the cited primary sources.
-
-**When NOT to use AI.** Do not use an LLM to adjudicate whether a specific data flow is HIPAA-compliant, whether a model is unlawfully discriminatory, or whether a given de-identification scheme has acceptable re-identification risk. These are legal and statistical judgments that require counsel and a privacy expert; a fluent model answer here can produce false legal confidence.
-
-**LLM exercise (copy-paste prompt):**
-> "Here is the feature list for a physician propensity model: [PASTE LIST]. Classify each feature as (a) clinical-need / patient-eligibility, (b) behavioral / neutral-to-targeting, or (c) susceptibility-to-influence proxy. For each, give a one-sentence justification and a confidence level (high/medium/low). Then list which features, if heavily weighted, would make this model select physicians for *targetability* rather than *patient need*. Do not assert that the model is discriminatory — only identify which features raise the question."
-
-**CLI exercise.** Download a slice of the public CMS Open Payments dataset and a slice of Medicare Part D Prescriber data from the command line. For a single specialty in one state, count physicians who appear in Open Payments versus those who do not, and compute each group's average claims for one branded drug. Write one sentence on what this *association* does and does not show — recall that it cannot establish that payments caused the prescribing.
-
-**AI Validation exercise.** Ask an LLM "is prescriber-level data-mining legal in the US, and why?" Check its answer against the chapter: did it cite *Sorrell v. IMS Health* and the First Amendment / commercial-speech holding, or did it vaguely say "it depends" or invent a statute? Write one sentence correcting any hallucinated citation, and note that this is exactly the kind of legal claim you must verify against the primary source rather than trust.
-
-## AI Use Disclosure
-
-*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to draft the feature-vector classification and summarize the HIPAA identifiers; I decided myself which features are genuine susceptibility proxies and flagged that the model's actual discrimination is an open empirical question, because the AI was willing to assert a fairness verdict the public data does not yet support."*
 
 ## What Would Change My Mind
 
@@ -153,3 +154,160 @@ The central claims of this chapter are that the targeting infrastructure is lega
 **Challenge**
 
 9. *(Challenge — open-ended) What this tests: designing a public-data audit.* Using only CMS Open Payments data and Medicare Part D prescribing data (both publicly available), design a study that would test whether propensity-driven targeting correlates with physician susceptibility to industry contact after controlling for patient mix and specialty. State your hypothesis, your independent and dependent variables, your proposed control variables, and one major confound you cannot eliminate with this data.
+
+---
+
+## Prompts
+
+### Figure 3.1 — De-identification removes the patient and leaves the prescriber
+
+Build a two-column pipeline diagram as a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN, inline CSS and inline JS. Five vertically stacked stages on the left margin (Pharmacy, Payer / Safe Harbor, Broker, Model, Bid). For each stage draw two boxes side by side: a left "patient identifiers" box and a right "NPI" box. In the patient column, show "name · DOB · address present" at the pharmacy, then struck-through (line-through) at the payer step, then "— patient gone —" thereafter. In the NPI column, show "NPI 1234567890" persisting unchanged, with red borders, resolving to "Dr. Jane Smith named" at the model step (note the AMA Masterfile join at the broker step) and an impression at the bid step. Draw downward arrows linking the NPI boxes to show persistence. Patient column ink/grey, NPI column red highlight. Hover tooltips per stage. viewBox 700x480. Structural, not aesthetic.
+
+### Figure 3.2 — The gap between event and targeting signal is where targeting error lives
+
+Build two parallel horizontal timelines as a single self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Top track "Claims-data lag — the standard monthly cycle": five nodes along an arrowed baseline labeled Day 0 (Rx written), Day 1–3 (pharmacy adjudication), Day 7–14 (payer processing), Day 14–30 (broker aggregation), monthly (model refresh → list deployed, highlighted red). Bottom track "Real-time EHR trigger — dynamic NPI activation": two nodes, Day 0 (chart opened) and Day 0 (bid fired, highlighted red), on a much shorter arrowed baseline. Day labels in monospace above each node, event labels below. Below both, a light-fill callout box noting the gap is where targeting error lives (stale lists, distorted lift). Hover tooltips per node. viewBox 700x420. Structural timeline, not decorative.
+
+### Figure 3.3 — The graph is enriched by targeting; each campaign refines the next
+
+Build a radial feedback diagram as a single self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Center: a red-bordered circle labeled "NPI profile / one physician". Three spoke boxes positioned around it: CRM (rep call logs) top, Endemic media (click data — Medscape, WebMD) lower-left, EHR triggers (prompt responses) lower-right. For each spoke draw a pair of parallel arrows — one outbound (profile → channel, the activation) and one return (channel → profile, the engagement signal), offset so they do not overlap. Add one label "engagement signal → feature update". Center red; spokes grey-bordered. Keep labels off the arrow centerlines. Hover tooltips per node. viewBox 700x420. Structural circular layout, not aesthetic.
+
+---
+
+## Chapter 3 Exercises: The HCP Identity Graph
+
+**Project:** One Drug, End to End
+**This chapter adds:** Assemble a synthetic/public prescriber identity graph for your drug and write out its propensity feature vector — then flag which features predict patient need versus targetability.
+
+### Exercise 1 — When to Use AI
+
+**The judgment:** Three chapter tasks where AI assistance is appropriate.
+
+- *Summarizing the 18 HIPAA Safe Harbor identifiers and the two de-identification routes.* **Why AI works here:** summarizing — these are well-documented facts you can verify against the primary HIPAA text.
+- *Drafting a first-pass classification of a propensity feature vector* (clinical-need / behavioral-neutral / susceptibility-proxy). **Why AI works here:** pattern-spotting — sorting features into known buckets, which you then confirm feature by feature.
+- *Explaining the* Sorrell v. IMS Health *holding in plain language.* **Why AI works here:** summarizing — a documented Supreme Court holding you can check against the opinion.
+
+**The tell:** You are using AI appropriately when you can independently evaluate the output — when you can check each classified feature against the chapter's framework yourself.
+
+### Exercise 2 — When NOT to Use AI
+
+**The judgment:** Three tasks here that require human judgment.
+
+- *Adjudicating whether a specific data flow for your drug is HIPAA-compliant.* **Why AI fails here:** hallucination risk + values judgment — this needs counsel; a fluent model answer produces false legal confidence.
+- *Concluding that your drug's propensity model is unlawfully discriminatory.* **Why AI fails here:** missing ground truth — whether susceptibility features are heavily weighted is an open empirical question, not a fact the model can retrieve.
+- *Certifying that a de-identification scheme's re-identification risk is "very small."* **Why AI fails here:** calibration gap — this is an Expert Determination a qualified statistician makes, and the model cannot quantify the risk.
+
+**The tell:** You've crossed the line when AI output is your *reason* for a conclusion rather than a tool for reaching one.
+**Series connection:** This trains **T4 Metacognitive** judgment — separating what is publicly documented (retrievable) from legal and statistical determinations that require credentialed human authority.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** A synthetic prescriber identity graph for your drug — a small set of synthetic NPI profiles plus a documented propensity feature vector with each feature classified by what it actually predicts.
+**Tool:** Claude. Recommend a **Claude Project** — the firewall discipline (synthetic-only profiles, no real prescribers) is a standing rule best stored once in Project instructions so it governs every generation.
+
+**The Prompt:**
+
+```
+We are continuing a teaching case study for a branded SGLT2 inhibitor (type 2
+diabetes; class has branded competitors and a generic substitute). From earlier
+chapters we have its prescriber set (primary care + endocrinology) and its
+loyalty-decile/brand-share reasoning.
+
+IMPORTANT FIREWALL: Use ONLY synthetic, invented prescribers. Do NOT name, infer,
+or reconstruct any real physician. Do NOT use real NPI numbers — use obviously
+fake placeholders like NPI-SYNTH-001. This is public/synthetic data only.
+
+Do three things:
+
+1. SYNTHETIC IDENTITY GRAPH. Create 5 synthetic prescriber profiles relevant to
+   this drug. For each: specialty, practice setting, geography (state only),
+   synthetic claims-derived signals (script volume tier, switch pattern, loyalty
+   decile, brand share), and synthetic engagement signals (email open tier, CME
+   completions). Label clearly as synthetic.
+
+2. PROPENSITY FEATURE VECTOR. List the feature vector a propensity model for THIS
+   drug would plausibly use, grouped as: (a) claims-derived, (b) identity/
+   affiliation, (c) behavioral/digital, (d) Open Payments history.
+
+3. FEATURE CLASSIFICATION. Classify each feature as: clinical-need/eligibility,
+   behavioral/neutral-to-targeting, or susceptibility-to-influence proxy. Give a
+   one-sentence justification and a confidence (high/med/low). Then list which
+   features, if heavily weighted, would make the model select for TARGETABILITY
+   rather than PATIENT NEED. Do NOT assert the model IS discriminatory — only
+   identify which features raise the question.
+
+Output markdown tables. End with one line naming the public datasets (Open
+Payments, Medicare Part D) that could later be used to TEST the susceptibility
+question.
+```
+
+**What this produces:** A synthetic identity graph (5 fake profiles) plus a classified propensity feature vector for your drug.
+**How to adapt this prompt:** *For your own drug:* swap the drug/class line and your prescriber set; keep the firewall paragraph verbatim. *For ChatGPT/Gemini:* paste in one message and re-state the synthetic-only firewall at the top. *For a Claude Project:* put the firewall rule and drug identity in the Project system prompt; send the three numbered tasks as the message.
+**Connection to previous chapters:** The loyalty deciles and brand share from Chapter 2 become features in the vector here. **Preview of next chapter:** In Chapter 4 you will inventory and classify the actual AI-stack tools a brand team would run against this graph.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building this chapter:** A reproducible public-data association check — for one specialty in one state, do Open-Payments-present prescribers prescribe your drug differently than absent ones. · **Tool:** Claude Code (joins two public files). · **Skill level:** Intermediate/Advanced.
+
+**Setup:**
+1. Download a slice of CMS Open Payments and a slice of Medicare Part D Prescriber data into `one-drug/data/`.
+2. Claude Code installed; Python/pandas or DuckDB available.
+3. Add a CLAUDE.md rule: "Report associations only; never write 'caused' in output; print the join key and matched-row count."
+
+**The Task:**
+
+```
+In one-drug/, using the Open Payments and Part D slices in one-drug/data/, do
+only this:
+
+1. Restrict to ONE specialty in ONE state (pick endocrinology in a state present
+   in both files; state your choice).
+2. Split prescribers into those who appear in Open Payments (any payment) vs.
+   those who do not.
+3. For your SGLT2 brand (from DRUG.txt), compute each group's average claim count.
+4. Write ch03-openpayments-assoc.md with the two group averages, the join key
+   used, the matched-row count, and a one-sentence statement of what this
+   ASSOCIATION does and does NOT show (it cannot establish that payments caused
+   prescribing).
+
+Safety: read-only on the data files; create only the script and the markdown.
+Verification: print how many prescribers fell into each group; if either group
+is under 10, say so and label the result unreliable rather than reporting it as
+meaningful. Stop after writing the markdown.
+```
+
+**Expected output:** A join script and `ch03-openpayments-assoc.md` with the two averages, group sizes, join key, and the association-not-causation caveat.
+**What to inspect:** Group sizes — a tiny group makes the average meaningless; the caveat must be present and the word "caused" absent.
+**If it goes wrong:** Most likely failure is a bad join (NPI formatted as int in one file, string in the other) producing zero matches that the model then narrates around. Recovery: normalize the NPI key type on both sides and re-join — don't accept averages computed over an empty join.
+**CLAUDE.md / AGENTS.md note:** Add "Public-data findings are associations; never write causal language; always report group sizes."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** The propensity feature classification from Exercise 3 (which features predict need vs. targetability). · **Validation type:** Reasoning + Factual. · **Risk level:** High — mislabeling a susceptibility proxy as clinical-need launders a fairness question into a description of "patient need," exactly the move the chapter warns against.
+
+**Setup:** Use your Exercise 3 output as the artifact.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 3 (Propensity Feature Classification)
+
+Mark each Pass / Fail / Cannot-determine with one line of evidence:
+
+- Correctness: Is Open Payments history classified as a susceptibility-to-
+  influence proxy, not as clinical need?
+- Completeness: Is every feature classified AND given a confidence level?
+- Scope: Are all profiles synthetic (fake NPIs, no real physicians)? Any real
+  NPI = automatic Fail.
+- Chapter-specific 1: Does it identify which heavily-weighted features would make
+  the model select for targetability rather than patient need?
+- Chapter-specific 2: Does it correctly treat the "is this model discriminatory"
+  question as OPEN and testable, not as a settled verdict?
+- Failure-mode check (fluent-but-wrong + ecological inference / missing ground
+  truth): Did it slide a susceptibility proxy into "clinical need," or claim the
+  model's real weighting is known when it is not? Flag any feature whose
+  classification it states with unwarranted confidence.
+```
+
+**What to do with your findings:** Pass → use the classified vector. One fail → revise that feature's label and re-run. Multiple/uncertain → reclassify the features yourself against the chapter's three-category framework; this is a "When NOT to Use AI" moment, because the need-vs-targetability call is the chapter's central human judgment.
+**AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "drafted the synthetic profiles and feature classification") and how you used it, plus one thing it couldn't determine (e.g., "whether Open Payments is actually heavily weighted in real models, which is an open question I flagged for public-data testing rather than asserting").
+**Series connection:** Trains detection of **ecological inference / missing-ground-truth** errors under **T4 Metacognitive** judgment — refusing to convert an untested feature weight into a claim about patient need.

@@ -31,6 +31,9 @@ The common misreading is to call pharma marketing "B2B advertising aimed at doct
 
 This is not a critique. It is a description. Understand the structure and you understand everything that follows: why the targeting works the way it does, why co-pay cards exist, why attribution claims are slippery, why nobody has funded a counter-stack. Every puzzle in this book is a consequence of the same anomaly. The party who pays is not at the table.
 
+![Four-node diagram of prescriber, patient, payer and institution, with the payer's payment arrow having no return arrow to the decision node.](images/01-the-machine-nobody-sees-fig-01.png)
+*Figure 1.1 — The split-agency structure that breaks consumer sovereignty*
+
 <!-- → [DIAGRAM: Four-node diagram of prescriber / patient / payer / institution — arrows showing decision flow, payment flow, and consumption flow. Key annotation: the payer's payment arrow has no return arrow to the decision node. Caption: "The split-agency structure that breaks consumer sovereignty. The physician decides; the payer pays; neither has complete information about the other's constraints."] -->
 
 Is this anomaly merely theoretical? Not quite. A study of 2013 Medicare Part D prescribers found that physicians who received industry gifts prescribed 2.3 more claims per patient and 7.8% more branded drugs than non-recipients (analysis of Part D data, PMC5656307). Read that carefully: it is an association, not a causal estimate. We do not know how much of the difference is the gift changing behavior versus industry targeting physicians already inclined toward branded drugs. We will take that puzzle apart in Chapter 5. For now, the anomaly predicts that the incentive structure is visible in behavior — and the data is at least consistent with the prediction.
@@ -43,7 +46,17 @@ To act on a physician, you must first name her. The naming primitive is the **Na
 
 A web cookie is probabilistic. It decays. It gets cleared. It loosely maps to a device that loosely maps to a person. An NPI is *deterministic*. You are not guessing that this IP address probably belongs to a cardiologist in Atlanta. You know the exact prescriber — her specialty, her geography, her prescribing history, the diagnostic mix of her patient panel.
 
-<!-- → [TABLE: Side-by-side comparison of web cookie vs. NPI as identity primitives — rows: durability, accuracy, link to behavior, regulatory status, targeting precision. Caption: "Why NPI-based targeting is categorically different from web advertising: the identity is permanent and directly linked to prescribing data."] -->
+
+| Property | Web cookie | NPI |
+|---|---|---|
+| Durability | Decays; cleared by users, expires, blocked by browsers | Permanent — assigned for the provider's professional lifetime |
+| Accuracy | Probabilistic; loosely maps device → person | Deterministic; a single named, licensed provider |
+| Link to behavior | Inferred from browsing signals | Directly joined to real prescribing records (claims data) |
+| Regulatory status | Governed by consumer-privacy and consent regimes | Federal billing identifier; not a HIPAA patient identifier, so it survives de-identification |
+| Targeting precision | Audience segments, lookalikes, fuzzy match | Down to a single named prescriber (bid-by-NPI) |
+
+*Table 1.1 — Why NPI-based targeting is categorically different from web advertising: the identity is permanent and directly linked to prescribing data.*
+
 
 A brand can build a target list of NPIs curated by specialty, geographic market, prescribing history, and patient mix. Against each NPI it can maintain a persistent cross-channel profile: what messages this physician has seen, through which channels, and what prescribing followed. That persistent profile is the HCP identity graph — the subject of Chapter 3. For now, treat it as the spine the whole stack hangs on.
 
@@ -62,6 +75,9 @@ Epic and Oracle Cerner — the two dominant systems — officially prohibit nati
 The first is **CDS Hooks**. CDS stands for Clinical Decision Support — the system of alerts and reminders that fires when a physician takes a clinical action. CDS Hooks is an event-driven HTTP API: when a clinician opens a chart, selects an order, or signs a prescription, the EHR fires an HTTP request to a registered external service. The service returns a "card" that renders inside the EHR. The mature hook types tell you exactly what clinical events are available as triggers: `patient-view` (the chart was opened), `order-select` (an order is being chosen), `order-sign` (an order is about to be signed). These hooks were built to surface contraindication alerts and clinical guidelines. Commercial platforms subscribe to the same triggers to surface branded messages (CDS Hooks specification, cds-hooks.org; HL7 CDS Hooks 2.0).
 
 The second standard is **SMART on FHIR**. SMART stands for Substitutable Medical Apps and Reusable Technologies; FHIR is Fast Healthcare Interoperability Resources. Together they define a protocol by which an approved third-party app can launch *inside* the EHR — embedded in Epic's Hyperspace, typically inside an iframe — and receive patient, encounter, and clinician context through standardized FHIR data resources. The authentication handshake uses OAuth 2.0: on launch, the EHR passes a short-lived token, and after the exchange the app receives context claims identifying which patient, which encounter, which clinician. It was designed so that a clinical decision-support app built by one vendor could run inside any EHR that supports the standard. Doceree's Spark product uses the identical protocol for branded engagement (SMART App Launch v2.2.0, HL7; Epic SMART on FHIR documentation).
+
+![Two sequence diagrams: a CDS Hooks card flow and a SMART on FHIR app launch, both ending in a commercial card rendered inside the EHR.](images/01-the-machine-nobody-sees-fig-02.png)
+*Figure 1.2 — The two clinical interoperability rails commercial messages ride*
 
 <!-- → [DIAGRAM: Sequence diagram showing the CDS Hooks trigger flow — physician action → EHR fires hook → external service receives hook → returns card → card renders in EHR sidebar. Second sequence shows SMART on FHIR app launch. Caption: "The two clinical interoperability rails commercial messages ride. Both were designed for safety alerts; both are now available to commercial messages delivered through approved app channels."] -->
 
@@ -87,6 +103,9 @@ Meanwhile the payer — the insurer — still absorbs the full difference in net
 
 The empirical evidence here is unusually clean by the standards of this field. Dafny, Ody, and Schmitt (NBER working paper w29735, published in *American Economic Journal: Policy*) compared prescribing in the commercial segment — where co-pay coupons are permitted — against Medicare Advantage, where coupons are federally banned. Using that variation as a quasi-experiment, they estimated that introducing a coupon increased the quantity of drugs without generic substitutes by 23–25% in the commercial segment, that net-of-rebate prices were roughly 8% higher, and that approximately 49% of branded drugs with coupons had a generic equivalent or close substitute available at lower cost. [verify the Georgetown "boosted branded sales by over 60%" figure against the original brief and the underlying paper before citation]
 
+![Bar chart comparing the estimated coupon effect on branded-drug volume: a 23 to 25 percent increase in the commercial segment versus a zero baseline in Medicare Advantage where coupons are banned.](images/01-the-machine-nobody-sees-fig-03.png)
+*Figure 1.3 — The natural experiment: the estimated coupon effect on branded-drug volume*
+
 <!-- → [CHART: Bar chart showing estimated prescribing-volume effect of co-pay coupon introduction, commercial vs. Medicare Advantage segment, from Dafny et al. Caption: "The natural experiment: commercial insurers allow coupons; Medicare Advantage does not. The gap isolates the coupon's effect on branded-drug volume."] -->
 
 This is the book's stance, stated plainly: co-pay cards improve affordability for the individual patient at the counter *and* suppress generic substitution and raise total system cost. Both are true. The opening case's automatic co-pay card is this mechanism executing in real time — at the very moment the physician is deciding, before the patient has seen any price at all. Doceree expanded into co-pay card delivery through its Co-Pay.com product in 2025, inserting the coupon mechanism directly into the prescribing workflow. [verify the Co-Pay.com expansion and launch date against a primary source]
@@ -104,6 +123,9 @@ Here is the thing that should unsettle you most. The same SMART on FHIR and CDS 
 Academic detailing programs — efforts to give physicians unbiased, evidence-based prescribing guidance — exist in fragments: the VA's academic detailing service, NPS MedicineWise in Australia, the Therapeutics Initiative in British Columbia. None operates at commercial scale. None occupies the point-of-care channel at the density that commercial platforms do.
 
 Why? Because the structure of the anomaly predicts it. The parties who would most benefit from unbiased prescribing information are patients and payers. They are exactly the parties least organized to build and fund a clinical information infrastructure. The physician's attention at the moment of prescribing is a contested space, and only one side is paying to occupy it.
+
+![Mirror diagram with the funded commercial closed loop on the left and an unfunded counter-stack of comparative effectiveness, generic alternatives, formulary and patient-cost data on the right.](images/01-the-machine-nobody-sees-fig-04.png)
+*Figure 1.4 — The same infrastructure could run both systems; only one is funded*
 
 <!-- → [DIAGRAM: Mirror diagram — left side shows the commercial closed loop (NPI targeting → impression → prescription → attribution → refined targeting); right side shows the counter-stack that could exist but doesn't (comparative effectiveness → generic alternatives → formulary data → patient cost → prescribing decision). Caption: "The same infrastructure could run both systems. Only one is funded."] -->
 
@@ -143,20 +165,6 @@ The Part D gifts study shows an association. How much of the prescribing differe
 
 ---
 
-**LLM exercise (copy-paste prompt):**
-
-> "Here is the text of a point-of-care pharma marketing platform's product page: [PASTE]. For each distinct claim, output a row with: (1) the exact phrase, (2) whether it is a *mechanism* claim (identity / trigger / impression / attribution) or an *effectiveness* claim, (3) what KPI it implies, and (4) what evidence would be required to verify it. Do not assess whether the claims are true — only classify them. Flag any effectiveness claim that does not mention a control group or holdout."
-
-**CLI exercise.** Using the command line, download the public CDS Hooks specification page and the hook-type list (e.g., `curl -s https://cds-hooks.org/ -o cdshooks.html`). Then `grep` for the three mature hook types (`patient-view`, `order-select`, `order-sign`) and confirm, in your own one-paragraph note, that each is a clinical-workflow event a commercial platform could subscribe to.
-
-**AI Validation exercise.** Take the LLM's classification table from the LLM exercise above. Independently re-classify three rows yourself, then check: did the model mislabel any *effectiveness* claim as a *mechanism* claim — a common and consequential error, because it launders an unproven result into a description of how the machine works? Write one sentence on any disagreement and say which of you was right.
-
-**AI Use Disclosure**
-
-*Write two sentences naming exactly what an AI tool did in your work for this chapter and what judgment you supplied that the AI could not. For example: "I used an LLM to parse the vendor page into a claims table; I independently determined which effectiveness claims lacked any control group, because the model accepted the vendor's framing as fact."*
-
----
-
 ## Exercises
 
 **Warm-up**
@@ -184,3 +192,159 @@ The Part D gifts study shows an association. How much of the prescribing differe
 **Challenge**
 
 9. *(Challenge — causal design)* Design a study that would produce credible causal evidence that point-of-care EHR advertising increases *clinically appropriate* (not merely branded) prescribing. Specify: the comparison group, the outcome measure, the randomization unit, and the primary threat to validity you would have to address. You do not need to solve the threat — just name it and explain why it is the hardest one. *What this tests: whether you can specify the evidence standard the field currently lacks.*
+
+---
+
+## Prompts
+
+### Figure 1.1 — The split-agency structure that breaks consumer sovereignty
+
+Build a four-node systems diagram as a single self-contained HTML file using D3 7.9.0 from the cdnjs CDN, inline CSS and inline JS. Four labeled boxes: PHYSICIAN (decides), PATIENT (consumes), PAYER (pays), INSTITUTION (constrains the menu) arranged in a 2x2 grid. Draw three directed flows with arrowheads — a decision flow physician→patient, a constraint flow institution→physician, a payment flow payer→institution — plus one *missing* return edge from payer back to the physician/decision node, rendered as a dashed grey broken line labeled "no voice in the decision." Highlight the physician node in red as the contested decision point; all other boxes use ink/grey borders. No chart axes. Place each flow label off the arrow centerline. Add hover tooltips per node describing its role. viewBox 700x420, zero baseline not applicable. Structural, not decorative.
+
+### Figure 1.2 — The two clinical interoperability rails commercial messages ride
+
+Build two stacked horizontal sequence diagrams in one self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Top lane "CDS Hooks": four boxes left-to-right — Physician opens chart → EHR fires hook (patient-view) → External service returns card → Card renders in sidebar — joined by right-pointing arrows. Bottom lane "SMART on FHIR": App launch → OAuth 2.0 token exchange → FHIR context (patient/encounter/clinician) → Branded panel renders in iframe. Final box in each lane highlighted red. Render hook names in monospace. Below both lanes, one full-width callout box on a light fill noting both ride the same visual tier as drug-interaction warnings. Hover tooltips per step. viewBox 700x480. Structural sequence, not aesthetic.
+
+### Figure 1.3 — The natural experiment: the estimated coupon effect on branded-drug volume
+
+Build a vertical bar chart, single self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Two categories on x-axis: "Commercial (coupons permitted)" and "Medicare Advantage (coupons banned)". Y-axis = estimated change in branded quantity, percent, zero baseline, domain 0–30%. Commercial bar at ~24% (label "+23–25%") drawn in red; Medicare Advantage shown as a near-zero baseline marker in grey labeled "0% (banned)". Dashed gridlines at 10/20/30. Value labels above bars. Margins top48 right40 bottom56 left64. ALL-CAPS source line attributing Dafny, Ody & Schmitt NBER w29735. Hover tooltips. Caption must hedge the figure as an estimate, not established fact. viewBox 700x420.
+
+### Figure 1.4 — The same infrastructure could run both systems; only one is funded
+
+Build a mirrored two-column flow diagram, single self-contained HTML file, D3 7.9.0 from cdnjs, inline CSS/JS. Left column "The commercial closed loop — funded": four stacked boxes NPI targeting → Point-of-care impression → Prescription → Attribution, joined by downward arrows, with a left-side feedback arrow from Attribution back up to NPI targeting labeled "refines next NPI list." Left boxes red-bordered. Right column "The counter-stack — could exist, unfunded": Comparative effectiveness → Generic alternatives + formulary tier → Patient cost shown → Prescribing decision, grey-bordered, downward arrows, no feedback loop. Dashed vertical divider between columns. Hover tooltips per node. viewBox 700x480. Structural mirror layout, not decorative.
+
+---
+
+## Chapter 1 Exercises: The Machine Nobody Sees
+
+**Project:** One Drug, End to End
+**This chapter adds:** Choose the one branded drug you will carry through the whole book, then map its split-agency stakeholders and the point-of-care surface where its promotion would land.
+
+### Exercise 1 — When to Use AI
+
+**The judgment:** Three tasks in this chapter where AI assistance earns its place.
+
+- *Parsing a vendor product page into a claims table* (mechanism vs. effectiveness, KPI, evidence required). **Why AI works here:** reformatting — you are restructuring text you can read into a grid you can check line by line.
+- *Drafting the four-party split-agency map for your chosen drug* (who decides, consumes, pays, constrains). **Why AI works here:** drafting — the structure is known and you supply the drug-specific facts, then verify each role.
+- *Generating candidate point-of-care surfaces* where a card for your drug might fire (CDS Hooks trigger types, SMART-on-FHIR launch points). **Why AI works here:** option-generation — you want a broad first list of plausible trigger events, which you then prune against the chapter's three mature hook types.
+
+**The tell:** You are using AI appropriately when you can independently evaluate the output — when you could have written the claims table yourself, just slower.
+
+### Exercise 2 — When NOT to Use AI
+
+**The judgment:** Three tasks here that need your judgment, not the model's fluency.
+
+- *Deciding whether the vendor's script-lift number is credible.* **Why AI fails here:** missing ground truth — there is no control group on the page, and the model will treat a confidently stated number as a fact rather than an un-evidenced assertion.
+- *Concluding whether your drug's promotion is clinically appropriate.* **Why AI fails here:** values judgment — appropriateness depends on patient welfare and formulary alternatives the model cannot weigh, and it has no stake in getting it right.
+- *Asserting whether real-time EHR triggering legally crosses into PHI-used-for-marketing.* **Why AI fails here:** hallucination risk — no court has resolved this, so the model will invent a confident legal answer with no primary source behind it.
+
+**The tell:** You've crossed the line when AI output is your *reason* for a conclusion rather than a tool for reaching one.
+**Series connection:** This trains **T4 Metacognitive** judgment — knowing what you cannot know from a marketing artifact, and refusing to let fluent prose substitute for a counterfactual you never observed.
+
+### Exercise 3 — LLM Exercise
+
+**What you're building this chapter:** A split-agency stakeholder map plus a point-of-care surface inventory for your chosen drug — the foundation document the rest of the project builds on.
+**Tool:** Claude. Recommend a **Claude Project** here — persistent drug context (the drug name, class, and competitor set) will be reused in every later chapter, so storing it once in the Project saves you re-pasting it nine times.
+
+**The Prompt:**
+
+```
+You are helping me build a teaching case study for a course on AI-driven HCP
+marketing. The worked-example drug is a branded SGLT2 inhibitor used for type 2
+diabetes, in a class that contains both branded competitors and a generic
+substitute (an older non-SGLT2 oral antidiabetic).
+
+Do two things, using only the structure I give you. Use public, general
+clinical and market knowledge; do not invent specific statistics, do not state
+any effectiveness or lift number, and label anything you are unsure of with
+"[verify]".
+
+1. SPLIT-AGENCY MAP. Produce a four-row table for this drug:
+   - PRESCRIBER (decides): which specialties write it and why
+   - PATIENT (consumes): the patient archetype it targets
+   - PAYER (pays): commercial plan / Medicare Part D / Medicaid considerations
+   - INSTITUTION (constrains): formulary tier, step therapy, prior auth likely
+   For each row, add one column: "where price sensitivity has been engineered
+   out of this party's decision." Mark the party absent from the commercial
+   message.
+
+2. POINT-OF-CARE SURFACE INVENTORY. List the plausible EHR trigger points where
+   a branded card for this drug could fire, mapped to the three mature CDS Hooks
+   types (patient-view, order-select, order-sign) and to a SMART-on-FHIR launch.
+   For each, give the clinical event that would trigger it and one sentence on
+   why a brand team would want that moment. Do NOT assert any of these is
+   actually deployed for this drug — only that the mechanism exists.
+
+Output both as markdown tables. End with a one-line note on which single fact in
+this map I should verify against a primary source before using it.
+```
+
+**What this produces:** A two-table case-study foundation — the split-agency map and the POC trigger inventory — for your drug.
+**How to adapt this prompt:** *For your own drug:* replace the first paragraph with your drug, its class, and whether a generic/branded competitor exists; keep everything else. *For ChatGPT/Gemini:* paste the same prompt as a single message; those tools have no persistent Project, so re-paste the drug paragraph each session. *For a Claude Project:* put the drug-identity paragraph in the Project's system/custom-instructions field and send only instructions 1 and 2 as the message.
+**Connection to previous chapters:** This is Chapter 1 — it starts the thread. **Preview of next chapter:** In Chapter 2 you will profile this same drug's lift-vs-equity position using TRx/NBRx/loyalty deciles.
+
+### Exercise 4 — CLI Exercise
+
+**What you're building this chapter:** A verified local note confirming that the three mature CDS Hooks types are real clinical-workflow events your drug's promotion could ride. · **Tool:** Claude Code (single-file fetch + grep, no multi-file orchestration needed). · **Skill level:** Beginner.
+
+**Setup:**
+1. Create a project folder `one-drug/` with an empty `ch01-poc-rails.md` you will fill.
+2. Claude Code installed and authenticated.
+3. Add a CLAUDE.md rule: "Never fabricate spec contents — only quote text actually fetched from the source URL."
+
+**The Task:**
+
+```
+In the folder one-drug/, do the following and nothing else:
+
+1. Fetch the public CDS Hooks specification homepage (https://cds-hooks.org/)
+   into a local file cdshooks.html. If the fetch fails, stop and tell me — do
+   not guess the contents.
+2. Search cdshooks.html for the three hook types: patient-view, order-select,
+   order-sign. For each one found, quote the surrounding sentence.
+3. Write ch01-poc-rails.md with: one short paragraph per hook type confirming it
+   is a clinical-workflow event, each quoting the fetched text, and a final
+   one-line statement of which hook would most plausibly carry a card for a
+   branded SGLT2 inhibitor (an order-select on starting an oral antidiabetic).
+
+Do not modify cdshooks.html. Do not create any other files. Stop after writing
+ch01-poc-rails.md and show me the file.
+```
+
+**Expected output:** `cdshooks.html` (raw, untouched) plus `ch01-poc-rails.md` with three quoted confirmations and one drug-specific line.
+**What to inspect:** That each paragraph quotes text that actually appears in the fetched HTML — not a paraphrase the model produced from memory.
+**If it goes wrong:** Most likely failure is the model "confirming" a hook type that the page does not literally contain (the site structure changed). Recovery: open `cdshooks.html` yourself, grep for the term, and if it is genuinely absent, have the model mark it `[verify]` rather than asserting it — do not just re-run.
+**CLAUDE.md / AGENTS.md note:** Add the standing rule "All spec/standard claims must quote fetched source text, never model recall."
+
+### Exercise 5 — AI Validation Exercise
+
+**What you're validating:** The split-agency map and POC inventory your Exercise 3 prompt produced. · **Validation type:** Structured-data + Factual. · **Risk level:** Med — this map seeds every later chapter, so an error here propagates.
+
+**Setup:** Use your Exercise 3 output as the artifact.
+
+**The Validation Task:**
+
+```
+Validation Checklist — Chapter 1 (Split-Agency Map + POC Inventory)
+
+For each item mark Pass / Fail / Cannot-determine and add one line of evidence:
+
+- Correctness: Are the four parties correctly assigned roles (decides /
+  consumes / pays / constrains) for THIS drug?
+- Completeness: Is the absent-from-the-message party identified, and is the
+  "price sensitivity engineered out" column filled for every row?
+- Scope: Did it stay within mechanism/stakeholder mapping, or did it sneak in an
+  effectiveness or lift claim it was told to avoid?
+- Chapter-specific 1: Are the POC triggers mapped to the THREE mature hook types
+  (patient-view, order-select, order-sign) and not to invented hook names?
+- Chapter-specific 2: Is every POC row framed as "the mechanism exists," not
+  "this is deployed for this drug"?
+- Failure-mode check (fluent-but-wrong + vendor-claim laundering): Did the model
+  restate any vendor capability ("AI-powered operating system," a script-lift
+  figure) as an established fact rather than a labeled claim? Flag any number
+  presented without [verify].
+```
+
+**What to do with your findings:** Pass → use it as your project foundation. One fail → revise the prompt and re-run that section. Multiple fails or several Cannot-determines → build the map yourself from the chapter text; this is a "When NOT to Use AI" moment, because a contaminated foundation corrupts nine chapters.
+**AI Use Disclosure prompt (mandatory):** Write two sentences — what the AI produced (e.g., "the model drafted the four-party map and POC trigger list") and how you used it, plus one thing it could not determine that needed your judgment (e.g., "whether the order-select trigger is actually live for this drug, which the model could not know and I marked [verify]").
+**Series connection:** Trains detection of **vendor-claim laundering** under **T4 Metacognitive** judgment — catching the moment an unproven marketing assertion gets quietly upgraded to fact.

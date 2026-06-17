@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Citation-fabrication rate by indication type</title>
+<style>
+  :root{
+    --color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;
+  }
+  @media(prefers-color-scheme:dark){:root{
+    --color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{width:100%;max-width:760px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:14px;fill:var(--color-ink);}
+  .axis text,.tick text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .axislabel{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);}
+  .catlabel{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;fill:var(--color-ink);}
+  .vallabel{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-ink);}
+  .source{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:.08em;}
+  .grid line{stroke:var(--color-border);stroke-width:.75;stroke-dasharray:5 4;}
+  .bar{fill:var(--color-red);}
+  .bar:focus{outline:none;stroke:var(--color-ink);stroke-width:1.5;}
+  .tooltip{position:absolute;pointer-events:none;background:var(--color-white);border:1px solid var(--color-border);
+    padding:4px 8px;font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;color:var(--color-ink);opacity:0;}
+  @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap"></div>
+<div class="tooltip" id="tt"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA=[
+  {indication:"Well-studied condition",rate:6},
+  {indication:"Niche conditions",rate:28.5}
+];
+const margin={top:48,right:40,bottom:56,left:64};
+const wrap=d3.select("#wrap");
+const tt=d3.select("#tt");
+function render(){
+  wrap.select("svg").remove();
+  const W=Math.max(420,Math.min(760,wrap.node().clientWidth||700));
+  const H=420;
+  const iw=W-margin.left-margin.right, ih=H-margin.top-margin.bottom;
+  const svg=wrap.append("svg").attr("viewBox",`0 0 ${W} ${H}`)
+    .attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Citation-fabrication rate by indication type");
+  svg.append("desc").attr("id","chart-desc").text("A well-studied condition shows about 6 percent fabricated citations; niche conditions about 28 to 29 percent. Figures contested, verify.");
+  svg.append("text").attr("class","title").attr("x",margin.left).attr("y",28)
+    .text("Fabrication is highest where the literature is thinnest");
+  const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const x=d3.scaleBand().domain(FALLBACK_DATA.map(d=>d.indication)).range([0,iw]).padding(0.35);
+  const y=d3.scaleLinear().domain([0,35]).range([ih,0]);
+  g.append("rect").attr("width",iw).attr("height",ih).attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+  g.append("g").attr("class","grid").attr("aria-hidden","true")
+    .call(d3.axisLeft(y).tickValues([10,20,30]).tickSize(-iw).tickFormat(""));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).tickValues([0,10,20,30]).tickFormat(d=>d));
+  g.append("text").attr("class","axislabel").attr("transform","rotate(-90)")
+    .attr("x",-ih/2).attr("y",-46).attr("text-anchor","middle").text("Fabricated citations (%)");
+  g.selectAll(".bar").data(FALLBACK_DATA).join("rect")
+    .attr("class","bar").attr("tabindex",0)
+    .attr("aria-label",d=>`${d.indication}: ${d.rate} percent fabricated citations`)
+    .attr("x",d=>x(d.indication)).attr("width",x.bandwidth())
+    .attr("y",d=>y(d.rate)).attr("height",d=>ih-y(d.rate))
+    .on("mousemove",(e,d)=>showTip(e,d)).on("mouseleave",hideTip)
+    .on("focus",(e,d)=>showTip(e,d)).on("blur",hideTip);
+  g.selectAll(".vallabel").data(FALLBACK_DATA).join("text")
+    .attr("class","vallabel").attr("x",d=>x(d.indication)+x.bandwidth()/2)
+    .attr("y",d=>y(d.rate)-8).attr("text-anchor","middle")
+    .text(d=>d.indication.startsWith("Niche")?"~28–29%":"~6%");
+  g.selectAll(".catlabel").data(FALLBACK_DATA).join("text")
+    .attr("class","catlabel").attr("x",d=>x(d.indication)+x.bandwidth()/2)
+    .attr("y",ih+24).attr("text-anchor","middle").text(d=>d.indication);
+  svg.append("text").attr("class","source").attr("x",margin.left).attr("y",H-8)
+    .text("SOURCE: PMC12658395 — CONTESTED, [VERIFY]. TRUST THE MODEL LESS WHERE YOU WANT HELP MOST.");
+}
+function showTip(e,d){tt.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-12)+"px")
+  .html(`${d.indication}<br>${d.rate}% fabricated`);}
+function hideTip(){tt.style("opacity",0);}
+render();
+new ResizeObserver(()=>render()).observe(wrap.node());
+</script>
+</body>
+</html>

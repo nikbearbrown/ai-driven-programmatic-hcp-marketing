@@ -1,0 +1,71 @@
+<!--
+  figure-title: Choosing a primary outcome metric from a commercial goal
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 02-lift-vs-brand
+  Figure: 02
+  Type: infographic
+  Generated: 2026-06-16
+  Source: chapters/02-lift-vs-brand.md
+-->
+<svg viewBox="0 0 700 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-02">
+  <title id="fig-title-02">Choosing a primary outcome metric from a commercial goal</title>
+  <desc>A decision tree. First branch: is the question about causation or association. Causation leads to a lift metric with a control group; association branches on horizon and level into brand or NBRx metrics with a persistence guardrail.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="02-lift-vs-brand" figure-number="02" figure-title="Choosing a primary outcome metric from a commercial goal" figure-type="infographic" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/02-lift-vs-brand.md"/></metadata>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="700" height="480" fill="#FFFFFF"/>
+
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">From a vague commercial goal to a metric, its study design, and a guardrail</text>
+
+  <!-- root -->
+  <rect x="250" y="52" width="200" height="44" rx="0" stroke="#2a1a0e" stroke-width="1" fill="#FFFFFF"/>
+  <text x="350" y="72" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">Q1: Causation or</text>
+  <text x="350" y="88" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">association?</text>
+
+  <!-- LEFT: causation -->
+  <line x1="290" y1="96" x2="170" y2="140" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="206" y="120" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">causation</text>
+
+  <rect x="64" y="144" width="220" height="44" rx="0" stroke="#C8102E" stroke-width="1.5" fill="#FFFFFF"/>
+  <text x="174" y="164" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">LIFT question</text>
+  <text x="174" y="180" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">needs a control / holdout group</text>
+
+  <line x1="174" y1="188" x2="174" y2="228" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <rect x="64" y="232" width="220" height="44" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="174" y="252" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">Output: incremental scripts</text>
+  <text x="174" y="268" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">vs. exposed-minus-control</text>
+
+  <!-- RIGHT: association -->
+  <line x1="410" y1="96" x2="530" y2="140" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="494" y="120" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">association</text>
+
+  <rect x="420" y="144" width="216" height="44" rx="0" stroke="#2a1a0e" stroke-width="1" fill="#FFFFFF"/>
+  <text x="528" y="164" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" font-weight="600">Q2: Short or long horizon?</text>
+  <text x="528" y="180" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">and individual or market level?</text>
+
+  <!-- long horizon -> brand -->
+  <line x1="480" y1="188" x2="420" y2="228" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="430" y="212" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">long</text>
+  <rect x="376" y="232" width="130" height="60" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="441" y="256" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">BRAND metric</text>
+  <text x="441" y="272" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">longitudinal design;</text>
+  <text x="441" y="286" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">brand share, SOMi</text>
+
+  <!-- short horizon -> NBRx -->
+  <line x1="576" y1="188" x2="600" y2="228" stroke="#2a1a0e" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="608" y="212" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">short</text>
+  <rect x="536" y="232" width="100" height="60" rx="0" stroke="#D4D4D4" stroke-width="1" fill="#F5F5F5"/>
+  <text x="586" y="256" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e">NBRx</text>
+  <text x="586" y="272" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">decisions now;</text>
+  <text x="586" y="286" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">leading indicator</text>
+
+  <!-- guardrail pairing -->
+  <rect x="64" y="336" width="572" height="60" rx="0" stroke="#C8860E" stroke-width="1" fill="#FFFFFF"/>
+  <text x="80" y="360" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e" font-weight="600">Always pair the primary metric with a guardrail</text>
+  <text x="80" y="378" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">e.g. NBRx + persistence over the next 2–3 fills — a metric without a named failure mode is a trap.</text>
+
+  <!-- caption -->
+  <text x="32" y="432" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Causation routes to a lift metric with a control group; association routes to a brand or NBRx metric,</text>
+  <text x="32" y="448" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">each paired with a guardrail that catches the failure mode the primary metric alone would miss.</text>
+</svg>

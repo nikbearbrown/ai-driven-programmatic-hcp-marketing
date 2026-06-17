@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 12.2 — Staggered adoption: TWFE forbidden comparisons vs. clean controls</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;--color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;--color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;padding:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:820px;margin:0 auto;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;padding:8px 16px 0;}
+  .panel-title{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:12px;font-weight:600;fill:var(--color-ink);}
+  .unit-label{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;}
+  .axis{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .note{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;}
+  .caption{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;fill:var(--color-secondary);padding:0 16px 4px;}
+  .source{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;text-transform:uppercase;padding:0 16px 12px;}
+  #tooltip{position:absolute;pointer-events:none;background:var(--color-ink);color:var(--color-white);font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;font-size:11px;padding:6px 8px;border-radius:0;opacity:0;transition:opacity 150ms cubic-bezier(0.2,0.8,0.2,1);max-width:240px;}
+  .unit:focus{outline:none;}
+  .unit:focus rect.seg-post{stroke:var(--color-red);stroke-width:2;}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div class="title">Three units adopt at different dates — which comparisons are allowed?</div>
+  <svg id="chart" role="img" aria-labelledby="chart-title chart-desc"></svg>
+  <div class="caption">TWFE uses forbidden comparisons under heterogeneous effects — already-treated units as controls for later-treated ones. The modern fix uses only not-yet-treated and never-treated units as clean controls.</div>
+  <div class="source">Source: Goodman-Bacon 2021; Callaway &amp; Sant'Anna 2021 — method is established; illustrative units</div>
+</div>
+<div id="tooltip" role="status" aria-live="polite"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+const FALLBACK_DATA = {
+  yearMin:2004, yearMax:2014,
+  panels:[
+    {title:"1 · Adoption structure",
+     units:[
+       {id:"U1", adoptionYear:2006, tip:"Unit U1 adopts treatment in 2006 — the early cohort."},
+       {id:"U2", adoptionYear:2009, tip:"Unit U2 adopts treatment in 2009 — the middle cohort."},
+       {id:"U3", adoptionYear:2012, tip:"Unit U3 adopts treatment in 2012 — the late cohort."},
+       {id:"C",  adoptionYear:null, tip:"Control unit C is never treated across the window."}
+     ],
+     comparisons:[],
+     note:"dark = treated; light = untreated"},
+    {title:"2 · TWFE — forbidden",
+     units:[
+       {id:"U1", adoptionYear:2006, tip:"U1 was treated in 2006 — already adjusted by the time U3 is treated."},
+       {id:"U3", adoptionYear:2012, tip:"U3 is treated in 2012 — TWFE wrongly uses already-treated U1 as its control."}
+     ],
+     comparisons:[{from:"U1", to:"U3", kind:"forbidden", label:"already-treated U1 used as control for U3"}],
+     note:"U1 already adjusted — a forbidden comparison. Coefficient can flip sign."},
+    {title:"3 · Callaway–Sant'Anna",
+     units:[
+       {id:"U3", adoptionYear:2012, tip:"Treated cohort U3 is compared only to units not yet treated by 2012."},
+       {id:"C",  adoptionYear:null, tip:"Not-yet-treated and never-treated units supply the clean counterfactual."}
+     ],
+     comparisons:[{from:"U3", to:"C", kind:"clean", label:"compared only to clean controls"}],
+     note:"Group-time ATT, then aggregated transparently. No forbidden comparisons."}
+  ]
+};
+const W=760,H=420;
+const svg=d3.select("#chart").attr("viewBox",`0 0 ${W} ${H}`);
+svg.append("title").attr("id","chart-title").text("Staggered adoption: TWFE forbidden comparisons vs. clean controls");
+svg.append("desc").attr("id","chart-desc").text("Three panels: adoption structure with units treated in 2006, 2009, 2012 plus a never-treated control; TWFE using an early-treated unit as a forbidden control for a late-treated unit (red); and Callaway-Sant'Anna comparing each cohort only to not-yet-treated and never-treated units (ink).");
+const defs=svg.append("defs");
+defs.append("marker").attr("id","arrow").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-ink)");
+defs.append("marker").attr("id","arrowred").attr("markerWidth",8).attr("markerHeight",6).attr("refX",7).attr("refY",3).attr("orient","auto")
+  .append("polygon").attr("points","0 0, 8 3, 0 6").attr("fill","var(--color-red)");
+const tip=d3.select("#tooltip");
+
+const PANEL_W=216, PANEL_X=[32,272,512], PANEL_Y=80, PANEL_H=220;
+const ROW_H=20, ROW_GAP=24, ROW_Y0=98;
+const x=d3.scaleLinear().domain([FALLBACK_DATA.yearMin,FALLBACK_DATA.yearMax]);
+
+function draw(){
+  svg.selectAll(".dyn").remove();
+
+  FALLBACK_DATA.panels.forEach((p,pi)=>{
+    const px=PANEL_X[pi];
+    x.range([px+12, px+PANEL_W-12]);
+    svg.append("text").attr("class","dyn panel-title").attr("x",px).attr("y",70).text(p.title);
+    svg.append("rect").attr("class","dyn").attr("x",px).attr("y",PANEL_Y).attr("width",PANEL_W).attr("height",PANEL_H)
+      .attr("rx",0).attr("fill","var(--color-fill)").attr("stroke","var(--color-border)").attr("stroke-width",1);
+
+    const rowOf={}; p.units.forEach((u,i)=>{rowOf[u.id]=ROW_Y0+i*44;});
+
+    const g=svg.append("g").attr("class","dyn").selectAll(".unit").data(p.units,d=>d.id).join(
+      enter=>{
+        const grp=enter.append("g").attr("class","unit").attr("tabindex",0).attr("role","img")
+          .attr("aria-label",d=>d.adoptionYear?("Unit "+d.id+" treated in "+d.adoptionYear):("Unit "+d.id+", never treated"));
+        grp.each(function(d){
+          const y=rowOf[d.id]; const sel=d3.select(this);
+          if(d.adoptionYear===null){
+            sel.append("rect").attr("class","seg-never").attr("x",x(FALLBACK_DATA.yearMin)).attr("y",y)
+              .attr("width",x(FALLBACK_DATA.yearMax)-x(FALLBACK_DATA.yearMin)).attr("height",ROW_H)
+              .attr("fill","var(--color-white)").attr("stroke","var(--color-border)").attr("stroke-width",0.75);
+            sel.append("text").attr("class","unit-label").attr("x",x(FALLBACK_DATA.yearMin)+4).attr("y",y+14)
+              .attr("fill","var(--color-secondary)").text(d.id+" · never treated");
+          } else {
+            const xa=x(d.adoptionYear);
+            sel.append("rect").attr("class","seg-pre").attr("x",x(FALLBACK_DATA.yearMin)).attr("y",y)
+              .attr("width",xa-x(FALLBACK_DATA.yearMin)).attr("height",ROW_H).attr("fill","var(--color-border)");
+            sel.append("rect").attr("class","seg-post").attr("x",xa).attr("y",y)
+              .attr("width",x(FALLBACK_DATA.yearMax)-xa).attr("height",ROW_H).attr("fill","var(--color-ink)");
+            sel.append("text").attr("class","unit-label").attr("x",x(FALLBACK_DATA.yearMin)+4).attr("y",y+14)
+              .attr("fill","var(--color-white)").text(d.id+" "+d.adoptionYear);
+          }
+        });
+        return grp;
+      }
+    );
+
+    // comparison arrows
+    p.comparisons.forEach(c=>{
+      const y1=rowOf[c.from]+ROW_H, y2=rowOf[c.to];
+      const cx=(x(FALLBACK_DATA.yearMin)+x(FALLBACK_DATA.yearMax))/2;
+      const red=c.kind==="forbidden";
+      svg.append("line").attr("class","dyn").attr("aria-hidden","true")
+        .attr("x1",cx).attr("y1",y1).attr("x2",cx).attr("y2",y2)
+        .attr("stroke",red?"var(--color-red)":"var(--color-ink)").attr("stroke-width",1.5)
+        .attr("stroke-dasharray",red?"5 4":null)
+        .attr("marker-end",red?"url(#arrowred)":"url(#arrow)");
+    });
+
+    // axis labels + note
+    svg.append("text").attr("class","dyn axis").attr("x",x(FALLBACK_DATA.yearMin)).attr("y",PANEL_Y+196).text(FALLBACK_DATA.yearMin);
+    svg.append("text").attr("class","dyn axis").attr("text-anchor","end").attr("x",x(FALLBACK_DATA.yearMax)).attr("y",PANEL_Y+196).text(FALLBACK_DATA.yearMax);
+    // wrap note into up to two lines
+    const words=p.note.split(" "); let line="",lines=[];
+    words.forEach(w=>{ if((line+" "+w).trim().length>34){lines.push(line.trim());line=w;} else {line+=" "+w;} });
+    lines.push(line.trim());
+    lines.slice(0,2).forEach((ln,li)=>{
+      svg.append("text").attr("class","dyn note").attr("x",px+12).attr("y",PANEL_Y+212+li*14)
+        .attr("fill",pi===1?"var(--color-red)":(pi===2?"var(--color-ink)":"var(--color-secondary)")).text(ln);
+    });
+
+    g.on("mousemove",function(event,d){tip.style("opacity",1).html(d.tip).style("left",(event.pageX+12)+"px").style("top",(event.pageY+12)+"px");})
+     .on("mouseleave",()=>tip.style("opacity",0))
+     .on("focus",function(event,d){const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");})
+     .on("blur",()=>tip.style("opacity",0))
+     .on("keydown",function(event,d){if(event.key==="Enter"||event.key===" "){event.preventDefault();const r=this.getBoundingClientRect();tip.style("opacity",1).html(d.tip).style("left",(window.scrollX+r.left)+"px").style("top",(window.scrollY+r.bottom+6)+"px");}});
+  });
+}
+draw();
+new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>

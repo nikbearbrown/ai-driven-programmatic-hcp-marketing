@@ -1,0 +1,52 @@
+<!--
+  Figure title: The four-quadrant evaluation checklist for an honest baseline
+  Book: AI-Driven Programmatic HCP Marketing
+  Chapter: 06-ensembles-tabular-advantage
+  Figure: 03
+  Type: INFOGRAPHIC
+  Generated: 2026-06-16
+  Source: chapters/06-ensembles-tabular-advantage.md
+-->
+<svg viewBox="0 0 700 420" role="img" aria-labelledby="fig-title-03" xmlns="http://www.w3.org/2000/svg">
+  <title id="fig-title-03">The four-quadrant evaluation checklist for an honest baseline</title>
+  <desc>Two-by-two grid: discrimination, calibration, temporal validation, subgroup robustness. Each quadrant lists its metrics and the failure mode if skipped.</desc>
+  <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="06-ensembles-tabular-advantage" figure-number="03" figure-title="Four-quadrant evaluation checklist" figure-type="INFOGRAPHIC" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/06-ensembles-tabular-advantage.md"/></metadata>
+  <defs></defs>
+  <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
+  <text x="32" y="28" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Pass all four and you have the baseline. Pass only the first is the common mistake.</text>
+
+  <!-- 2x2 grid: x 32..668, y 44..380. each cell 318 x 168 -->
+  <!-- Q1 Discrimination top-left -->
+  <rect x="32" y="44" width="304" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="48" y="68" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">1 · DISCRIMINATION</text>
+  <text x="48" y="90" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">AUC, AUPRC — "can it rank?"</text>
+  <text x="48" y="112" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Can it sort prescribers above</text>
+  <text x="48" y="128" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">non-prescribers, top decile vs. bottom?</text>
+  <text x="48" y="178" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">skip it → you can't target at all</text>
+
+  <!-- Q2 Calibration top-right (red accent: most-skipped) -->
+  <rect x="364" y="44" width="304" height="160" fill="#FFFFFF" stroke="#C8102E" stroke-width="1.5"/>
+  <text x="380" y="68" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">2 · CALIBRATION</text>
+  <text x="380" y="90" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">reliability curve, Brier score</text>
+  <text x="380" y="112" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Does a 0.7–0.8 bin actually prescribe</text>
+  <text x="380" y="128" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">at ~75%? The probability must mean it.</text>
+  <text x="380" y="178" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">skip it → every bid decision is wrong</text>
+
+  <!-- Q3 Temporal bottom-left -->
+  <rect x="32" y="212" width="304" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="48" y="236" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">3 · TEMPORAL VALIDATION</text>
+  <text x="48" y="258" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">out-of-time split</text>
+  <text x="48" y="280" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Train on earlier periods, test on later.</text>
+  <text x="48" y="296" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Does it hold when the future is the future?</text>
+  <text x="48" y="346" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">skip it → leakage inflates stability</text>
+
+  <!-- Q4 Subgroup bottom-right -->
+  <rect x="364" y="212" width="304" height="160" fill="#FFFFFF" stroke="#D4D4D4" stroke-width="1"/>
+  <text x="380" y="236" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="13" fill="#2a1a0e">4 · SUBGROUP ROBUSTNESS</text>
+  <text x="380" y="258" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">by specialty, decile, geography</text>
+  <text x="380" y="280" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">Strong on average can be useless on the</text>
+  <text x="380" y="296" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">one segment the campaign targets.</text>
+  <text x="380" y="346" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#C8102E">skip it → aggregate AUC hides a failure</text>
+
+  <text x="668" y="404" text-anchor="end" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="10" fill="#545454" letter-spacing="0.08em">SOURCE: CH.06 — ENSEMBLES AND THE TABULAR ADVANTAGE</text>
+</svg>

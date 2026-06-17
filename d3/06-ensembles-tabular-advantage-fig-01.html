@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Figure 6.1 — Bias-variance-covariance decomposition</title>
+<style>
+  :root{--color-white:#FFFFFF;--color-ink:#2a1a0e;--color-red:#C8102E;
+    --color-secondary:#545454;--color-border:#D4D4D4;--color-ochre:#C8860E;--color-fill:#F5F5F5;}
+  @media (prefers-color-scheme: dark){:root{--color-white:#111111;--color-ink:#F0EBE3;--color-red:#E8243A;
+    --color-secondary:#A0978C;--color-border:#2E2E2E;--color-ochre:#D49A30;--color-fill:#1A1A1A;}}
+  html,body{margin:0;background:var(--color-white);color:var(--color-ink);}
+  #wrap{max-width:760px;margin:0 auto;padding:8px;}
+  .title{font-family:'EB Garamond','Garamond',Georgia,serif;font-size:15px;margin:0 0 6px;}
+  svg{width:100%;height:auto;display:block;}
+  text{font-family:'Inter',-apple-system,'Helvetica Neue',sans-serif;}
+  .tick text{font-family:'JetBrains Mono','Fira Code','Courier New',monospace;font-size:11px;fill:var(--color-secondary);}
+  .axis path,.axis line{stroke:var(--color-border);}
+  .grid line{stroke:var(--color-border);stroke-dasharray:5 4;}
+  .seg-label{font-size:11px;}
+  .panel{font-size:11px;fill:var(--color-ink);}
+  .legend{font-size:11px;fill:var(--color-ink);}
+  .src{font-size:10px;fill:var(--color-secondary);letter-spacing:0.08em;}
+  rect.seg{cursor:pointer;}rect.seg:focus{outline:2px solid var(--color-ochre);}
+  #tip{position:absolute;pointer-events:none;opacity:0;background:var(--color-white);border:1px solid var(--color-border);
+    padding:6px 8px;font-size:12px;color:var(--color-ink);}
+  @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important;}}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <p class="title">Ensemble error: bias² + (1/N)·var + (1−1/N)·covar</p>
+  <div id="chart"></div>
+  <div id="tip"></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script>
+// stacked segments per panel; values are schematic fractions of total error
+const FALLBACK_DATA=[
+  {panel:"single model",bias:0.25,variance:0.50,covar:0.0},
+  {panel:"10-model ensemble",bias:0.25,variance:0.05,covar:0.22},
+  {panel:"N → ∞",bias:0.25,variance:0.0,covar:0.24}
+];
+const data=FALLBACK_DATA;const tip=d3.select("#tip");
+const margin={top:48,right:40,bottom:56,left:64};
+const NOTE={bias:"bias² — average systematic error; unchanged by averaging",
+  variance:"variance — shrinks as 1/N with more independent members",
+  covar:"covariance — correlated error; sets the floor that diversity cannot beat"};
+function cv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function draw(){
+  const host=d3.select("#chart");host.selectAll("*").remove();
+  const W=host.node().clientWidth||700,H=420;
+  const iw=W-margin.left-margin.right,ih=H-margin.top-margin.bottom;
+  const svg=host.append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("role","img").attr("aria-labelledby","chart-title chart-desc");
+  svg.append("title").attr("id","chart-title").text("Bias-variance-covariance decomposition");
+  svg.append("desc").attr("id","chart-desc").text("Three panels showing how variance shrinks and the covariance floor appears as ensemble size grows.");
+  const g=svg.append("g").attr("transform",`translate(${margin.left},${margin.top})`);
+  const x=d3.scaleBand().domain(data.map(d=>d.panel)).range([0,iw]).padding(0.4);
+  const y=d3.scaleLinear().domain([0,1]).range([ih,0]);
+  g.append("rect").attr("width",iw).attr("height",ih).attr("fill",cv("--color-fill")).attr("stroke",cv("--color-border")).attr("stroke-width",0.75);
+  g.append("g").attr("class","grid").attr("aria-hidden","true").call(d3.axisLeft(y).ticks(4).tickSize(-iw).tickFormat(""));
+  g.append("g").attr("class","axis").call(d3.axisLeft(y).ticks(4)).selectAll("text").attr("class","");
+  g.selectAll(".tick text").attr("class","tick");
+  const color={bias:cv("--color-ink"),variance:cv("--color-secondary"),covar:cv("--color-red")};
+  const keys=["bias","variance","covar"];
+  data.forEach(d=>{
+    let acc=0;
+    keys.forEach(k=>{
+      const h=ih-y(d[k]);
+      if(d[k]>0){
+        g.append("rect").attr("class","seg").attr("tabindex",0).attr("aria-label",`${d.panel}: ${k} ${d[k]}`)
+          .attr("x",x(d.panel)).attr("width",x.bandwidth())
+          .attr("y",y(acc+d[k])).attr("height",h).attr("fill",color[k]).attr("rx",0)
+          .on("mousemove",(e)=>showTip(e,k,d[k])).on("mouseleave",hideTip)
+          .on("keydown",(e)=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();showTip(e,k,d[k]);}});
+        if(h>14) g.append("text").attr("class","seg-label").attr("text-anchor","middle").attr("fill",cv("--color-white"))
+          .attr("x",x(d.panel)+x.bandwidth()/2).attr("y",y(acc+d[k]/2)+4).text(k==="covar"?"covar":k==="bias"?"bias²":"variance");
+        acc+=d[k];
+      }
+    });
+    g.append("text").attr("class","panel").attr("text-anchor","middle").attr("x",x(d.panel)+x.bandwidth()/2).attr("y",ih+18).text(d.panel);
+  });
+  // covariance floor line on last panel
+  const last=data[data.length-1];
+  const floorY=y(last.bias+last.covar);
+  g.append("line").attr("x1",x(last.panel)).attr("y1",floorY).attr("x2",iw).attr("y2",floorY).attr("stroke",cv("--color-red")).attr("stroke-width",0.75).attr("stroke-dasharray","5 4");
+  g.append("text").attr("text-anchor","end").attr("x",iw-2).attr("y",floorY-4).attr("font-size","10px").attr("fill",cv("--color-red")).text("the covariance floor");
+  // legend
+  const lg=svg.append("g").attr("transform",`translate(${margin.left},${H-12})`);
+  const items=[["bias²",color.bias],["variance (1/N)",color.variance],["covariance (floor)",color.covar]];
+  let lx=0;items.forEach(it=>{lg.append("rect").attr("x",lx).attr("y",-9).attr("width",11).attr("height",11).attr("fill",it[1]);
+    lg.append("text").attr("class","legend").attr("x",lx+16).text(it[0]);lx+=160;});
+  svg.append("text").attr("class","src").attr("text-anchor","end").attr("x",W-margin.right).attr("y",H-2).text("SOURCE: CH.06 — SCHEMATIC, NOT MEASURED");
+}
+function showTip(e,k,v){tip.style("opacity",1).style("left",(e.pageX+12)+"px").style("top",(e.pageY-10)+"px").html(`<strong>${k==="covar"?"covariance":k==="bias"?"bias²":"variance"} = ${v}</strong><br>${NOTE[k]}`);}
+function hideTip(){tip.style("opacity",0);}
+draw();new ResizeObserver(()=>draw()).observe(document.getElementById("chart"));
+</script>
+</body>
+</html>
