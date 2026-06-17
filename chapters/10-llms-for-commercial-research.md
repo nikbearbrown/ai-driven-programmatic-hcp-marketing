@@ -339,3 +339,12 @@ Mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to draft the Jardiance literature scan and decompose claims; I decided which surviving citations actually supported their claims and whether the evidence was strong enough to defend to a regulator, because no automated layer can make the real-but-misattributed catch or the human capstone call."* (Mandatory.)
 
 **Series connection:** the failure mode is the **hallucinated/misattributed citation** at tier **T7** — the fluency trap in its most consequential form, and the reason the human capstone is the one control in the entire series positioned to catch what every automated layer misses.
+
+## References (fact-check pass)
+
+1. Mata v. Avianca, Inc., No. 22-cv-1461 (S.D.N.Y. June 22, 2023). CONFIRMED — Judge Castel, six fabricated ChatGPT cases, $5,000 Rule 11 sanction.
+2. Chelli M. et al. "Hallucination Rates and Reference Accuracy of ChatGPT and Bard for Systematic Reviews." J Med Internet Res 2024;26:e53164. CONFIRMED — GPT-3.5 39.6%, GPT-4 28.6%, Bard 91.4%.
+3. Linardon J. et al. "Influence of Topic Familiarity and Prompt Specificity on Citation Fabrication in Mental Health Research Using LLMs." JMIR Ment Health 2025;e80371 (PMC12658395). CONFIRMED (citation); per-condition decimals appropriately hedged.
+4. Zheng L. et al. "Judging LLM-as-a-Judge with MT-Bench and Chatbot Arena." arXiv:2306.05685 (NeurIPS 2023). CONFIRMED — >80% human agreement; position/verbosity/self-enhancement biases.
+5. Niu C. et al. "RAGTruth: A Hallucination Corpus for Developing Trustworthy Retrieval-Augmented Language Models." ACL 2024, arXiv:2401.00396. CONFIRMED.
+6. FDA. "Presenting Risk Information in Prescription Drug and Medical Device Promotion." Draft Guidance, 2009. CONFIRMED — net-impression / fair-balance standard.

@@ -348,3 +348,12 @@ For each item mark Pass / Fail / Cannot-determine and add one line of evidence:
 **What to do with your findings:** Pass → use it as your project foundation. One fail → revise the prompt and re-run that section. Multiple fails or several Cannot-determines → build the map yourself from the chapter text; this is a "When NOT to Use AI" moment, because a contaminated foundation corrupts nine chapters.
 **AI Use Disclosure prompt (mandatory):** Write two sentences — what the AI produced (e.g., "the model drafted the four-party map and POC trigger list") and how you used it, plus one thing it could not determine that needed your judgment (e.g., "whether the order-select trigger is actually live for this drug, which the model could not know and I marked [verify]").
 **Series connection:** Trains detection of **vendor-claim laundering** under **T4 Metacognitive** judgment — catching the moment an unproven marketing assertion gets quietly upgraded to fact.
+
+## References (fact-check pass)
+
+1. Wood SF, et al. Influence of pharmaceutical marketing on Medicare prescriptions in the District of Columbia. PLoS ONE. 2017;12(10):e0186060. https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0186060
+2. Dafny L, Ho K, Kong E. How Do Copayment Coupons Affect Branded Drug Prices and Quantities Purchased? NBER Working Paper No. 29735, 2022. https://www.nber.org/papers/w29735
+3. Dafny L, Ody C, Schmitt M. When Discounts Raise Costs: The Effect of Copay Coupons on Generic Utilization. American Economic Journal: Economic Policy. 2017;9(2):91–123. https://www.aeaweb.org/articles?id=10.1257/pol.20150588
+4. Point of Care Marketing Association. Point of Care Revenue Surpassed $1 Billion in 2024 — What's Driving the Surge. pocmarketing.org, 2024–2025. https://pocmarketing.org/resources-insights/point-of-care-revenue-surpassed-1-billion-in-2024-whats-driving-the-surge
+5. HL7. CDS Hooks specification 2.0. https://cds-hooks.org/
+6. HL7. SMART App Launch v2.2.0. http://hl7.org/fhir/smart-app-launch/

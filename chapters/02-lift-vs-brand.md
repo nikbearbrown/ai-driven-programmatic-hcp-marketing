@@ -44,6 +44,8 @@ The opening case is now readable in metric terms. The team had flat-to-rising TR
 
 One technical note worth flagging. The major claims-data vendors — IQVIA foremost among them — describe their prescription datasets as covering roughly 90% or more of US retail dispensing before projection adjustments, and market their new-to-brand methodology as an industry standard. These are the vendors' own characterizations of their own products, not independent validation. The metric definition is industry-standardized and uncontroversial; the specific coverage percentages are product positioning and should be read accordingly. [verify — unconfirmed: a specific "93% NBRx coverage" self-description did not resolve to a current IQVIA primary source; the ~90% retail-dispensing figure is the verifiable adjacent claim.]
 
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/02-lift-vs-brand-assertions.md -->
+
 ---
 
 Volume is not the whole story. *Who* prescribes and whether their patients *stay* matter at least as much.
@@ -73,7 +75,9 @@ There is a rule of thumb borrowed from fast-moving consumer goods: if SOV exceed
 
 Picture a brand with 30% SOV and 15% SOM. Consumer-goods logic predicts growth — you are twice as loud as you are remembered, so memory should catch up. But if the brand sits on Tier-3 formulary behind step therapy, the growth may never materialize. The gate, not the voice, is binding. Shouting louder helps only if the door is not locked by the formulary.
 
-The SOMi → SOMa leading-indicator claim deserves to be flagged explicitly. It is asserted qualitatively across the industry — vendors will tell you that higher brand equity predicts market-share growth — but as of this writing, it is not rigorously tested on linked survey-plus-claims data. [verify; treat as a vendor hypothesis, not an established finding] The statement that "higher brand equity is predictive of market-share growth" appears in vendor materials with no published test attached. Whether mind-share actually predicts share growth with a lag is a tractable research question. It is also exactly the kind of study a Fellow could run on available data, which is why Chapter 13 returns to it.
+The SOMi → SOMa leading-indicator claim deserves to be flagged explicitly. It is asserted qualitatively across the industry — vendors will tell you that higher brand equity predicts market-share growth — but as of this writing, it is not rigorously tested on linked survey-plus-claims data. [verify; treat as a vendor hypothesis, not an established finding] The statement that "higher brand equity is predictive of market-share growth" appears in vendor materials with no published test attached.
+
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/02-lift-vs-brand-assertions.md --> Whether mind-share actually predicts share growth with a lag is a tractable research question. It is also exactly the kind of study a Fellow could run on available data, which is why Chapter 13 returns to it.
 
 ---
 
@@ -333,3 +337,8 @@ Mark each Pass / Fail / Cannot-determine with one line of evidence:
 **What to do with your findings:** Pass → adopt the profile. One fail → revise that section and re-run. Multiple/uncertain → redo the lift/brand sort yourself from the chapter's two-ladder logic; this is a "When NOT to Use AI" moment, because the lift/brand call is exactly the judgment the model cannot make for your intervention.
 **AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "drafted the metric table and goal translation") and how you used it, plus one thing it couldn't determine (e.g., "whether my drug's core question is a lift or brand question, which I decided because only I know the intervention's causal structure").
 **Series connection:** Trains detection of **attribution circularity** under **T5 Causal** judgment — refusing to read a same-platform "lift" number as a causal effect.
+
+## References (fact-check pass)
+
+1. Greenway T, Ross JS. US drug marketing: how does promotion correspond with health value? BMJ. 2017;357:j1855. https://pubmed.ncbi.nlm.nih.gov/28465309/
+2. Cliff BQ, et al. Association Between Drug Characteristics and Manufacturer Spending on Direct-to-Consumer Advertising. JAMA. 2023;329(5). https://pubmed.ncbi.nlm.nih.gov/36749334/

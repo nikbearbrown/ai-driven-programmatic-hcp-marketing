@@ -288,3 +288,20 @@ For the pasted analysis plan or code, mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your Chapter 12 work and the one judgment it could not make — for example, that you used Claude to draft the Callaway-Sant'Anna code and summarize the Part D dictionary for Cardizem-X, but you decided yourself whether parallel trends were defensible given the drug's specific patent and entry history, because that judgment requires the institutional context the model does not have.* (Mandatory.)
 
 **Series connection:** the failure mode is **TWFE bias / failed pre-trends**, and the validating judgment is **T7 Wisdom** — the identifying assumption and the estimator choice are the human contribution that the chapter exists to train.
+
+---
+
+## References (fact-check pass)
+
+The following sources cited in this chapter were confirmed during the 2026-06-17 fact-check pass:
+
+1. Larkin, I., et al. "Association Between Academic Medical Center Pharmaceutical Detailing Policies and Physician Prescribing." *JAMA* 317(17):1785–1795 (2017). — citation and all reported specifics (~1.7pp effect, 19 centers, 11 with all three elements, 8 of 11 significant) confirmed.
+2. Goodman-Bacon, A. "Difference-in-Differences with Variation in Treatment Timing." *Journal of Econometrics* 225(2):254–277 (2021). — confirmed.
+3. Callaway, B., & Sant'Anna, P. H. C. "Difference-in-Differences with Multiple Time Periods." *Journal of Econometrics* 225(2):200–230 (2021). — confirmed.
+4. de Chaisemartin, C., & D'Haultfœuille, X. "Two-Way Fixed Effects Estimators with Heterogeneous Treatment Effects." *American Economic Review* 110(9):2964–96 (2020). — confirmed.
+5. Sun, L., & Abraham, S. "Estimating Dynamic Treatment Effects in Event Studies with Heterogeneous Treatment Effects." *Journal of Econometrics* 225(2):175–199 (2021). — confirmed.
+6. Borusyak, K., Jaravel, X., & Spiess, J. "Revisiting Event-Study Designs: Robust and Efficient Estimation." *Review of Economic Studies* 91(6):3253–3285 (2024). — confirmed.
+7. Baker, A., Callaway, B., Cunningham, S., Goodman-Bacon, A., & Sant'Anna, P. H. C. "Difference-in-Differences Designs: A Practitioner's Guide." arXiv:2503.13323 (forthcoming *Journal of Economic Literature*). — confirmed.
+8. McCrary, J. "Manipulation of the Running Variable in the Regression Discontinuity Design: A Density Test." *Journal of Econometrics* 142(2):698–714 (2008). — confirmed.
+9. CMS Open Payments (Aug 2013–present, free, no DUA); Medicare Part D Prescriber PUF (2013–present, ~2-yr lag, no DUA, no NBRx, Medicare population); Medicaid SDUD; ICER Value Assessment Framework ($50k–$200k/QALY range; $100k–$150k value-based price benchmark). — all confirmed (cms.gov; medicaid.gov; icer.org).
+

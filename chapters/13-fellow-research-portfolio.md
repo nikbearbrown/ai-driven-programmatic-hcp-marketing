@@ -380,3 +380,15 @@ For the pasted completed card, mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your Chapter 13 work and the one judgment it could not make — for example, that you used Claude to lay out four seven-field cards and draft the plain-language readouts for Cardizem-X, but you wrote and held each pre-registered kill criterion yourself and decided whether each result honestly met or missed it, because the model would relabel a disappointing finding as promising.* (Mandatory.)
 
 **Series connection:** the failure mode is **kill-criterion-relabeled-as-success**, and the validating judgment is **T7 Wisdom** held to a **T6 Collective** standard — the portfolio is trustworthy only if the whole lab applies the no-spin kill discipline, not one Fellow in private.
+
+---
+
+## References (fact-check pass)
+
+The following sources cited in this chapter were confirmed during the 2026-06-17 fact-check pass:
+
+1. Dafny, L., Ody, C., & Schmitt, M. "When Discounts Raise Costs: The Effect of Copay Coupons on Generic Utilization." *American Economic Journal: Economic Policy* 9(2):91–123 (2017); NBER WP 22745. — citation and the ">60% branded-sales, entirely by displacing bioequivalent generics" finding confirmed.
+2. Grinsztajn, L., Oyallon, E., & Varoquaux, G. "Why do tree-based models still outperform deep learning on tabular data?" NeurIPS 2022 (arXiv:2207.08815). — confirmed.
+3. Callaway, B., & Sant'Anna, P. H. C. "Difference-in-Differences with Multiple Time Periods." *Journal of Econometrics* 225(2):200–230 (2021). — confirmed.
+4. Medicaid SDUD (NDC × state × quarter aggregation, no patient/physician identity); ICER QALY framework (methodology genuinely contested). — confirmed (medicaid.gov; icer.org). The Evidence Ladder (Level-3 public-data ceiling) is the book's own construct; see Chapter 11 references.
+

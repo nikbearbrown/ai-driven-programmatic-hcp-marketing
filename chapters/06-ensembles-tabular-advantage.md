@@ -312,3 +312,8 @@ Mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to draft the join logic and the four-quadrant evaluation harness for the Jardiance baseline; I decided which features leak and whether the scores were truly calibrated, because that requires the claims-lag knowledge of my specific Part D source and a held-out-time reliability check the model cannot certify."* (Mandatory.)
 
 **Series connection:** the failure mode here is **miscalibration-masquerading-as-accuracy** at tier **T6** — the same class of silent error that, uncaught, propagates into every downstream chapter of the One Drug case.
+
+## References (fact-check pass)
+
+1. Grinsztajn L., Oyallon E., Varoquaux G. "Why do tree-based models still outperform deep learning on tabular data?" arXiv:2207.08815 (NeurIPS 2022, Datasets & Benchmarks). CONFIRMED — title, authors, 45 datasets, ~10K-sample tree-SOTA finding all exact.
+2. Chen T., Guestrin C. "XGBoost: A Scalable Tree Boosting System." KDD 2016. CONFIRMED — attribution correct.

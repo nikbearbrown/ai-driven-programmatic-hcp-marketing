@@ -309,3 +309,15 @@ Mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to draft the Jardiance DCE profiles and the WEAT word sets; I decided that the brand-archetype WEAT is a proposal rather than a result and that no brand-IAT study exists, because the model treated component-wise validation as if it validated the full application and offered a fabricated citation for the gap."* (Mandatory.)
 
 **Series connection:** the failure mode is **construct-validity / embedding-bias** at tier **T6**, compounded by the hallucinated-citation risk that Chapter 10's harness is built to catch — the bridge from this chapter into the validation chapter.
+
+## References (fact-check pass)
+
+1. Mitchell A.P., Trivedi N.U., Gennarelli R.L. et al. "Are Financial Payments From the Pharmaceutical Industry Associated With Physician Prescribing? A Systematic Review." Ann Intern Med 2021;174(3):353–361, doi:10.7326/M20-5665. CONFIRMED.
+2. Yeh J.S. et al. "Association of Industry Payments to Physicians With the Prescribing of Brand-name Statins in Massachusetts." JAMA Intern Med 2016. CONFIRMED.
+3. Greenwald A.G., McGhee D.E., Schwartz J.L.K. "Measuring Individual Differences in Implicit Cognition: The Implicit Association Test." JPSP 74(6):1464–1480 (1998). CONFIRMED.
+4. Greenwald A.G., Poehlman T.A., Uhlmann E.L., Banaji M.R. "Understanding and Using the IAT: III. Meta-Analysis of Predictive Validity." JPSP 97(1):17–41 (2009). CONFIRMED — 122 reports, mean r=.274.
+5. Oswald F.L., Mitchell G., Blanton H., Jaccard J., Tetlock P.E. "Predicting Ethnic and Racial Discrimination: A Meta-Analysis of IAT Criterion Studies." JPSP 105(2):171–192 (2013). CONFIRMED — aggregate r≈.148.
+6. Caliskan A., Bryson J.J., Narayanan A. "Semantics derived automatically from language corpora contain human-like biases." Science 356(6334):183–186 (2017). CONFIRMED — WEAT.
+7. Wang R. et al. "Chinese Physicians' Preference for Prescribing Brand-Name vs. Generic: A Discrete Choice Experiment." Int J Health Policy Manag 2024 (PMC11806230). CONFIRMED — N=1,047.
+8. Bloudek L. et al. "Are Drugs Priced in Accordance With Value?" Value in Health 2021 (PMID 34119076). CONFIRMED — 81% of drugs exceeded the $100,000-per-QALY VBP.
+9. FitzGerald C., Hurst S. "Implicit bias in healthcare professionals: a systematic review." BMC Medical Ethics 2017;18:19. CONFIRMED.

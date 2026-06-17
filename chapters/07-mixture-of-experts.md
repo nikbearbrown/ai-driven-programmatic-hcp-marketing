@@ -340,3 +340,12 @@ Mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming exactly what the AI did and the one judgment it could not make. Example: "I used Claude to extract the vendor's stated answers to the six buyer questions for the Jardiance MoE pitch; I decided whether it was genuine MoE or relabeled stacking, and whether it could beat my baseline, because both require the two architectural distinctions and a benchmark the public text never supplied."* (Mandatory.)
 
 **Series connection:** the failure mode is **MoE-relabel laundering** at tier **T5** — relabeling that survives only because no one demanded the baseline comparison the rest of the series is built to provide.
+
+## References (fact-check pass)
+
+1. Shazeer N. et al. "Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer." arXiv:1701.06538 (2017). CONFIRMED — title, authors (incl. Hinton, Dean), 137B-parameter LSTM, noisy top-k gating all exact.
+2. Jacobs R.A., Jordan M.I., Nowlan S.J., Hinton G.E. "Adaptive Mixtures of Local Experts." Neural Computation 3(1):79–87 (1991). CONFIRMED — 1991 origin, authors, vowel-discrimination task exact.
+3. Fedus W., Zoph B., Shazeer N. "Switch Transformers." arXiv:2101.03961 (JMLR). CONFIRMED — top-1 routing, trillion-parameter scaling exact.
+4. Jiang A.Q. et al. "Mixtral of Experts." arXiv:2401.04088 (2024). CONFIRMED — 8 experts, top-2, 47B total / 13B active, Llama 2 70B & GPT-3.5 comparison all exact.
+5. DeepSeek-AI. "DeepSeek-V3 Technical Report." arXiv:2412.19437 (2024). CONFIRMED — 671B total / 37B active (5.5%), auxiliary-loss-free load balancing exact.
+6. Grinsztajn L., Oyallon E., Varoquaux G. arXiv:2207.08815 (NeurIPS 2022). CONFIRMED — tabular tree-SOTA result (see Ch6).

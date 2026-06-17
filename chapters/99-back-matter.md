@@ -13,7 +13,9 @@ This book was pressure-tested by the people who had to live inside its disciplin
 
 ## About the Author
 
-**Humanitarians AI** — author of record and co-publisher of this book — is a 501(c)(3) nonprofit organization (EIN 33-1984805; State ID 001846362), founded in 2019 and based in Boston. Through its **Fellows Program** it connects data-capable people — including international graduates building production-scale AI with public evidence of real work — to real projects, experienced mentors, and the *Irreducibly Human* curriculum, which asks what people should get better at as machines improve. This book is a product of that Fellows pipeline, developed under the direction of Nik Bear Brown. The methods in it — public-data research under an IP firewall, two-axis evidence grading, pre-registered kill criteria — are the methods the Fellows are trained to practice. [humanitarians.ai](https://www.humanitarians.ai/) · [info@humanitarians.ai](mailto:info@humanitarians.ai)
+**Humanitarians AI** — author of record and co-publisher of this book — is a 501(c)(3) nonprofit organization (EIN 33-1984805; State ID 001846362), founded in 2019 and based in Boston.
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/99-back-matter-assertions.md -->
+ Through its **Fellows Program** it connects data-capable people — including international graduates building production-scale AI with public evidence of real work — to real projects, experienced mentors, and the *Irreducibly Human* curriculum, which asks what people should get better at as machines improve. This book is a product of that Fellows pipeline, developed under the direction of Nik Bear Brown. The methods in it — public-data research under an IP firewall, two-axis evidence grading, pre-registered kill criteria — are the methods the Fellows are trained to practice. [humanitarians.ai](https://www.humanitarians.ai/) · [info@humanitarians.ai](mailto:info@humanitarians.ai)
 
 **Nik Bear Brown** — Curriculum Architect and Series Editor — built the *Irreducibly Human* curriculum this book belongs to and directs the Fellows pipeline that produced it. He is an Associate Teaching Professor at Northeastern University's College of Engineering, where he teaches artificial intelligence, data science, statistics, and AI fluency under a single through-line: *learn AI by doing AI* — specifying, delegating, auditing, and taking responsibility, rather than pressing a button and accepting the output. He holds a PhD and MS in Computer Science from UCLA (computational and systems biology, with minors in AI and statistics), an MS in Information Design and Data Visualization and an MBA from Northeastern, and a BA in Biochemistry and Molecular Biology from UC Santa Cruz. His work for this book sits where commercial and claims data meet computational skepticism: how to read a pharmaceutical-marketing stack fluently, join public datasets like Open Payments and Medicare Part D, and still refuse to call a measured difference between selected groups a measured effect of the intervention. He founded Humanitarians AI, the 501(c)(3) nonprofit whose Fellows wrote and ran the case studies here, and his consistent argument — across this series — is that in a field where polish is the medium, AI fluency is a discipline of checking the claim, not a license to ship it. [nikbearbrown.com](https://www.nikbearbrown.com) · [bearbrown.co](https://www.bearbrown.co/) · [humanitarians.ai](https://www.humanitarians.ai/) · [bear@bearbrown.co](mailto:bear@bearbrown.co)
 
@@ -68,6 +70,8 @@ O'Brien, Mary Ann, et al. "Educational Outreach Visits: Effects on Professional 
 Ries, Eric. *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses.* New York: Crown Business, 2011.
 
 Rome, Benjamin N., et al. "Academic Detailing Interventions and Prescribing Practices: A Systematic Review." *JAMA Network Open* (2025). [verify — issue/page pending final trace]
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/99-back-matter-assertions.md -->
+
 
 *Sorrell v. IMS Health Inc.*, 564 U.S. 552 (2011).
 
@@ -138,6 +142,17 @@ A working reference for the principal terms this book uses. One line each; see t
 **MLR (Medical-Legal-Regulatory) review** — the mandatory cross-functional review of promotional content; the lab flags the trigger and routes adjudication to counsel. *(Chapter 11.)*
 
 **One Drug, End to End** — the book's running project: a single branded drug carried through every chapter, from split-agency map to partner handoff brief. *(All chapters.)*
+
+---
+
+## References (fact-check pass)
+
+The following back-matter items were checked during the 2026-06-17 fact-check pass:
+
+1. Humanitarians AI — 501(c)(3) status, 2019 founding, Boston location, and Nik Bear Brown as founder CONFIRMED (humanitarians.ai). The specific EIN (33-1984805) and State ID (001846362) were NOT independently web-locatable via IRS TEOS / ProPublica and are flagged UNVERIFIED; confirm against the IRS determination letter before print.
+2. Nik Bear Brown, Associate Teaching Professor, Northeastern University College of Engineering — affiliation CONFIRMED. Other biographical/degree claims treated as AI-ONLY, not independently verified.
+3. Rome, B. N., et al., *JAMA Network Open* (2025) — article CONFIRMED to exist (published Jan 8, 2025, article e2828799), but the cited title differs from the published title; correct to "Academic Detailing Interventions and **Evidence-Based** Prescribing: A Systematic Review" and complete the article/page number. In-text [verify] flag resolves with this correction.
+4. Spot-checked method-canon and pharma-economics References entries (Callaway–Sant'Anna 2021; Goodman-Bacon 2021; Dafny–Ody–Schmitt 2017 / NBER w22745; Dafny–Ho–Kong NBER w29735 2022; Grinsztajn et al. NeurIPS 2022 / arXiv:2207.08815) — all CONFIRMED.
 
 ---
 

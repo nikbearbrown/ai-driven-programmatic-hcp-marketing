@@ -108,6 +108,8 @@ The canonical case is **GSK Study 329** — paroxetine in adolescents with depre
 
 The pattern generalizes. Turner and colleagues, comparing FDA-registered antidepressant trials with the published literature, found that nearly all FDA-positive trials were published (37 of 38), while FDA-negative or -questionable trials were largely either left unpublished or published in a way that conveyed a positive outcome (of 36 such trials, only 3 were published as not-positive); correcting for this selective publication shrank the apparent effect size by roughly a third (Turner et al., *NEJM* 2008;358:252–260). The drugs still work — but less well than the unadjusted literature implied. Publication-bias checking in meta-analyses is also far from universal. [verify — unconfirmed: a specific "~31% of medical meta-analyses check for publication bias" figure (attributed to Ritchie, *Science Fictions*, 2020) did not resolve to a primary source.]
 
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/05-the-evidence-problem-assertions.md -->
+
 The lesson: the problem is not only the vendor case study. The evidence base is contaminated at its source wherever the funded party controls the pipeline. Skepticism is not anti-industry. It is the price of admission to *any* claim, including the ones that appear in journals.
 
 ---
@@ -347,3 +349,13 @@ Mark each Pass / Fail / Cannot-determine with one line of evidence:
 **What to do with your findings:** Pass → use the map in your handoff. One fail → revise that row and re-run. Multiple fails, or any hallucinated citation → grade the claims yourself against the two ladders; this is a "When NOT to Use AI" moment, because the grade and the citation check are the chapter's irreducible human work.
 **AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "extracted and tabled the claims and drafted the grading scaffold") and how you used it, plus one thing it couldn't determine (e.g., "whether the DeJong meals study is genuinely stronger evidence than the vendor's lift figure, which I judged myself, and which citations were real, which I verified by opening each").
 **Series connection:** Trains detection of **hallucinated citation** and **fluent-but-wrong grading** under **T5 Causal** judgment — the discipline of treating an unopened source as nonexistent and an exposed/unexposed difference as not-yet-an-effect.
+
+## References (fact-check pass)
+
+1. Mitchell AP, Trivedi NU, Gennarelli RL, et al. Are Financial Payments From the Pharmaceutical Industry Associated With Physician Prescribing? A Systematic Review. Ann Intern Med. 2021;174(3):353–361. https://www.acpjournals.org/doi/10.7326/M20-5665
+2. Wazana A. Physicians and the pharmaceutical industry: is a gift ever just a gift? JAMA. 2000;283(3):373–380.
+3. DeJong C, Aguilar T, Tseng C, Lin GA, Boscardin WJ, Dudley RA. Pharmaceutical Industry–Sponsored Meals and Physician Prescribing Patterns for Medicare Beneficiaries. JAMA Intern Med. 2016;176(8):1114–1122. https://pubmed.ncbi.nlm.nih.gov/27322350/
+4. Rome BN, et al. Academic Detailing Interventions and Evidence-Based Prescribing: A Systematic Review. JAMA Netw Open. 2025;8(1). https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12543401/
+5. O'Brien MA, Rogers S, Jamtvedt G, et al. Educational outreach visits: effects on professional practice and health care outcomes. Cochrane Database Syst Rev. 2007;(4):CD000409.
+6. Le Noury J, Nardo JM, Healy D, et al. Restoring Study 329: efficacy and harms of paroxetine and imipramine in treatment of major depression in adolescence. BMJ. 2015;351:h4320. https://www.bmj.com/content/351/bmj.h4320
+7. Turner EH, Matthews AM, Linardatos E, Tell RA, Rosenthal R. Selective Publication of Antidepressant Trials and Its Influence on Apparent Efficacy. N Engl J Med. 2008;358:252–260. https://www.nejm.org/doi/full/10.1056/NEJMsa065779

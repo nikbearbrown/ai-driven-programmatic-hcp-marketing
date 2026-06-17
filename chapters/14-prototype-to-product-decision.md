@@ -339,3 +339,15 @@ For the pasted handoff brief, mark each Pass / Fail / Cannot-determine:
 **AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your capstone Chapter 14 work and the one judgment it could not make — for example, that you used Claude to assemble the integrated Cardizem-X case study and draft the handoff brief from your four cards, but you reached the verdict and held the patient-welfare veto yourself, because the model defaults to BUILD on a commercial win and cannot judge whether the partner could defend the recommendation to a regulator.* (Mandatory.)
 
 **Series connection:** the failure mode is **welfare-gate bypass / automation bias**, and the validating judgment is the series-terminal **T7 Wisdom** — true evidence status, signal-vs-noise, and partner-defensibility — held to a **T6 Collective** standard, since the welfare veto and the handoff are a standard the lab and counsel own together. This is where the One Drug project ends: one drug, carried end to end, decided by a human.
+
+---
+
+## References (fact-check pass)
+
+The following sources cited in this chapter were confirmed during the 2026-06-17 fact-check pass:
+
+1. Grinsztajn, L., Oyallon, E., & Varoquaux, G. (NeurIPS 2022; arXiv:2207.08815) — tree ensembles vs. deep learning on medium tabular data; confirmed.
+2. Dafny, L., Ody, C., & Schmitt, M. "When Discounts Raise Costs..." *AEJ: Economic Policy* 9(2):91–123 (2017) — coupon → bioequivalent-generic-suppression mechanism; confirmed.
+3. Co-pay coupons prohibited for Medicare beneficiaries (federal Anti-Kickback Statute), with state variation on Medicaid/commercial — the identification basis of the Dafny papers (incl. Dafny, Ho & Kong, NBER WP 29735, 2022); confirmed.
+4. Compliance surfaces (MLR; FDA fair-balance 21 CFR 202.1; Sunshine Act/Open Payments; HIPAA 164.514/164.508) — verified in Chapter 11. The Evidence Ladder and four-stage pipeline are the book's own constructs, applied consistently across Chapters 11, 13, and 14.
+

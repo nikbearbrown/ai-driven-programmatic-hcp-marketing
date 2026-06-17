@@ -69,6 +69,8 @@ Make it concrete. Two cardiologists. Identical patient mixes — same age distri
 
 Whether this actually describes how real propensity models are weighted is, honestly, an open empirical question. Including a feature is not the same as weighting it heavily. But the question is answerable on public data — Open Payments is public, Medicare Part D prescribing is public — and the fact that it has not been systematically examined is itself worth noting. [The susceptibility-proxy construct is the book's position, flagged not asserted — see pantry; it is the seed for the Chapter 13 Track D proxy-discrimination study.]
 
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/03-the-hcp-identity-graph-assertions.md -->
+
 ---
 
 There is a second limit on this whole apparatus, and it operates not at the feature level but at the data layer underneath everything.
@@ -311,3 +313,10 @@ Mark each Pass / Fail / Cannot-determine with one line of evidence:
 **What to do with your findings:** Pass → use the classified vector. One fail → revise that feature's label and re-run. Multiple/uncertain → reclassify the features yourself against the chapter's three-category framework; this is a "When NOT to Use AI" moment, because the need-vs-targetability call is the chapter's central human judgment.
 **AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "drafted the synthetic profiles and feature classification") and how you used it, plus one thing it couldn't determine (e.g., "whether Open Payments is actually heavily weighted in real models, which is an open question I flagged for public-data testing rather than asserting").
 **Series connection:** Trains detection of **ecological inference / missing-ground-truth** errors under **T4 Metacognitive** judgment — refusing to convert an untested feature weight into a claim about patient need.
+
+## References (fact-check pass)
+
+1. Sorrell v. IMS Health Inc., 564 U.S. 552 (2011). https://supreme.justia.com/cases/federal/us/564/552
+2. Public Citizen Health Research Group. Health Letter, November 2012. https://www.citizen.org/wp-content/uploads/hl_201211.pdf
+3. IQVIA. OneKey HCP Reference Data. https://www.iqvia.com/solutions/commercialization/data-and-information-management/onekey/onekey-hcp-reference-data
+4. U.S. Department of Health and Human Services. HIPAA Privacy Rule, De-identification Standard, 45 CFR §164.514(b) (Safe Harbor and Expert Determination). https://www.hhs.gov/hipaa/for-professionals/privacy/special-topics/de-identification/index.html

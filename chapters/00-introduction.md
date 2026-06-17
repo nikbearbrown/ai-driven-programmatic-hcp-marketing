@@ -91,3 +91,7 @@ Everything above Evidence Level 3 — clean causal identification, deployed mode
 *Humanitarians AI · Bear Brown LLC*
 *bear@bearbrown.co · humanitarians.ai*
 ʕ •ﻌ•ʔ
+
+## References (fact-check pass)
+
+1. Dafny L, Ody C, Schmitt M. When Discounts Raise Costs: The Effect of Copay Coupons on Generic Utilization. American Economic Journal: Economic Policy. 2017;9(2):91–123. https://www.aeaweb.org/articles?id=10.1257/pol.20150588

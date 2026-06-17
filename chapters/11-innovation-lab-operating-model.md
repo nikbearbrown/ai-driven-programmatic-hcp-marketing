@@ -346,3 +346,19 @@ For the pasted brief or hypothesis set, mark each Pass / Fail / Cannot-determine
 **AI Use Disclosure prompt:** *Write two sentences naming what an AI tool did in your Chapter 11 work and the one judgment it could not make — for example, that you used Claude to cluster ten findings and draft three hypothesis-test-kill triples for Cardizem-X, but you set and held the Evidence Ladder level yourself, because the model cannot know whether a public-data result genuinely cleared the baseline or merely sounded like it did.* (Mandatory.)
 
 **Series connection:** the failure mode is **ladder-level inflation / firewall breach**, and the validating judgment is **T7 Wisdom** — the human alone holds the ceiling and the kill, with compliance routing at **T6 Collective**.
+
+---
+
+## References (fact-check pass)
+
+The following sources cited in this chapter were confirmed during the 2026-06-17 fact-check pass:
+
+1. Bogers, M., Chesbrough, H., & Moedas, C. "Open Innovation: Research, Practices, and Policies." *California Management Review* 60(2):5–16 (2018). — quoted definition and citation confirmed.
+2. McKinsey & Company, "Innovation sourcing in biopharma." — ~45% externally-sourced (top-20 by R&D budget, ~2020) confirmed.
+3. Takeda Center for External Innovation — origin in 2015–2016 R&D restructuring confirmed (takeda.com).
+4. 21 CFR 202.1 — prescription-drug advertising fair-balance / substantiation requirement confirmed (eCFR).
+5. Physician Payments Sunshine Act / CMS Open Payments — enacted 2010 (ACA §6002), reporting effective Aug 2013; 2025 de minimis thresholds $13.46 single / $134.54 aggregate confirmed (cms.gov).
+6. 45 CFR 164.514(b) (HIPAA Safe Harbor de-identification) and 45 CFR 164.508(a)(3) (marketing authorization) — confirmed (eCFR / HHS).
+7. NASA Technology Readiness Levels (TRL 1–9) and OCEBM 2011 Levels of Evidence — both source frameworks for the Evidence Ladder confirmed to exist (nasa.gov; cebm.ox.ac.uk). The Evidence Ladder itself is the book's own construct and is not externally citable.
+8. Ries, *The Lean Startup* (2011); Cooper, *Winning at New Products* / Stage-Gate (2011) — correctly attributed.
+

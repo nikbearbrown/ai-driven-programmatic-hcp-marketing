@@ -53,3 +53,7 @@ Why us? Because this is the kind of question Humanitarians AI's Fellows are buil
 > **This book is that lab's method written down.** Chapter 11 is literally the external-innovation-lab operating model; Chapters 12 and 13 are how a Fellow runs a public-data research portfolio under the firewall; Chapter 14 is the one-page brief that turns a prototype into a go/kill decision. If you want to see what working with the lab looks like before you ever talk to us, read those four chapters and run the exercises. That *is* the engagement.
 
 A word on what this book does **not** cover. It is not a HIPAA or regulatory-compliance manual — it flags where MLR review, fair balance, the Sunshine Act, and HIPAA are triggered, but it routes the adjudication to counsel rather than rendering legal judgments. It is not a deep-learning textbook; the architecture chapters are about *what works on tabular HCP data and what is merely marketing*, not about training large models from scratch. It does not teach media buying, creative production, or the operational mechanics of running a campaign. And it takes no position on whether any individual drug should be promoted — it teaches you to ask whether the *evidence* for a promotional claim is causal, and whether the prescribing change it produces is good for the patient. Those last two questions are the whole book. Everything else is in service of them.
+
+## References (fact-check pass)
+
+No references added by fact-check pass.

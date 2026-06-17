@@ -67,7 +67,9 @@ The consensus implementation pattern is Human-in-the-Loop: AI does the quantitat
 
 Now hold two numbers in tension and resist resolving them.
 
-McKinsey has cited a 50 to 65 percent reduction in regulatory-submission timelines at some companies through AI-enabled automation and workflow redesign (McKinsey, life-sciences insights, mckinsey.com). An MIT report — "The GenAI Divide: State of AI in Business 2025," from the MIT NANDA initiative — found that roughly 95 percent of enterprise generative-AI pilots deliver no measurable P&L impact (MIT NANDA, 2025). Both circulate without fully transparent, comparable methodology. They appear to describe different populations, different task definitions, or different stages of the same adoption curve. The honest move is to present both, attribute both, and treat neither as settled.
+McKinsey has cited a 50 to 65 percent reduction in regulatory-submission timelines at some companies through AI-enabled automation and workflow redesign (McKinsey, life-sciences insights, mckinsey.com).
+
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/04-what-todays-ai-stack-does-assertions.md --> An MIT report — "The GenAI Divide: State of AI in Business 2025," from the MIT NANDA initiative — found that roughly 95 percent of enterprise generative-AI pilots deliver no measurable P&L impact (MIT NANDA, 2025). Both circulate without fully transparent, comparable methodology. They appear to describe different populations, different task definitions, or different stages of the same adoption curve. The honest move is to present both, attribute both, and treat neither as settled.
 
 A third datum reframes the whole thing. Promotional-content production keeps rising — Veeva's 2025 Pulse data reports pharma companies producing roughly 20 percent more content each year — while about 77 percent of field content is never used by reps (Veeva Pulse, 2025). Volume is up. Value is not obviously up. The real constraint in MLR is not speed — it is governance and relevance. If 77 percent of what clears review never gets used, faster generation makes the governance problem worse, not better. "50% faster MLR" is an answer to a question nobody asked.
 
@@ -82,7 +84,9 @@ So when a company reports faster MLR review times, the audit questions write the
 
 ## Omnichannel — coordination, not ubiquity
 
-Physician access changed permanently after COVID. Industry access-tracking (ZS AccessMonitor and similar trackers) has documented a long downward slide — by the mid-2010s only a minority of physicians were fully "rep-accessible," and more than half now restrict access to some degree, with a substantial share limiting access to a single brand. [verify — unconfirmed: the specific "45% available / ~30% single-brand-restricted by early 2024" figures did not resolve to a current ZS primary release; the documented trend is rising restriction.] The channel mix shifted accordingly: in-person reps declining, remote detailing normalized, email high-volume but low-engagement, EHR point-of-care the fastest-growing and highest-conversion channel, endemic digital (Medscape, Doceree's physician network) high-trust but moderate-scale, programmatic open web broad-reach but low-conversion.
+Physician access changed permanently after COVID. Industry access-tracking (ZS AccessMonitor and similar trackers) has documented a long downward slide — by the mid-2010s only a minority of physicians were fully "rep-accessible," and more than half now restrict access to some degree, with a substantial share limiting access to a single brand. [verify — unconfirmed: the specific "45% available / ~30% single-brand-restricted by early 2024" figures did not resolve to a current ZS primary release; the documented trend is rising restriction.]
+
+<!-- FACT-CHECK FLAG: UNVERIFIED — see factchecks/04-what-todays-ai-stack-does-assertions.md --> The channel mix shifted accordingly: in-person reps declining, remote detailing normalized, email high-volume but low-engagement, EHR point-of-care the fastest-growing and highest-conversion channel, endemic digital (Medscape, Doceree's physician network) high-trust but moderate-scale, programmatic open web broad-reach but low-conversion.
 
 Omnichannel orchestration is the coordination of all those channels for a single HCP so the brand experience is coherent rather than overwhelming. NBA decides which channel each physician is most responsive to, suppresses channels where they are not, and sequences messages so the rep call and the EHR trigger and the email reinforce each other rather than firing simultaneously and competing for the physician's attention.
 
@@ -338,3 +342,10 @@ Mark each Pass / Fail / Cannot-determine with one line of evidence:
 **What to do with your findings:** Pass → use the inventory. One fail → fix that row's verdict and re-run. Multiple/uncertain → re-run the five-question audit yourself on the disputed tools; this is a "When NOT to Use AI" moment, because the maturity verdict and circularity flag are the chapter's core human skill.
 **AI Use Disclosure prompt (mandatory):** Two sentences — what the AI produced (e.g., "drafted the tool inventory and ladder placements") and how you used it, plus one thing it couldn't determine (e.g., "whether a vendor's claimed lift for my drug is real, which needs a holdout I noted is absent").
 **Series connection:** Trains detection of **vendor-claim laundering** under **T4 Metacognitive** judgment — keeping "capability is real" and "effect is proven" as two separate sentences.
+
+## References (fact-check pass)
+
+1. Grinsztajn L, Oyallon E, Varoquaux G. Why do tree-based models still outperform deep learning on typical tabular data? NeurIPS 2022 (Datasets & Benchmarks). https://arxiv.org/abs/2207.08815
+2. MIT Project NANDA. The GenAI Divide: State of AI in Business 2025. July 2025. https://mlq.ai/media/quarterly_decks/v0.1_State_of_AI_in_Business_2025_Report.pdf
+3. King & Spalding. HHS and FDA Declare "Crackdown" on Drug Advertising and Promotion. 2025. https://www.kslaw.com/news-and-insights/hhs-and-fda-declare-crackdown-on-drug-advertising-and-promotion
+4. Agrawal A, Gans J, Goldfarb A. Prediction Machines: The Simple Economics of Artificial Intelligence. Harvard Business Review Press, 2018.
