@@ -1,180 +1,155 @@
 # Chapter 6 — Ensembles and the Tabular-Data Advantage
+*Why the boring model is hard to beat, and why that is the most useful thing you can know.*
 
-## 1. Overview
+The number came back at 0.94. I had built the unglamorous thing first — an XGBoost model scoring each physician's propensity to start prescribing a brand, trained on public data, calibrated outputs, ranked target list. Clean pipeline. Sensible features. And an AUC of 0.94, which on a real targeting problem would be extraordinary. The kind of number that makes a vendor's "AI platform" look like an expensive way to do worse.
 
-This chapter builds the baseline. By the end of it you will be able to explain the three ways multiple models get combined — bagging, boosting, and stacking — and why diversity among them is not an aesthetic preference but a mathematical necessity with a hard floor. You will be able to justify, from peer-reviewed evidence, why gradient-boosted tree ensembles (XGBoost, LightGBM, CatBoost) are the practical state of the art for medium-sized tabular data, which is exactly what NPI-level propensity prediction is. And you will learn to evaluate such a model *honestly* — calibration alongside discrimination, out-of-time validation instead of random splits, subgroup robustness — and to spot the pharma-specific landmine that makes a model look brilliant offline and collapse in production: leakage from claims-data lag. The reason this matters is strategic, not just technical. The ensemble baseline is the bar. Every fancier claim in the next chapter — "we run a Mixture of Experts," "our deep model beats your trees" — has to clear it. The emotional takeaway the chapter is built to produce: *the boring thing is hard to beat.* One honest hedge, stated up front so the book does not age badly: tabular deep learning (notably TabPFN v2, 2024/25) is genuinely narrowing the gap. Trees remain the correct *baseline*; "trees always win" is a claim with a shelf life, and we will mark it as such.
+Then I went looking for what was too good.
 
-## 2. Learning Objectives
+The failure-first instinct this book keeps returning to is not pessimism; it is the only reliable way to learn what a model is actually doing. And what this model was doing, I found, was reading a smudged copy of the answer. One of my features — a recent-fill flag — had been computed *after* the prediction timestamp. It postdated the moment at which I was supposed to be predicting. The model was not forecasting future prescribing. It was encoding a bookkeeping artifact of future prescribing.
 
-1. **(Understand)** Explain bagging, boosting, and stacking, and the bias–variance–covariance decomposition that makes ensemble diversity load-bearing.
-2. **(Evaluate)** Justify gradient-boosted tree ensembles as state-of-the-art on medium tabular data (Grinsztajn et al., NeurIPS 2022), and state honestly where tabular deep learning is closing the gap.
-3. **(Apply · Part B)** Specify an ensemble baseline and an honest evaluation plan for a propensity task in your own research thread — calibration, out-of-time validation, subgroup robustness, and a leakage check.
+I fixed the timestamp, cut the feature, and ran it again. The AUC dropped to 0.78.
 
-## 3. Opening Case — The Baseline That Leaks
-
-You build the unglamorous thing first: an XGBoost model that scores each physician's propensity to start prescribing a brand, trained on public data — CMS Open Payments plus Medicare Part D prescriber records, with behavioral and demographic features. The pipeline is clean: features in, gradient-boosted trees, a calibrated probability out, a ranked target list. You run cross-validation and the AUC comes back at 0.94. You are, briefly, delighted. A 0.94 AUC on a real targeting problem would be a genuinely strong baseline — the kind of number that makes a vendor's "AI platform" look like an expensive way to do worse.
-
-Then you check the failure-first instinct this book drills into you, and you go looking for what is too good. You find it. One of your features is a recent-fill flag that was computed *after* the prediction timestamp — it postdates the moment at which you are supposed to be predicting. The model is not predicting future prescribing; it is reading a smudged copy of the answer. This is **target leakage**, and it is the most common way a tabular model lies to its builder.
-
-You fix it: define a strict as-of prediction timestamp and admit only features knowable *before* it. The AUC drops to 0.78. That number is real, and it is the one a vendor claim must actually beat. The dead end taught the lesson the chapter opens with: *a baseline that looks brilliant offline is, more often than not, leaking.* There is a second, subtler version of this trap that comes straight from pharma's data plumbing, and it is the reason this opening is not just a generic ML cautionary tale — we return to it in §4.4.
-
-## 4. Core Sections
-
-### 4.1 The three ensemble paradigms
-
-"Ensemble" just means combining several models. There are three canonical ways to do it, and you should know each by its originating idea.
-
-**Bagging** (Breiman, 1996): train many independent models on bootstrap samples of the data and average or vote their outputs. This primarily reduces **variance** — it averages out each model's overfitting. The **Random Forest** (Breiman, 2001) is bagging plus a twist: at each tree split, only a random subset of features is considered, which decorrelates the trees and pushes the variance down further.
-
-**Boosting** (AdaBoost: Freund & Schapire, 1997; Gradient Boosting: Friedman, 2001): train models *sequentially*, each one correcting the errors of its predecessors. This reduces both **bias and variance** — it is more powerful than bagging, and correspondingly more sensitive to noise and outliers. **XGBoost** (Chen & Guestrin, 2016), **LightGBM**, and **CatBoost** are the dominant modern implementations, and they are the practical default for structured tabular work.
-
-**Stacking** (Wolpert, 1992): train several diverse base models, then train a *meta-learner* on their out-of-fold predictions; the meta-learner learns which base model to trust in which region of the input space. Remember this one — it is the punchline of Chapter 7, because **what most "Mixture of Experts" pharma platforms actually run is stacking**, not MoE.
-
-### 4.2 Why diversity is mathematically load-bearing
-
-Diversity among ensemble members is not a stylistic choice; it is forced by the error math. Ensemble error decomposes as:
-
-> error = bias² + (1/N)·var + (1 − 1/N)·covar
-
-where N is the ensemble size, *var* is the average individual-model variance, and *covar* is the average pairwise covariance between model errors. Watch what happens as you add members. As N grows, the variance term (1/N)·var shrinks toward zero — more models wash out individual noise. But the covariance term (1 − 1/N)·covar grows toward *covar* and **sets a floor**. If your models are perfectly correlated, their covariance equals their variance, and adding more of them buys you nothing. The benefit of a bigger ensemble is bounded by how *independent* its members are.
-
-That is why diversity is load-bearing rather than decorative. But here is the catch that Chapter 7 turns on: ensemble diversity is **manufactured**, not emergent. You generate it with different seeds, different data subsets, different feature sets, different algorithms — all variations on the *same data distribution*. Models trained on the same data learn the same regularities and share the same blind spots; they make correlated errors on the same hard cases no matter how different the algorithms look. This manufactured-diversity limit is precisely what Chapter 7's MoE claims to escape through routing-induced (*emergent*) specialization. Note the tension now; do not resolve it here.
-
-### 4.3 Why trees dominate tabular data — the state-of-the-art claim
-
-Here is the evidence that makes the ensemble baseline more than a placeholder. Grinsztajn, Oyallon, and Varoquaux, in "Why do tree-based models still outperform deep learning on typical tabular data?" (**NeurIPS 2022**, Datasets & Benchmarks track), benchmarked deep-learning methods against tree-based methods across **45 tabular datasets**. The finding: **tree-based models remain state-of-the-art on medium-sized tabular data (around 10,000 samples)** — and that holds even when you set aside trees' large speed advantage.
-
-The paper identifies three reasons, and each maps onto pharma data:
-
-1. **Trees are natively robust to uninformative features.** Real tabular data is full of irrelevant columns; tree splits simply never select them, while neural nets must learn to ignore them. NPI feature vectors are full of weakly informative signals — trees shrug them off.
-2. **Neural nets struggle with irregular, non-smooth target functions.** Tabular relationships are often jagged (a threshold effect at a particular decile, a discontinuity at a payment cutoff); tree splits represent those natively, while neural nets bias toward smooth functions.
-3. **The best tabular methods are themselves ensemble methods, with a decision tree as the weak learner.** The paper's own conclusion: "the best methods on tabular data… are ensemble methods."
-
-The pharma relevance is direct. NPI-level propensity is a *structured tabular* problem — physician features, prescribing history, Open-Payments history, demographics, behavioral signals. This is exactly the regime where gradient-boosted trees beat neural architectures, **including MoE**. So the ensemble baseline is not a stand-in for something better that you will swap in later. On this problem, it may *be* the best architecture available — which is what makes "we use a fancier model" a claim that owes you a benchmark, not the benefit of the doubt.
-
-### 4.4 Honest evaluation — and the claims-lag landmine
-
-A propensity score is not a classroom accuracy number; it feeds a spend decision. So evaluate it the way the decision requires.
-
-- **Discrimination** (AUC / AUPRC): can the model rank prescribers above non-prescribers? Necessary but *not sufficient* — a model can rank well and still be miscalibrated.
-- **Calibration**: do predicted probabilities match observed rates? Check with reliability curves and the Brier score. This is load-bearing for two reasons: downstream bid and spend decisions use the probability as a *quantity* (a 0.8 had better mean 80%), and the uplift meta-learners of Chapter 8 use these scores as base learners, so miscalibration propagates into your causal estimates.
-- **Out-of-time validation**: split by *time*, not by random rows. Pharma data drifts; random cross-validation leaks the future into the training fold and flatters the model. Train on earlier periods, test on later ones.
-- **Subgroup robustness**: evaluate by specialty, decile, and geography. A model strong on average can be useless on the one segment the campaign actually targets.
-
-Now the pharma-specific landmine, which the opening case previewed. **Claims data arrives with a lag — weeks to months — and is revised after the fact.** That produces two distinct failures:
-
-1. **Target leakage** (the opening case): a feature that encodes the outcome because it postdates the prediction point — a recent-fill flag, a "treated" indicator. Spectacular offline AUC, production collapse. The fix is a strict as-of timestamp and features knowable only *before* it.
-2. **The claims-lag illusion of lift**: because fills are *recorded* late, a physician's "post-exposure" prescribing window can include scripts that were actually *written before* exposure but recorded after. The apparent response is inflated by a bookkeeping artifact. This is not only a modeling bug — it feeds directly into the Chapter 5 attribution problem and the Chapter 8 incrementality problem. A "lift" can be partly an accounting lag.
-
-This is why the chapter leads with failure: the most transferable practitioner lesson here is not "boosting beats bagging," it is "your offline number is probably leaking, and in pharma the leak often comes from the calendar."
-
-### 4.5 The honest hedge — tabular deep learning is catching up
-
-If this chapter only said "trees always win," it would age into a falsehood, so here is the calibrated version. Newer tabular deep-learning methods — FT-Transformer, SAINT, and especially **TabPFN and TabPFN v2 (2024/25)** — narrow the gap on some benchmarks, particularly on small-sample problems and where large-scale pre-training transfers well [verify the 2026 state of these results in the accuracy pass]. The Grinsztajn result remains the right anchor for *medium* tabular data, but it is no longer unchallenged across the board.
-
-The honest framing is therefore not "trees are unbeatable" but "trees are the correct *default and baseline*; tabular DL is an active, not-yet-default frontier." That distinction is robust to the next few years of results: even if a deep tabular model eventually wins on your problem, you would only know it *by beating the tuned tree baseline you built first.* The baseline keeps its job either way. (This is a tracked aging-risk item for the book's annual review.)
-
-## 5. Worked Example — Building the Baseline That Survives
-
-**Task.** Build an NPI-propensity baseline on public data that a vendor's "AI platform" claim would have to beat — and make it honest.
-
-**Step 1 — assemble the substrate.** Join CMS Open Payments (payment/meal history per physician) to Medicare Part D prescriber data (prescribing volumes), keyed on NPI, with specialty and geography as features. The target: did the physician start (or increase) prescribing the brand in the next period?
-
-**Step 2 — set the as-of timestamp first.** Before touching a model, fix the prediction point and admit only features knowable before it. This is the single most important step and the one most often skipped.
-
-**Step 3 — fit and tune the ensemble.** Calibrated XGBoost (or LightGBM), tuned with time-respecting cross-validation.
-
-**Step 4 — evaluate the way the decision requires.** AUC *and* a reliability curve *and* Brier score; out-of-time test split; subgroup breakdown by specialty and decile.
-
-**The dead end (worth keeping).** My first version scored 0.94 and I nearly shipped it as the baseline. The recent-fill feature was leaking. After fixing the as-of timestamp the model came back at 0.78. A second, subtler problem surfaced in the out-of-time split: the high decile subgroup looked fine, but the model was near-useless on low-decile physicians — the exact segment a "growth" campaign cares about. Average AUC had hidden a segment failure.
-
-**The lesson.** The deliverable is not "a model with 0.94 AUC." It is "a *calibrated, time-validated, leakage-checked, subgroup-audited* model at 0.78 AUC, with a documented weakness on low deciles" — a baseline you can defend and a bar a fancier claim must clear.
-
-**The limit.** This baseline tells you *who is likely to prescribe.* It does **not** tell you *whom an intervention would change* — propensity is not incrementality. A perfect propensity model is still not an intervention, which is exactly the inversion Chapter 8 forces. As *Prediction Machines* puts it, a good prediction is not a good decision; the baseline is the prediction, not the decision.
-
-## 6. Common Misconceptions
-
-- **"A high offline AUC means a good model."** Usually it means leakage. Check the as-of timestamp before you celebrate.
-- **"Calibration is a detail; AUC is what matters."** For a spend decision and for downstream uplift estimation, calibration is co-equal with discrimination.
-- **"Random cross-validation is fine."** Not on time-structured pharma data — it leaks the future. Split by time.
-- **"More models in the ensemble always helps."** Only if they are diverse; the covariance floor bounds the benefit of correlated members.
-- **"Deep learning must beat trees on tabular data because it's newer."** On medium tabular data, trees are the documented state of the art (Grinsztajn 2022); tabular DL is closing the gap but is not the default.
-- **"A strong propensity model is a strong intervention."** Propensity ≠ incrementality (Chapter 8).
-
-## 7. Evidence Check & Compliance and Patient-Welfare Check
-
-**Evidence check:**
-- *Settled, peer-reviewed:* gradient-boosted trees as state of the art for medium tabular data (Grinsztajn et al., NeurIPS 2022); the bias–variance–covariance decomposition (textbook); the originating papers for bagging/boosting/stacking (Breiman, Friedman, Freund & Schapire, Wolpert, Chen & Guestrin).
-- *Contested / evolving:* whether tabular deep learning (TabPFN v2, 2024/25) now matches or beats trees on some problems — narrowing but not settled; flagged for the aging review. `[verify 2026 state.]`
-- *Hypothetical / illustrative:* the 0.94→0.78 AUC figures in the opening and worked example are illustrative of the leakage failure mode, not measurements of a specific dataset.
-- *Gap:* no pharma-specific *public* benchmark of XGBoost-vs-MoE on NPI propensity exists — that is exactly the Chapter 13 Track C study. This chapter exposes the gap; the lab fills it.
-
-**Compliance and patient-welfare check:** a propensity model's *features* carry the welfare risk. If the model encodes proxies for physician *susceptibility* (responsiveness to promotion) rather than patient *clinical need*, then optimizing the score optimizes influence-ability, not appropriate care — the susceptibility concern from Chapter 3, surfacing in the feature vector itself. The subgroup audit (§4.4) is therefore not only a modeling check but a fairness check: a model that performs differently across specialties or geographies can systematically steer promotion toward or away from groups in ways that warrant a flag to medical and compliance review. And calibration has a welfare dimension — an over-confident propensity score translates directly into over-spend on physicians the model merely *guessed* were high-potential. None of this is adjudicated here; it is flagged and routed.
-
-## 8. Exercises
-
-1. **(Understand)** Define bagging, boosting, and stacking in one sentence each, and state which error component each primarily reduces. Then explain, using the bias–variance–covariance formula, why an ensemble of ten identical models is no better than one.
-2. **(Apply+)** Given a public Open Payments + Part D extract, write the *as-of timestamp rule* you would enforce and list five features that would be legitimate before that timestamp and two that would constitute target leakage. Explain the claims-lag illusion of lift in your own words.
-3. **(Apply+ · Produce · Part B)** Specify the **ensemble-baseline memo** for a propensity task in your own thread: the target definition, the as-of timestamp, the feature set, the chosen ensemble, and the *honest evaluation plan* (AUC + calibration + out-of-time split + subgroup breakdown + leakage check). Write it so it serves as the bar any "AI platform"/"MoE" claim in Chapter 7 must beat.
-4. **(Evaluate)** A vendor claims their deep-learning targeting model "outperforms gradient boosting." Write the three questions you would ask to evaluate the claim, including the one about an independent benchmark on the same task — and state what result would actually justify abandoning the tree baseline.
-
-## 9. The Five-Part AI Block
-
-**When to use AI here.** Use an LLM/CLI assistant to scaffold the pipeline — generate the join logic for Open Payments + Part D, draft the cross-validation harness, and produce the calibration and subgroup-evaluation plots. It is a fast, competent pair-programmer for boilerplate.
-
-**When NOT to use AI here.** Do not let an AI decide your *as-of timestamp* or vet your features for leakage on its own. Whether a feature postdates the prediction point depends on pharma data-plumbing facts (claims lag, revisions) the model does not know about your specific source. Leakage detection is the human judgment this chapter trains; an LLM will happily build you a beautiful, leaking pipeline.
-
-**LLM exercise.** Prompt: *"Here is my feature list and my prediction timestamp for an NPI-propensity model on Medicare Part D + Open Payments. For each feature, ask me the questions you'd need answered to determine whether it could leak the outcome — do not assume, ask. Then propose a calibration and out-of-time validation plan."* You answer the leakage questions from domain knowledge; the AI drafts the eval plan.
-
-**CLI exercise.** With a public extract loaded, use command-line tooling to compute the date distribution of your claims records (`csvstat`/`awk` on the fill-date column) and *show yourself* the lag between service date and recorded date. Then count how many "post-exposure" records have service dates that predate a hypothetical exposure window. This makes the claims-lag illusion concrete with real numbers.
-
-**AI validation.** Have the AI generate the evaluation report, then validate it: re-run the calibration on a held-out *time* split yourself, confirm the AUC was not computed on a random split, and confirm no feature in the final model postdates the as-of timestamp. Record any leakage the AI's pipeline introduced.
-
-## 10. AI Use Disclosure
-
-An LLM assisted in structuring the ensemble taxonomy and drafting the worked-example pipeline steps; all evaluation choices, the leakage/claims-lag framing, and the TabPFN hedge were set against the synthesis and library sources and verified by hand. The judgment an AI could not supply: **deciding which features leak given the specific claims-lag behavior of the data source, and deciding that a leakage-free 0.78 is the real baseline rather than the leaking 0.94.** That call requires pharma data-plumbing knowledge the model does not have about your source. (Part B standard: name the one leakage decision you made that the AI could not.)
-
-## 11. What Would Change My Mind
-
-I would retire "gradient-boosted trees are the correct baseline for NPI propensity" if an independent, reproducible benchmark — on a public NPI-propensity task, with calibration and out-of-time validation, not just headline accuracy — showed a tabular deep-learning model (or a genuine MoE) *consistently and meaningfully* beating a well-tuned tree ensemble, with the gain surviving subgroup and out-of-time scrutiny. TabPFN v2's trajectory makes this a live possibility, not a rhetorical one. Until that benchmark exists, the trees stay the baseline — and even after it exists, you would only have learned it by building the baseline first.
-
-## 12. Still Puzzling
-
-- If tree ensembles are state of the art on tabular data, why do so many pharma platforms reach for deep-learning and "MoE" framing — is it performance, or is it the funding and prestige that attach to those words?
-- The covariance floor bounds ensemble benefit; routing-induced specialization (Chapter 7) claims to break it. On *tabular* data with no token sequence, is there any natural unit for routing to specialize over?
-- Calibration matters for spend and for uplift — but how miscalibrated can a propensity model be before it corrupts the Chapter 8 CATE estimates that use it as a base learner?
-
-## 13. Summary
-
-You can now name the three ensemble paradigms and explain, via the bias–variance–covariance floor, why manufactured diversity has a hard limit — the limit Chapter 7's MoE claims to escape. You can justify gradient-boosted trees as the documented state of the art for medium tabular data, which is what NPI propensity is, while stating honestly that tabular deep learning is narrowing the gap. You can evaluate a model the way a spend decision requires — calibration and out-of-time validation and subgroup robustness, not AUC alone — and you can detect the pharma-specific leakage that makes a model look brilliant offline and fail in production. Most of all, you have the baseline: the unglamorous, calibrated, leakage-checked tree ensemble that every fancier claim in the next chapter must beat. The boring thing is hard to beat — and proving that is the whole point.
-
-## 14. Key Terms
-
-- **Bagging:** train independent models on bootstrap samples and average/vote; reduces variance (Random Forest is the canonical case).
-- **Boosting:** train models sequentially, each correcting prior errors; reduces bias and variance (XGBoost, LightGBM, CatBoost).
-- **Stacking:** train a meta-learner on base models' out-of-fold predictions; what most "MoE" platforms actually run (Chapter 7).
-- **Bias–variance–covariance decomposition:** the error formula whose covariance term sets a floor, making diversity load-bearing.
-- **Manufactured vs. emergent diversity:** ensemble diversity is engineered on one data distribution (shared blind spots); MoE claims routing-induced emergent diversity.
-- **Calibration:** agreement between predicted probabilities and observed rates; required when the probability feeds a spend decision or a CATE estimate.
-- **Out-of-time validation:** splitting by time, not random rows, to avoid leaking the future on drifting pharma data.
-- **Target leakage:** a feature that encodes the outcome (often by postdating the prediction point); the leading cause of too-good offline numbers.
-- **Claims-lag illusion of lift:** late-recorded fills inflating apparent post-exposure response — a bookkeeping artifact feeding the attribution and incrementality problems.
-
-## 15. Bridge
-
-You now hold the baseline: a tuned, honestly evaluated tree ensemble that is genuinely hard to beat on tabular NPI prediction. So when the next vendor says the upgrade is a "Mixture of Experts," you have the one thing needed to judge it — a bar. The next chapter takes MoE apart precisely, shows you what most pharma "MoE" claims actually are (you already know: stacking), and gives you the buyer's questions to tell a real routing model from a transformer-era relabel.
-
-## 16. Further Reading
-
-- Grinsztajn, L., Oyallon, E., & Varoquaux, G. "Why do tree-based models still outperform deep learning on typical tabular data?" *NeurIPS 2022* (Datasets & Benchmarks Track). The anchor evidence — 45 datasets, trees state-of-the-art on medium tabular data, and the three reasons why. [verify exact title/venue wording.]
-- Chen, T., & Guestrin, C. "XGBoost: A Scalable Tree Boosting System." *KDD 2016.* The implementation that made gradient boosting the practical default; read for the engineering that matters at commercial scale.
-- López de Prado, M. *Advances in Financial Machine Learning* (2018). The best practitioner treatment of leakage, cross-validation under temporal structure, and backtest overfitting — maps directly onto the pharma claims-lag failure case and out-of-time validation.
-- Agrawal, A., Gans, J., & Goldfarb, A. *Prediction Machines* (2018). The prediction-vs-decision distinction — why a strong propensity model is still not an intervention. Sets up Chapter 8.
-- TabPFN v2 and tabular-DL benchmark literature (2024/25). Track the live challenger to the "trees win" claim; read alongside Grinsztajn to calibrate the §4.5 hedge. [verify current results in the accuracy pass before citing specifics.]
+That number is real. It is the bar a vendor's fancier claim would have to beat. The 0.94 was a hallucination the data was willing to produce because I had not yet asked it the right question. And the particular way pharma data produces this hallucination — through claims-processing lag, through features whose timestamp you think you know but do not — is the first thing to understand before anything else in this chapter makes sense.
 
 ---
 
-## Prompts
+An ensemble is just a collection of models whose outputs get combined. That sentence is almost insultingly simple, and it is nonetheless the key. The question worth asking is *why* combining models helps at all, because the answer — the real mathematical answer — is not "averaging smooths things out" but something more precise, and it has a hard limit that controls everything that follows.
 
-*No figures have been generated for this chapter yet.*
-*Run the Cowork enrichment pass to populate this section.*
+Start from the error of a single model. It decomposes into two parts: **bias** (how far off the model is on average, from being systematically wrong) and **variance** (how much the model's outputs fluctuate across different training sets, from being unstably right). These trade off. A simple model — a shallow tree, a linear regression — is biased but stable. A complex model — a deep tree, an overparameterized network — is less biased but bounces around wildly across training runs.
+
+Now take *N* models and average them. The bias of the average equals the average bias — you cannot remove systematic errors by averaging. But the variance term drops: it scales as *1/N* times the average individual variance. More models, lower variance. This is why averaging helps.
+
+But here is the catch that the textbook often glosses past. The full formula for ensemble error includes a third term: **covariance** — the degree to which the models make correlated errors. The complete decomposition is:
+
+$$\text{ensemble error} \approx \text{bias}^2 + \frac{1}{N}\cdot\text{var} + \left(1 - \frac{1}{N}\right)\cdot\text{covar}$$
+
+As N grows large, the variance term shrinks toward zero. But the covariance term grows toward *covar* and **sets a floor**. If your models make perfectly correlated errors — if they all fail on the same cases in the same direction — then combining them buys you nothing. The floor on ensemble error is determined entirely by how *independent* the members are from each other.
+
+This is why diversity among ensemble members is not an aesthetic preference. It is mathematically load-bearing. And it is also where the uncomfortable truth lives: ensemble diversity is **manufactured**, not emergent. You generate it with different random seeds, different bootstrap samples, different feature subsets, different algorithms — but all of these are variations on the same underlying data distribution. Models trained on the same data share the same blind spots. They will make correlated errors on the hard cases regardless of how different the algorithms look. The covariance floor is real, and manufactured diversity cannot eliminate it.
+
+Hold that thought. Chapter 7 is going to make a specific claim — that Mixture of Experts systems escape this floor through *routing-induced* specialization. That claim deserves to be examined with exactly this math in hand. But the resolution is not this chapter's problem. The floor is.
+
+<!-- → [DIAGRAM: Three-panel figure showing bias-variance-covariance decomposition. Panel 1: single model error as bias² + variance. Panel 2: 10-model ensemble — variance term shrinks, covariance term appears and grows. Panel 3: the covariance floor: as N → ∞, ensemble error approaches bias² + covar. Caption: "Adding models reduces variance but cannot reduce correlated error. Diversity is what moves the floor."] -->
+
+---
+
+There are three canonical ways to manufacture that diversity, and you should know them by their originating idea rather than their names.
+
+The first is **bagging** — Leo Breiman, 1996. Train many independent models on bootstrap samples of the data (random draws with replacement) and average their outputs. The independence is the point: each model sees a slightly different dataset, learns slightly different patterns, makes slightly different errors. Averaging washes the differences out in a direction that reduces variance. The **Random Forest** (Breiman again, 2001) pushes this further: at each split in each tree, only a random subset of features is considered. This decorrelates the trees even more aggressively than the bootstrap alone. Random Forests are still competitive on many problems and are often the right first thing to try.
+
+The second is **boosting**. Rather than training models independently and averaging, train them *sequentially*, each one correcting the errors of its predecessors. The first model fits the data; the second fits the residuals of the first; the third fits the residuals of the second. Freund and Schapire's AdaBoost (1997) formalized this for classification. Friedman's Gradient Boosting (2001) generalized it to arbitrary loss functions by framing each sequential model as a gradient descent step in function space. The dominant modern implementations — **XGBoost** (Chen and Guestrin, 2016), **LightGBM**, **CatBoost** — are all gradient-boosted decision tree systems, and they are the practical default for structured tabular work. Boosting reduces both bias and variance, which makes it more powerful than bagging. It is correspondingly more sensitive to noise and outliers, and requires more care in tuning.
+
+The third is **stacking** — David Wolpert, 1992. Train several diverse base models. Then train a *meta-learner* on their out-of-fold predictions: the meta-learner learns which base model to trust in which region of the input space, and combines them accordingly. Remember stacking's definition precisely, because it is the punchline of Chapter 7: **most pharma platforms that describe themselves as running "Mixture of Experts" are actually running stacking**. The terms have been relabeled; the machinery has not changed. Knowing what stacking actually is lets you ask the right question about whether what a vendor is selling is genuinely different.
+
+<!-- → [TABLE: Three-column comparison of bagging, boosting, and stacking. Columns: paradigm, originating idea, primary error component reduced, canonical modern implementation, key weakness. Rows: Bagging (parallel, independent; variance; Random Forest; correlated errors if features overlap), Boosting (sequential, corrective; bias + variance; XGBoost/LightGBM/CatBoost; sensitive to noise), Stacking (meta-learner on base models; both via learned combination; any diverse ensemble + meta-learner; requires careful out-of-fold discipline to avoid leakage).] -->
+
+---
+
+So why does this matter for the specific problem of predicting which physician will prescribe a drug?
+
+There is a rigorous answer to this question. Léo Grinsztajn, Edouard Oyallon, and Gaël Varoquaux published "Why do tree-based models still outperform deep learning on typical tabular data?" at NeurIPS 2022 — the Datasets and Benchmarks track, where the standard of evidence is precisely the kind of broad, comparative evaluation the question requires. They tested deep-learning methods against tree-based methods across 45 tabular datasets. The finding: **tree-based models remain state-of-the-art on medium-sized tabular data** — around 10,000 samples — and that holds even setting aside trees' substantial speed advantage.
+
+The paper identifies three mechanisms, and each one maps onto the pharma problem directly.
+
+First: trees are natively robust to uninformative features. A split on a useless feature will be selected away from by the tree's information criterion; the feature simply goes unused. Neural networks must *learn* to ignore uninformative inputs, which takes capacity and training examples. An NPI feature vector is full of weakly informative signals — Open Payments meal counts from three years ago, engagement rates on specific journal articles, geography proxies — and trees shrug them off while networks waste capacity on them.
+
+Second: neural networks are biased toward smooth functions. The gradient descent process that trains them nudges outputs toward continuity; the inductive bias is toward interpolating gradually across the input space. Tabular relationships are often jagged: a threshold effect at a particular prescribing decile, a discontinuity at a payment cutoff, a specialty boundary that creates a hard categorical jump. Decision tree splits represent those discontinuities natively. Neural networks must approximate them with many parameters.
+
+Third — and the paper states this directly — the best tabular methods are themselves ensemble methods, with a decision tree as the weak learner. The paper's own conclusion: the best methods on tabular data are ensemble methods.
+
+The pharma relevance is not a loose analogy. NPI-level propensity prediction is a structured tabular problem: physician features, prescribing history, Open-Payments history, demographics, behavioral engagement signals. This is exactly the regime the Grinsztajn result covers. The gradient-boosted tree ensemble is not a stand-in for something better that you will swap in later. On this problem, it may be the best architecture available — which makes "we use a fancier model" a claim that owes you a benchmark, not the benefit of the doubt.
+
+One hedge, stated explicitly because otherwise this chapter ages badly: newer tabular deep-learning methods — FT-Transformer, SAINT, and particularly **TabPFN and TabPFN v2 (2024/25)** — are narrowing the gap on some benchmarks, especially on small-sample problems and where large-scale pre-training transfers well. [verify 2026 state of these results.] The Grinsztajn result remains the right anchor for medium tabular data, but it is no longer unchallenged across the entire landscape. The honest framing is not "trees are unbeatable" but "trees are the correct default and baseline; tabular deep learning is an active, not-yet-default frontier." That framing is robust to the next few years of results — even if a deep tabular model eventually wins on your specific problem, you would only know that by beating the tuned tree baseline you built first.
+
+<!-- → [CHART: Bar chart reproducing the qualitative structure of Grinsztajn et al. 2022 Figure 1 — tree-based vs. deep-learning methods ranked by average normalized performance across 45 tabular datasets. Trees clustered at the top; DL methods scattered lower. Caption: "On medium tabular data, gradient-boosted trees consistently outperform deep-learning architectures. This is the benchmark any 'AI platform' claim must beat. Source: Grinsztajn et al., NeurIPS 2022. [verify figure representation against paper before publication.]"] -->
+
+---
+
+Now for how to evaluate the model honestly — which is a separate question from how to build it, and the one that most often gets skipped.
+
+A propensity score feeds a spend decision. It gets used as a quantity: this physician gets a $40 CPM impression because her score is 0.8; that physician gets nothing because his score is 0.3. For a quantity to be useful, it needs to mean what it says. This is the difference between **discrimination** and **calibration**, and it is the difference that most model-evaluation practice ignores.
+
+Discrimination — measured by AUC or AUPRC — answers: can the model rank prescribers above non-prescribers? Can it tell the top decile from the bottom? This is necessary but not sufficient. A model can rank perfectly and still be completely miscalibrated: every score 0.05 too high, every confidence interval in the wrong direction. AUC would not catch it. A reliability curve would.
+
+**Calibration** asks whether predicted probabilities match observed rates. Plot your bins: the group of physicians you scored between 0.7 and 0.8 — what fraction of them actually prescribed? If the answer is 0.6, your model is overconfident and every bid decision built on it is systematically wrong. The Brier score captures this in a single number. Calibration is not a detail. For spend decisions it is co-equal with discrimination, and for the uplift estimation of Chapter 8 it is load-bearing — CATE estimates use propensity scores as base learners, so miscalibration propagates directly into causal estimates.
+
+**Out-of-time validation** means splitting by time, not by randomly shuffled rows. Pharma data drifts. Prescribing patterns shift with trial publications, label changes, competitor entries. Random cross-validation leaks the future into the training fold and makes your model look more stable than it is. Train on earlier periods. Test on later ones. Any lift in performance you see on a random split that disappears on a time split is a signal the model has memorized temporal regularities it will not have at deployment.
+
+**Subgroup robustness** means evaluating by specialty, decile, and geography separately — not just on the aggregate. A model that is strong on average can be useless on the one segment the campaign actually targets. In my worked example, the aggregate AUC after fixing the leakage was 0.78 and looked defensible. Breaking it out by decile revealed the model was near-useless on low-decile physicians — the exact group a growth campaign cares about most. Aggregate AUC had hidden a segment failure.
+
+<!-- → [INFOGRAPHIC: Four-quadrant evaluation checklist. Quadrant 1: Discrimination (AUC, AUPRC — "can it rank?"). Quadrant 2: Calibration (reliability curve, Brier score — "does the probability mean what it says?"). Quadrant 3: Temporal validation (out-of-time split — "does it hold when the future is actually the future?"). Quadrant 4: Subgroup robustness (by specialty, decile, geography — "where does it fail?"). Each quadrant includes a one-line failure mode if skipped. Caption: "A model that passes all four is the baseline. A model that passes only the first is the most common mistake."] -->
+
+---
+
+Now back to the pharma-specific landmine that the opening case previewed, because there is a second version of the leakage problem that is subtler and more dangerous.
+
+The first version is the one I hit: a feature that postdates the prediction point. Fix the as-of timestamp, remove the offending feature, done. But the second version is not about features at all. It is about *when fills are recorded* relative to when they were written.
+
+Claims data arrives with a lag. A prescription written in March may not appear in adjudicated claims until April or May, after processing delays at the pharmacy, the payer, and the data broker. When you build a "post-exposure" outcome window — prescribing in the 90 days after a marketing contact — some of those fills were actually written *before* the contact but recorded after it. The apparent response is inflated by a bookkeeping artifact. The physician looks like a responder because the data processing calendar aligned in a way that had nothing to do with your intervention.
+
+This is the **claims-lag illusion of lift**, and it feeds directly into the attribution problem of Chapter 8. A model trained to predict propensity on stale claims, evaluated on an outcome window contaminated by late-recorded fills, will systematically overstate both its targeting accuracy and the lift it is credited with producing. The fix — strict as-of timestamps, careful outcome-window construction that excludes fills with service dates predating exposure — requires knowing about the data plumbing. An AI assistant will happily build you a beautiful, self-consistent pipeline that nonetheless leaks in this way, because the lag behavior of your specific claims source is not in its training data.
+
+---
+
+What you have by the end of this chapter is the baseline: a tuned, calibrated, leakage-checked, out-of-time-validated, subgroup-audited gradient-boosted tree ensemble at some honest AUC — 0.78, in my case. Not 0.94. 0.78, with a documented weakness on low deciles and a recorded as-of timestamp that a vendor's analyst could check.
+
+That number is the bar. Every claim in Chapter 7 — "we run a Mixture of Experts," "our deep model beats trees," "our routing architecture unlocks specialist knowledge the ensemble misses" — has to clear it. Not on some internal holdout set with a different data distribution, not on a random split that leaks temporal regularities, not on aggregate AUC that hides a segment failure. On the same task, evaluated the same way.
+
+The boring thing is hard to beat. Building it correctly is the proof.
+
+**Five-part AI exercise block**
+
+**When to use AI here.** Use an LLM or CLI assistant to scaffold the pipeline — generate the join logic for Open Payments and Part D data, draft the cross-validation harness, produce the calibration curve and subgroup evaluation plots. It is a fast, competent pair programmer for boilerplate.
+
+**When NOT to use AI here.** Do not let an AI decide your as-of timestamp or vet your features for leakage on its own. Whether a feature postdates the prediction point depends on pharma data-plumbing facts — claims lag, revision cycles, broker processing delays — that the model does not know about your specific source. Leakage detection is the human judgment this chapter trains. An LLM will happily build you a beautiful, leaking pipeline.
+
+**LLM exercise (copy-paste prompt):**
+> "Here is my feature list and my prediction timestamp for an NPI-propensity model on Medicare Part D and Open Payments data. For each feature, ask me the questions you'd need answered to determine whether it could leak the outcome — do not assume, ask. Then propose a calibration and out-of-time validation plan based on my answers."
+
+**CLI exercise.** With a public extract loaded, use command-line tooling to compute the date distribution of your claims records (`csvstat` or `awk` on the fill-date column) and show yourself the lag between service date and recorded date. Then count how many "post-exposure" records have service dates that predate a hypothetical exposure window. This makes the claims-lag illusion concrete with real numbers rather than an abstraction.
+
+**AI validation.** Have the AI generate the full evaluation report, then audit it: re-run the calibration on a held-out *time* split yourself, confirm the AUC was not computed on a random split, and confirm no feature in the final model postdates the as-of timestamp. Record any leakage the AI's pipeline introduced.
+
+## AI Use Disclosure
+
+*Write two sentences naming what an AI tool did in your work for this chapter and the one judgment it could not make. For example: "I used an LLM to scaffold the pipeline and draft the evaluation harness; I decided which features leak given the claims-lag behavior of my specific data source, because that is pharma data-plumbing knowledge the model does not have."*
+
+## What Would Change My Mind
+
+I would retire "gradient-boosted trees are the correct baseline for NPI propensity" if an independent, reproducible benchmark — on a public NPI-propensity task, with calibration and out-of-time validation, not just headline accuracy — showed a tabular deep-learning model consistently and meaningfully beating a well-tuned tree ensemble, with the gain surviving subgroup and out-of-time scrutiny. TabPFN v2's trajectory makes this a live possibility. Until that benchmark exists on this specific task, the trees stay the baseline — and even after it exists, you would only have learned it by building the baseline first.
+
+## Still Puzzling
+
+- If tree ensembles are state of the art on tabular data, why do so many pharma platforms reach for deep-learning and Mixture of Experts framing? Is it performance, or is it the funding and prestige those words attract?
+- The covariance floor bounds ensemble benefit from manufactured diversity. Routing-induced specialization claims to break it. On tabular data with no token sequence, what is the natural unit for routing to specialize over?
+- Calibration matters for spend decisions and for uplift estimation — but how miscalibrated can a propensity model be before it corrupts the Chapter 8 CATE estimates that use it as a base learner?
+
+---
+
+## Exercises
+
+**Warm-up**
+
+1. *(Recall — low difficulty) What this tests: whether you can state the three paradigms and their error targets.* Define bagging, boosting, and stacking in one sentence each, and state which component of the bias-variance-covariance error decomposition each primarily reduces. Then explain, using the covariance floor, why an ensemble of ten identical models trained on the same data is no better than one.
+
+2. *(Recall — low difficulty) What this tests: whether you can state the Grinsztajn result and its scope conditions.* Summarize the Grinsztajn et al. (NeurIPS 2022) finding in two sentences: what was tested, what was found, and what the authors themselves concluded about the nature of the winning methods. Then name one condition under which the result is actively contested.
+
+3. *(Recall — low difficulty) What this tests: whether you can distinguish discrimination from calibration.* Define AUC and Brier score in your own words, and explain in one sentence why a model can achieve high AUC while being severely miscalibrated. Give a concrete example of a spend-decision context where miscalibration causes a worse outcome than low AUC would.
+
+**Application**
+
+4. *(Apply — medium difficulty) What this tests: leakage detection on a realistic feature list.* Given a public Open Payments and Part D extract with a prediction timestamp of January 1, classify each of the following features as legitimate or leaking, and justify in one sentence: (a) specialty as of last year, (b) total meals received in the prior 12 months, (c) a recent-fill flag computed on February adjudicated data, (d) prescribing volume in Q3 of the prior year, (e) a trend feature computed as Q4-minus-Q3 volume from the prior year's adjudicated claims. Then explain in your own words how the claims-lag illusion of lift differs from straightforward target leakage.
+
+5. *(Apply — medium difficulty) What this tests: designing a time-respecting evaluation plan.* You have 36 months of NPI-level prescribing data. Specify an out-of-time validation design — training period, validation period, test period, and the rationale for the boundary choices. Then identify one subgroup breakdown you would run and explain what a failure in that subgroup would tell you about the model's deployment risk.
+
+6. *(Apply — medium difficulty) What this tests: translating the covariance floor into a practical diagnostic.* You train five XGBoost models with different random seeds on the same data. Their pairwise error correlations are all above 0.92. What does this tell you about the expected benefit of the ensemble relative to a single model, and what would you change to push the correlation down?
+
+**Synthesis**
+
+7. *(Synthesis — high difficulty) What this tests: integrating the baseline specification and evaluation plan into a defensible memo.* Write the ensemble-baseline memo for a propensity task: the target definition, the as-of timestamp, the feature set (with a leakage check for each feature), the chosen ensemble and tuning approach, and the honest evaluation plan including calibration, out-of-time split, and subgroup breakdown. Write it so it serves as the explicit bar that any vendor's "AI platform" or "Mixture of Experts" claim must beat in Chapter 7.
+
+8. *(Synthesis — high difficulty) What this tests: connecting propensity calibration to downstream causal estimation.* Chapter 8 will use propensity scores as base learners in CATE estimation. Explain in three to four sentences how systematic miscalibration in the propensity model — specifically, overconfident scores in the high-propensity decile — would propagate into the causal estimates. What direction would the bias run, and what evaluation step in this chapter would catch it?
+
+**Challenge**
+
+9. *(Challenge — open-ended) What this tests: critical evaluation of a vendor benchmark.* A pharma platform vendor publishes a white paper claiming their deep-learning model achieves AUC 0.91 on NPI propensity prediction versus 0.83 for "standard gradient boosting." Write the three questions you would ask to evaluate the claim — including questions about the split strategy, the feature set, calibration reporting, and whether the comparison baseline was tuned — and state precisely what evidence would justify abandoning the tree baseline in favor of the vendor's model.
