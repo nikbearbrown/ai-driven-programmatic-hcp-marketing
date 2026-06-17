@@ -31,7 +31,7 @@ The common misreading is to call pharma marketing "B2B advertising aimed at doct
 
 This is not a critique. It is a description. Understand the structure and you understand everything that follows: why the targeting works the way it does, why co-pay cards exist, why attribution claims are slippery, why nobody has funded a counter-stack. Every puzzle in this book is a consequence of the same anomaly. The party who pays is not at the table.
 
-![Four-node diagram of prescriber, patient, payer and institution, with the payer's payment arrow having no return arrow to the decision node.](images/01-the-machine-nobody-sees-fig-01.png)
+![Four-node diagram of prescriber, patient, payer and institution, with the payer's payment arrow having no return arrow to the decision node.](../images/01-the-machine-nobody-sees-fig-01.png)
 *Figure 1.1 — The split-agency structure that breaks consumer sovereignty*
 
 <!-- → [DIAGRAM: Four-node diagram of prescriber / patient / payer / institution — arrows showing decision flow, payment flow, and consumption flow. Key annotation: the payer's payment arrow has no return arrow to the decision node. Caption: "The split-agency structure that breaks consumer sovereignty. The physician decides; the payer pays; neither has complete information about the other's constraints."] -->
@@ -76,7 +76,7 @@ The first is **CDS Hooks**. CDS stands for Clinical Decision Support — the sys
 
 The second standard is **SMART on FHIR**. SMART stands for Substitutable Medical Apps and Reusable Technologies; FHIR is Fast Healthcare Interoperability Resources. Together they define a protocol by which an approved third-party app can launch *inside* the EHR — embedded in Epic's Hyperspace, typically inside an iframe — and receive patient, encounter, and clinician context through standardized FHIR data resources. The authentication handshake uses OAuth 2.0: on launch, the EHR passes a short-lived token, and after the exchange the app receives context claims identifying which patient, which encounter, which clinician. It was designed so that a clinical decision-support app built by one vendor could run inside any EHR that supports the standard. Doceree's Spark product uses the identical protocol for branded engagement (SMART App Launch v2.2.0, HL7; Epic SMART on FHIR documentation).
 
-![Two sequence diagrams: a CDS Hooks card flow and a SMART on FHIR app launch, both ending in a commercial card rendered inside the EHR.](images/01-the-machine-nobody-sees-fig-02.png)
+![Two sequence diagrams: a CDS Hooks card flow and a SMART on FHIR app launch, both ending in a commercial card rendered inside the EHR.](../images/01-the-machine-nobody-sees-fig-02.png)
 *Figure 1.2 — The two clinical interoperability rails commercial messages ride*
 
 <!-- → [DIAGRAM: Sequence diagram showing the CDS Hooks trigger flow — physician action → EHR fires hook → external service receives hook → returns card → card renders in EHR sidebar. Second sequence shows SMART on FHIR app launch. Caption: "The two clinical interoperability rails commercial messages ride. Both were designed for safety alerts; both are now available to commercial messages delivered through approved app channels."] -->
@@ -103,7 +103,7 @@ Meanwhile the payer — the insurer — still absorbs the full difference in net
 
 The empirical evidence here is unusually clean by the standards of this field. Two related studies use Medicare Advantage — where coupons are federally banned — as a control against the commercial segment, where they are permitted. Dafny, Ho, and Kong (NBER working paper w29735, 2022) found that in the 12 months after a coupon was introduced, commercially insured purchases of the drug (measured in days of supply) rose by more than 20% relative to Medicare Advantage; for the multiple-sclerosis drug class they studied, they estimated that banning coupons would cut total spending by about $950 million, a 7.6% reduction in insurer costs (NBER Digest, May 2022, nber.org). The earlier Dafny, Ody, and Schmitt study — "When Discounts Raise Costs," *American Economic Journal: Economic Policy* 2017 (NBER w22745) — examined branded drugs first facing generic entry and found that coupons increased branded sales by more than 60%, entirely by displacing lower-cost bioequivalent generics, raising total spending by an estimated $30–$120 million per drug.
 
-![Bar chart comparing the estimated coupon effect on branded-drug volume: a more-than-20-percent increase in the commercial segment versus a zero baseline in Medicare Advantage where coupons are banned.](images/01-the-machine-nobody-sees-fig-03.png)
+![Bar chart comparing the estimated coupon effect on branded-drug volume: a more-than-20-percent increase in the commercial segment versus a zero baseline in Medicare Advantage where coupons are banned.](../images/01-the-machine-nobody-sees-fig-03.png)
 *Figure 1.3 — The natural experiment: the estimated coupon effect on branded-drug volume*
 
 <!-- → [CHART: Bar chart showing estimated prescribing-volume effect of co-pay coupon introduction, commercial vs. Medicare Advantage segment, from Dafny et al. Caption: "The natural experiment: commercial insurers allow coupons; Medicare Advantage does not. The gap isolates the coupon's effect on branded-drug volume."] -->
@@ -124,7 +124,7 @@ Academic detailing programs — efforts to give physicians unbiased, evidence-ba
 
 Why? Because the structure of the anomaly predicts it. The parties who would most benefit from unbiased prescribing information are patients and payers. They are exactly the parties least organized to build and fund a clinical information infrastructure. The physician's attention at the moment of prescribing is a contested space, and only one side is paying to occupy it.
 
-![Mirror diagram with the funded commercial closed loop on the left and an unfunded counter-stack of comparative effectiveness, generic alternatives, formulary and patient-cost data on the right.](images/01-the-machine-nobody-sees-fig-04.png)
+![Mirror diagram with the funded commercial closed loop on the left and an unfunded counter-stack of comparative effectiveness, generic alternatives, formulary and patient-cost data on the right.](../images/01-the-machine-nobody-sees-fig-04.png)
 *Figure 1.4 — The same infrastructure could run both systems; only one is funded*
 
 <!-- → [DIAGRAM: Mirror diagram — left side shows the commercial closed loop (NPI targeting → impression → prescription → attribution → refined targeting); right side shows the counter-stack that could exist but doesn't (comparative effectiveness → generic alternatives → formulary data → patient cost → prescribing decision). Caption: "The same infrastructure could run both systems. Only one is funded."] -->

@@ -47,7 +47,7 @@ In pharma marketing, this gap is not symmetric. It does not randomly overstate o
 
 Any single mechanism is enough to inflate a number. EHR script-lift claims typically carry all four at once.
 
-![Diagram of four bias mechanisms — selection on the outcome, attribution circularity, absence of a control, and publication asymmetry — each feeding arrows into an "Observed Lift" box, with the "True Causal Effect" box sitting apart, reachable only through design controls.](images/05-the-evidence-problem-fig-01.png)
+![Diagram of four bias mechanisms — selection on the outcome, attribution circularity, absence of a control, and publication asymmetry — each feeding arrows into an "Observed Lift" box, with the "True Causal Effect" box sitting apart, reachable only through design controls.](../images/05-the-evidence-problem-fig-01.png)
 *Figure 5.1 — Four mechanisms inflate observed lift away from the true causal effect*
 
 <!-- → [DIAGRAM: Four-mechanism diagram — each mechanism as a node feeding into "Observed Lift," with arrows labeled by what each conflates with the true effect; a fifth node for "True Causal Effect" shown as disconnected or estimated only with design controls] -->
@@ -95,7 +95,7 @@ The pedagogical point is clean: same channel, opposite funder incentive, rigorou
 
 When you search for *independent, peer-reviewed* evidence on this channel, you find almost exclusively vendor marketing pages. That is itself the finding. No independent, peer-reviewed study validates the causal attribution behind these numbers. No peer-reviewed study has assessed whether EHR-embedded ads produce clinically appropriate versus inappropriate prescribing. This is the single largest open validation gap in the field, and it is where the gap in the evidence and the gap in the regulation coincide.
 
-![Scatter matrix with source independence on the x-axis and study-design strength on the y-axis. Detailing and academic detailing sit high/high, the DeJong meals study medium-high/medium, and EHR/point-of-care advertising low/low; quadrant labels explain what each position means for actionability.](images/05-the-evidence-problem-fig-02.png)
+![Scatter matrix with source independence on the x-axis and study-design strength on the y-axis. Detailing and academic detailing sit high/high, the DeJong meals study medium-high/medium, and EHR/point-of-care advertising low/low; quadrant labels explain what each position means for actionability.](../images/05-the-evidence-problem-fig-02.png)
 *Figure 5.2 — Channel evidence-strength matrix (vendor EHR figures `[verify]`, plotted as weak)*
 
 <!-- → [CHART: Channel evidence strength matrix — x-axis: source independence (low to high), y-axis: study-design strength (low to high); channels plotted as labeled points: detailing (high/high), academic detailing (high/high), meals/DeJong (medium-high/medium), EHR/POC (low/low); quadrant labels explain what each position means for actionability] -->
@@ -128,7 +128,7 @@ The evidence map's honest output: best available evidence is weak — vendor-gen
 
 The limit to name: the evidence map tells you how much you know — here, little, with confidence. It does not tell you the true effect. Naming an absence precisely is itself a result a team can act on. It cannot manufacture a number to fill the gap, and it must not.
 
-![Five-step flowchart building the evidence map for the EHR co-pay example: name the dependent variable, locate best evidence, grade on two axes, identify bias mechanisms, state known versus unknown — arrows connect the steps to a final output box reading "WEAK — holdout required."](images/05-the-evidence-problem-fig-03.png)
+![Five-step flowchart building the evidence map for the EHR co-pay example: name the dependent variable, locate best evidence, grade on two axes, identify bias mechanisms, state known versus unknown — arrows connect the steps to a final output box reading "WEAK — holdout required."](../images/05-the-evidence-problem-fig-03.png)
 *Figure 5.3 — Evidence-map construction for the EHR co-pay program (output: weak, holdout required)*
 
 <!-- → [INFOGRAPHIC: Step-by-step evidence-map construction for the EHR co-pay example — boxes for: (1) name the dependent variable, (2) locate best evidence, (3) grade on two axes, (4) identify mechanisms, (5) state what is known vs. unknown; arrows connecting steps; final output box reads "WEAK — holdout required"] -->

@@ -17,7 +17,7 @@ Confusing the two — trying to build the platform — is how a lab loses its in
 
 The management literature has a name for this structure: open innovation — "a distributed innovation process based on purposively managed knowledge flows across organizational boundaries, using pecuniary and non-pecuniary mechanisms in line with the organization's business model" (Bogers, Chesbrough & Moedas, *California Management Review* 60(2):5–16, 2018). In pharma, this is not exotic. McKinsey estimates that roughly 45% of the pipeline assets of the top-20 biopharma companies (by R&D budget) were externally sourced around 2020, through licensing, collaborations, university partnerships, and M&A (McKinsey & Company, "Innovation sourcing in biopharma"). Named structures — Takeda's Center for External Innovation, established as part of its 2015–2016 R&D restructuring, is one example — exist to manage exactly this flow. The lab is the inbound half of that flow, specialized to commercial measurement rather than drug development.
 
-![Inbound innovation funnel showing external research and public data flowing into the lab, which scouts, hypothesizes, tests, scores, and decides go or kill; a vertical dashed IP firewall separates the lab from the partner, with a single handoff brief arrow crossing it into the partner's proprietary replication, prototype, and resourced-product stages.](images/11-innovation-lab-operating-model-fig-01.png)
+![Inbound innovation funnel showing external research and public data flowing into the lab, which scouts, hypothesizes, tests, scores, and decides go or kill; a vertical dashed IP firewall separates the lab from the partner, with a single handoff brief arrow crossing it into the partner's proprietary replication, prototype, and resourced-product stages.](../images/11-innovation-lab-operating-model-fig-01.png)
 
 *Figure 11.1 — The inbound innovation funnel and the IP firewall*
 
@@ -79,7 +79,7 @@ The ladder describes evidence; the four-stage productization pipeline describes 
 
 The Fellow owns Stage 1 and writes the handoff that recommends whether Stage 2 should happen. The Fellow does not do Stage 2. That is the operational meaning of "test on public data, hand off for proprietary replication" — not a modest self-limitation, but the precise definition of the role.
 
-![Four-stage productization pipeline running left to right: Stage 1 (Fellow, open research on public data, Evidence Ladder Levels 1 to 3), a handoff brief crossing a vertical dashed IP firewall, then Stage 2 (Partner internal proprietary replication, Level 4), Stage 3 (Partner prototype, Level 5), and Stage 4 (Partner production, Level 6). The firewall sits between Stage 1 and Stage 2.](images/11-innovation-lab-operating-model-fig-02.png)
+![Four-stage productization pipeline running left to right: Stage 1 (Fellow, open research on public data, Evidence Ladder Levels 1 to 3), a handoff brief crossing a vertical dashed IP firewall, then Stage 2 (Partner internal proprietary replication, Level 4), Stage 3 (Partner prototype, Level 5), and Stage 4 (Partner production, Level 6). The firewall sits between Stage 1 and Stage 2.](../images/11-innovation-lab-operating-model-fig-02.png)
 
 *Figure 11.2 — The four-stage productization pipeline*
 

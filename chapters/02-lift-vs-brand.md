@@ -54,7 +54,7 @@ Volume is not the whole story. *Who* prescribes and whether their patients *stay
 
 Here is the trap. Sophisticated brand teams go one step further than raw volume and compute *brand share within each physician's eligible patient pool*: Brand X prescriptions divided by all prescriptions that physician writes for the category. This yields a behavioral map that raw deciles cannot see. Consider two cardiologists. Dr. X is decile 10 — enormous prescribing volume — but only 5% brand share: ninety-five percent of her eligible patients are going to competitors. Dr. Y is decile 5 — half the volume — but 60% brand share. A naive targeting model that ranks physicians by predicted prescribing would rank Dr. Y higher. It is targeting the physician who is already largely won. Dr. X is the larger opportunity; there is far more prescribing left to convert.
 
-![A 2x2 scatter of prescribing decile against brand share within category, showing Dr. X at decile 10 with 5 percent share as high headroom and Dr. Y at decile 5 with 60 percent share as already won.](images/02-lift-vs-brand-fig-01.png)
+![A 2x2 scatter of prescribing decile against brand share within category, showing Dr. X at decile 10 with 5 percent share as high headroom and Dr. Y at decile 5 with 60 percent share as already won.](../images/02-lift-vs-brand-fig-01.png)
 *Figure 2.1 — Volume is not opportunity: brand share within the eligible pool reveals headroom*
 
 <!-- → [CHART: 2x2 scatter plot — x-axis: brand share within category (0–100%), y-axis: decile rank (1–10); quadrants labeled: "already won," "high headroom," "low priority," "efficiently converted"; points colored by opportunity tier] -->
@@ -122,7 +122,7 @@ One patient-welfare note that belongs here before the chapter closes.
 
 The welfare risk in metric work is metric capture: optimizing NBRx and share without ever measuring whether the new starts were clinically appropriate. Commercial measurement sees commercial KPIs well — NBRx, switch-ins, share of voice — and patient-welfare KPIs poorly: real-world outcomes, clinical appropriateness, total cost of care. For every project in this book, the welfare question is: *does this metric, optimized hard, reward anything a patient would not want?* Winning new decisions is good for the brand. Whether those decisions were the right drug, for the right patients, at the right time — the commercial metric never asks.
 
-![A decision tree for choosing a primary outcome metric: branching on causation versus association, then horizon and level, into a lift metric with a control, a brand metric with longitudinal design, or NBRx, each paired with a guardrail.](images/02-lift-vs-brand-fig-02.png)
+![A decision tree for choosing a primary outcome metric: branching on causation versus association, then horizon and level, into a lift metric with a control, a brand metric with longitudinal design, or NBRx, each paired with a guardrail.](../images/02-lift-vs-brand-fig-02.png)
 *Figure 2.2 — Choosing a primary outcome metric from a commercial goal*
 
 <!-- → [INFOGRAPHIC: Decision tree for choosing a primary outcome metric given a commercial goal — branches: Is the question about causation or association? Short or long horizon? Individual prescriber or market-level? Outputs: lift metric with control, brand metric with longitudinal design, guardrail pairing] -->

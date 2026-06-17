@@ -25,7 +25,7 @@ $$G(x) = \text{Softmax}(\text{Top-}k(H(x))), \qquad H(x) = x \cdot W_{\text{gate
 
 where $\epsilon$ is Gaussian noise added to help balance load across experts (Shazeer et al. 2017), and Top-$k$ zeros out all but the $k$ largest scores before the softmax. That zeroing is the whole trick. It makes activation **sparse**: only $k$ of the $N$ experts fire for any given input. Model capacity — the total number of parameters — can grow with the number of experts while the compute per forward pass stays roughly flat, because you only ever run $k$ of them.
 
-![Single input x flowing into a gating network that produces a weight vector; only k of N expert boxes are highlighted (active); their outputs combine via weighted sum to produce y. Sparse activation: N experts exist, k fire. Capacity scales with N; compute scales with k.](images/07-mixture-of-experts-fig-01.png)
+![Single input x flowing into a gating network that produces a weight vector; only k of N expert boxes are highlighted (active); their outputs combine via weighted sum to produce y. Sparse activation: N experts exist, k fire. Capacity scales with N; compute scales with k.](../images/07-mixture-of-experts-fig-01.png)
 
 *Figure 7.1 — Sparse activation in a MoE layer: gating fires only k of N experts*
 
@@ -84,7 +84,7 @@ Interpretability work on Mixtral 8x7B finds that experts specialize in **syntact
 
 Now carry that finding to pharma. NPI prediction operates on tabular feature vectors — prescribing history, demographic signals, Open Payments data, behavioral indicators. There is no token sequence and no syntactic structure. The mechanism by which MoE experts develop specialization — routing on token type within a sequence — has no natural analogue in a physician feature vector. What would "specialization" even mean for an expert routing on NPI features? If routing on tabular data found stable, interpretable physician archetypes, that would be a genuinely new finding. But the null result is more likely: routing degenerates into the same near-redundancy the interpretability work already warns about.
 
-![Two panels. Left: sequence input (tokens) flowing through a MoE layer — color-coded by token type showing which expert each route takes. Right: tabular NPI input (feature vector) flowing toward the same architecture — question mark over the routing, captioned "no syntactic structure to route on." MoE routing specializes on token type in sequential models. What it routes on in a feature-vector regime is an open question — and probably not 'physician archetypes.'](images/07-mixture-of-experts-fig-02.png)
+![Two panels. Left: sequence input (tokens) flowing through a MoE layer — color-coded by token type showing which expert each route takes. Right: tabular NPI input (feature vector) flowing toward the same architecture — question mark over the routing, captioned "no syntactic structure to route on." MoE routing specializes on token type in sequential models. What it routes on in a feature-vector regime is an open question — and probably not 'physician archetypes.'](../images/07-mixture-of-experts-fig-02.png)
 
 *Figure 7.2 — What MoE routes on: token type versus a feature vector with no structure*
 
@@ -136,7 +136,7 @@ Return to the opening-case platform. Run the six questions that form the reusabl
 
 There is also a fast three-criterion screen for when you are short on time: *token-level routing? shared trunk and output space? jointly trained?* Three "no" answers means stacking.
 
-![Six-question audit as a vertical checklist with yes/no branches. Fast screen as a three-item inset box. The six buyer questions and the fast screen. A vendor that cannot answer questions 2, 3, and 4 transparently has answered them.](images/07-mixture-of-experts-fig-03.png)
+![Six-question audit as a vertical checklist with yes/no branches. Fast screen as a three-item inset box. The six buyer questions and the fast screen. A vendor that cannot answer questions 2, 3, and 4 transparently has answered them.](../images/07-mixture-of-experts-fig-03.png)
 
 *Figure 7.3 — The six buyer questions and the fast screen*
 

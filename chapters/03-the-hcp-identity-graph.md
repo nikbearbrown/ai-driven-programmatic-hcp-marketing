@@ -19,7 +19,7 @@ Now trace a single statin prescription through this machine. A patient fills a s
 
 The result is not anonymous data. It is data that is anonymous with respect to the *patient* and fully identified with respect to the *physician*. The output of that de-identification step is: "NPI 1234567890 wrote 47 statin scripts last month." The patient is gone. The doctor is named — numerically, but named.
 
-![Two-column pipeline: patient identifiers struck through at the payer de-identification step while the NPI persists through broker, model and bid.](images/03-the-hcp-identity-graph-fig-01.png)
+![Two-column pipeline: patient identifiers struck through at the payer de-identification step while the NPI persists through broker, model and bid.](../images/03-the-hcp-identity-graph-fig-01.png)
 *Figure 3.1 — De-identification removes the patient and leaves the prescriber*
 
 <!-- → [DIAGRAM: Two-column pipeline diagram — left column shows patient data being stripped at the payer step (fields crossed out: name, DOB, address); right column shows NPI persisting through every subsequent step — broker, pharma buyer, model, bid. Caption: "De-identification removes the patient and leaves the prescriber. This asymmetry is the legal foundation of NCP targeting."] -->
@@ -79,7 +79,7 @@ The effect on measurement compounds this. If the targeting list is built from st
 
 The industry's frontier response to claims lag is **dynamic NPI activation**: ingesting real-time clinical signals — EHR-derived, from platforms like OptimizeRx's DAAP — to identify physicians at the moment of actual clinical relevance rather than on a monthly refresh cycle. Instead of "this physician was a high-volume prescriber last month," the trigger becomes "this physician just opened a chart for a patient with the eligible diagnosis." That is a meaningfully different signal. It is also, as Chapter 1 discussed, the point where the question of whether PHI is leaving the EHR becomes live again.
 
-![Two parallel timelines: a multi-week claims-data lag from prescription to deployed targeting list, contrasted with a same-day real-time EHR trigger that goes straight from chart-open to bid.](images/03-the-hcp-identity-graph-fig-02.png)
+![Two parallel timelines: a multi-week claims-data lag from prescription to deployed targeting list, contrasted with a same-day real-time EHR trigger that goes straight from chart-open to bid.](../images/03-the-hcp-identity-graph-fig-02.png)
 *Figure 3.2 — The gap between event and targeting signal is where targeting error lives*
 
 <!-- → [DIAGRAM: Timeline diagram showing claims-data lag: prescription written (Day 0) → pharmacy adjudication (Day 1-3) → payer processing (Day 7-14) → broker aggregation (Day 14-30) → model refresh (monthly) → targeting list deployed. Contrast with a parallel "real-time EHR trigger" track showing Day 0 → bid. Caption: "The gap between event and targeting signal is where targeting error lives."] -->
@@ -92,7 +92,7 @@ CRM systems — Veeva, IQVIA OCE+, Salesforce Life Sciences Cloud — surface ne
 
 The feature worth understanding here is not the sophistication of any individual channel but the feedback structure of the system as a whole. Every engagement signal — whether a rep's call got answered, whether a Medscape banner got clicked, whether an EHR prompt was dismissed — flows back into the profile. The propensity model that targets Dr. Martinez today is partly built from how Dr. Martinez responded to being targeted last month. This is not a static dataset that gets queried. It is a continuously updating portrait, enriched by its own use.
 
-![A circular feedback loop with an NPI profile at the center and spokes to CRM rep-call logs, endemic-media click data and EHR prompt responses, each returning an engagement signal that updates the model.](images/03-the-hcp-identity-graph-fig-03.png)
+![A circular feedback loop with an NPI profile at the center and spokes to CRM rep-call logs, endemic-media click data and EHR prompt responses, each returning an engagement signal that updates the model.](../images/03-the-hcp-identity-graph-fig-03.png)
 *Figure 3.3 — The graph is enriched by targeting; each campaign refines the next*
 
 <!-- → [DIAGRAM: Circular feedback loop — NPI profile at center, with spokes to: CRM (rep call logs), endemic media (click data), EHR triggers (prompt responses). Each spoke has a return arrow labeled "engagement signal → model feature update." Caption: "The graph is enriched by targeting. Each campaign refines the model that drives the next one."] -->

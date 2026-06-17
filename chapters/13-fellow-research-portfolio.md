@@ -170,7 +170,7 @@ Two rules govern every card. First, the kill criterion is pre-registered — you
 
 **The failure mode.** Ecological inference. Medicaid SDUD is aggregated to NDC × state × quarter — it does not observe individual patients or individual substitution decisions. Reporting "coupons cause patients to stay on the brand" overclaims patient-level behavior from state-level aggregates. The honest version states the estimate at the level the data supports — state-quarter generic share — and explicitly flags that individual substitution is inferred, not observed.
 
-![Evidence Ladder with rungs L0 to L6; the four portfolio tracks plotted by the level public data lets them reach — Track A and Track B span L2 to L3, Track C sits at L3, Track D splits with D1 and D3 at L2 and D2 at L3 — and a red horizontal line above L3 labeled "proprietary data required" marking the public-data ceiling.](images/13-fellow-research-portfolio-fig-01.png)
+![Evidence Ladder with rungs L0 to L6; the four portfolio tracks plotted by the level public data lets them reach — Track A and Track B span L2 to L3, Track C sits at L3, Track D splits with D1 and D3 at L2 and D2 at L3 — and a red horizontal line above L3 labeled "proprietary data required" marking the public-data ceiling.](../images/13-fellow-research-portfolio-fig-01.png)
 
 *Figure 13.1 — The public-data ceiling is the firewall made visible*
 

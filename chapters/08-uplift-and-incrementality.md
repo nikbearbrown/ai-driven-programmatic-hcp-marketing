@@ -23,7 +23,7 @@ This is why targeting on propensity and then measuring the treated group's outco
 
 A great predictor can be a terrible intervention target. Keep that sentence nearby. It is the inversion this chapter is built on, and it resolves the opening case in one step.
 
-![Two-axis plot — x: propensity score (0 to 1), y: incremental effect (CATE); curve peaks in the middle persuadable range and is near zero at both tails; annotations at high-propensity end read "sure things — wasted spend," at low end "lost causes — wasted spend," in middle "persuadables — the only profitable target".](images/08-uplift-and-incrementality-fig-01.png)
+![Two-axis plot — x: propensity score (0 to 1), y: incremental effect (CATE); curve peaks in the middle persuadable range and is near zero at both tails; annotations at high-propensity end read "sure things — wasted spend," at low end "lost causes — wasted spend," in middle "persuadables — the only profitable target".](../images/08-uplift-and-incrementality-fig-01.png)
 
 *Figure 8.1 — The propensity-versus-incrementality inversion*
 
@@ -101,7 +101,7 @@ The standard solution is the **uplift curve** and its summary statistic, the **Q
 
 The intuition to hold: a useful uplift model lets you spend on the persuadables and skip the sure things. If a model cannot concentrate incremental response at the top of its ranking, it has not learned to distinguish persuadables from sure things, and it will not improve on random targeting even if its propensity predictions are excellent.
 
-![Uplift/Qini curve — x-axis: fraction of population targeted (0–1), y-axis: cumulative incremental response; three curves: perfect model (steep rise then flat), actual model (intermediate bow), random targeting (diagonal); shaded area between actual and diagonal labeled "Qini coefficient"; annotation: "sure things live below the knee; persuadables live above it".](images/08-uplift-and-incrementality-fig-02.png)
+![Uplift/Qini curve — x-axis: fraction of population targeted (0–1), y-axis: cumulative incremental response; three curves: perfect model (steep rise then flat), actual model (intermediate bow), random targeting (diagonal); shaded area between actual and diagonal labeled "Qini coefficient"; annotation: "sure things live below the knee; persuadables live above it".](../images/08-uplift-and-incrementality-fig-02.png)
 
 *Figure 8.2 — The Qini curve: how much incremental response a ranking captures*
 
@@ -123,7 +123,7 @@ Cross two binary questions: does this physician prescribe if treated? Does this 
 
 Targeting on high propensity targets the sure things. Uplift targeting targets the persuadables. That reframing is the chapter's entire argument in business language.
 
-![Persuadables 2x2 — axes: "prescribes if treated" (yes/no) and "prescribes if untreated" (yes/no); four quadrants labeled persuadables, sure things, lost causes, sleeping dogs; arrows from "propensity targeting" pointing to sure-things quadrant; arrows from "uplift targeting" pointing to persuadables quadrant.](images/08-uplift-and-incrementality-fig-03.png)
+![Persuadables 2x2 — axes: "prescribes if treated" (yes/no) and "prescribes if untreated" (yes/no); four quadrants labeled persuadables, sure things, lost causes, sleeping dogs; arrows from "propensity targeting" pointing to sure-things quadrant; arrows from "uplift targeting" pointing to persuadables quadrant.](../images/08-uplift-and-incrementality-fig-03.png)
 
 *Figure 8.3 — The persuadables 2×2: propensity targets sure things, uplift targets persuadables*
 

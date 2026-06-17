@@ -71,7 +71,7 @@ McKinsey has cited a 50 to 65 percent reduction in regulatory-submission timelin
 
 A third datum reframes the whole thing. Promotional-content production keeps rising — Veeva's 2025 Pulse data reports pharma companies producing roughly 20 percent more content each year — while about 77 percent of field content is never used by reps (Veeva Pulse, 2025). Volume is up. Value is not obviously up. The real constraint in MLR is not speed — it is governance and relevance. If 77 percent of what clears review never gets used, faster generation makes the governance problem worse, not better. "50% faster MLR" is an answer to a question nobody asked.
 
-![Two-bar-per-year chart, 2020–2024, contrasting total promotional materials submitted for MLR review against materials actively used by field teams; the persistent gap between the bars makes the governance problem visible.](images/04-what-todays-ai-stack-does-fig-01.png)
+![Two-bar-per-year chart, 2020–2024, contrasting total promotional materials submitted for MLR review against materials actively used by field teams; the persistent gap between the bars makes the governance problem visible.](../images/04-what-todays-ai-stack-does-fig-01.png)
 *Figure 4.1 — The MLR governance gap (illustrative)*
 
 <!-- → [CHART: Two-bar chart per year, 2020–2024 — left bar: total promotional materials submitted for MLR review; right bar: materials actively used by field teams. Caption: "If the 77%-unused figure is accurate, speed is not the binding constraint. The chart makes the governance problem visible as the gap between bars."] -->
@@ -88,7 +88,7 @@ Omnichannel orchestration is the coordination of all those channels for a single
 
 The misconception is that omnichannel means being everywhere. It does not. It means coordination. A physician hit in one week by a rep visit, two emails, retargeting banners, and an EHR trigger has a fragmented brand experience, not an omnichannel one. Orchestration exists precisely to prevent that. In practice: a physician who ignores email but engages endemic content gets email suppressed and a Medscape placement plus a virtual detail prioritized. The system is adjusting in real time to revealed preference — which is genuinely useful, and which is still optimizing for the marketer's objective, not the patient's.
 
-![Side-by-side diagram of a single HCP at the center radiating to six channels. Left panel, fragmented: all six channels fire the same week. Right panel, orchestrated: two channels active, four suppressed based on engagement history.](images/04-what-todays-ai-stack-does-fig-02.png)
+![Side-by-side diagram of a single HCP at the center radiating to six channels. Left panel, fragmented: all six channels fire the same week. Right panel, orchestrated: two channels active, four suppressed based on engagement history.](../images/04-what-todays-ai-stack-does-fig-02.png)
 *Figure 4.2 — Omnichannel is sequencing and suppression, not reach*
 
 <!-- → [DIAGRAM: Single HCP at the center; radiating lines to six channels (in-person rep, virtual detail, email, EHR/POC card, endemic digital, programmatic). Two versions side by side: left labeled "fragmented" (all channels firing same week); right labeled "orchestrated" (two channels active, four suppressed based on engagement history). Caption: "Omnichannel is a sequencing and suppression problem, not a reach problem."] -->
@@ -109,7 +109,7 @@ This is the chapter's named artifact and the structure the rest of the book uses
 
 **Five: does a buzzword name a real architecture, or is it a relabel?** "Mixture of Experts" may name a real system. It does not tell you whether that system outperforms a gradient-boosted tree on tabular NPI data. "Federated learning" may describe real infrastructure. It does not tell you whether the resulting model is better than a centrally trained one. "Agentic" may describe real task automation. It does not tell you whether the tasks being automated are the binding constraint on commercial effectiveness.
 
-![Vertical flowchart of the five-question audit rubric. Each question sits in a box with branch paths for answered-clearly versus not-answered-or-circular, converging on a bottom verdict band: test it, watch it, believe it, or route to Chapter 7.](images/04-what-todays-ai-stack-does-fig-03.png)
+![Vertical flowchart of the five-question audit rubric. Each question sits in a box with branch paths for answered-clearly versus not-answered-or-circular, converging on a bottom verdict band: test it, watch it, believe it, or route to Chapter 7.](../images/04-what-todays-ai-stack-does-fig-03.png)
 *Figure 4.3 — The five-question audit rubric for any vendor claim*
 
 <!-- → [INFOGRAPHIC: Five-question audit rubric as a vertical flowchart — each question in a box, with branch paths for "answered clearly" vs. "not answered / circular" — converging at a bottom verdict: test it / watch it / believe it / route to Chapter 7. Caption: "Run this rubric on every vendor claim before citing any number."] -->

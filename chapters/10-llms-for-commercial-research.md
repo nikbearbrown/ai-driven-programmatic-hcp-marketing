@@ -23,7 +23,7 @@ The mistake is not generating the draft. It is shipping the draft as though gene
 
 This is worth stating flatly because the tool actively encourages the confusion. The draft *looks* finished. It has the surface features — citations, hedged language, section structure, confident register — that we use as proxies for "someone did the work." The Fellow's job is to stop reading those surface features as evidence of work. They are evidence that the model is very good at producing surface features.
 
-![Two-stage pipeline: an LLM generates a draft, a validation harness sits between, and only after it does the draft become a trustworthy claim; a labeled gap separates generation from verification.](images/10-llms-for-commercial-research-fig-01.png)
+![Two-stage pipeline: an LLM generates a draft, a validation harness sits between, and only after it does the draft become a trustworthy claim; a labeled gap separates generation from verification.](../images/10-llms-for-commercial-research-fig-01.png)
 
 *Figure 10.1 — Generation and verification are different acts*
 
@@ -75,7 +75,7 @@ First, topic familiarity drives fabrication in the wrong direction. Hallucinatio
 
 Second, "real" does not mean "accurate." Some genuine citations carry bibliographic errors — wrong or invalid DOIs, or mismatched details that survive a casual check because the journal and authors are real. This is the opening-case failure: a resolving link is not a verified claim.
 
-![Bar chart comparing LLM citation-fabrication rate for a well-studied condition (about 6 percent) against niche conditions (about 28 to 29 percent), showing fabrication is highest where the literature is thinnest. Figures are contested and marked verify.](images/10-llms-for-commercial-research-fig-02.png)
+![Bar chart comparing LLM citation-fabrication rate for a well-studied condition (about 6 percent) against niche conditions (about 28 to 29 percent), showing fabrication is highest where the literature is thinnest. Figures are contested and marked verify.](../images/10-llms-for-commercial-research-fig-02.png)
 
 *Figure 10.2 — Fabrication is highest where the literature is thinnest (illustrative bars based on Linardon et al., JMIR Mental Health 2025, PMC12658395: ~6% for major depressive disorder vs. ~28–29% for less-studied conditions)*
 
@@ -117,7 +117,7 @@ The harness is the chapter's named artifact. It is a workflow with four layers �
 
 **Layer four: human-in-the-loop capstone.** The model does the mechanical pre-checks. The expert makes the judgment. By the time content reaches the human, the harness has resolved references, scored groundedness, and surfaced compliance flags — so the human's scarce attention goes to what only a human can decide: is this claim true? Is the signal real? Could the partner defend it to a regulator or an audit committee?
 
-![Vertical four-layer validation harness: citation verification, groundedness scoring, compliance flag, and human capstone, each annotated with what it catches on the left and its limit on the right.](images/10-llms-for-commercial-research-fig-03.png)
+![Vertical four-layer validation harness: citation verification, groundedness scoring, compliance flag, and human capstone, each annotated with what it catches on the left and its limit on the right.](../images/10-llms-for-commercial-research-fig-03.png)
 
 *Figure 10.3 — The four-layer validation harness, with each layer's catch and limit*
 

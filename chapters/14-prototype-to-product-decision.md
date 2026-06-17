@@ -50,7 +50,7 @@ The criteria are conjunctive, and this matters: a project must pass all of them 
 
 **Build cost** is an order-of-magnitude engineering estimate — data access for proprietary replication, model and infrastructure build, monitoring. A strong-evidence, high-cost project may still be TEST rather than BUILD. The Fellow gives an order of magnitude plus the questions for the partner's engineers, not a precise number that cannot be defended.
 
-![The TEST / BUILD / KILL decision tree: a top-down sequence of five conjunctive decision nodes from a scored project, where any failed criterion exits to a TEST or KILL verdict and the patient-welfare gate (in red) can veto a commercially excellent project.](images/14-prototype-to-product-decision-fig-01.png)
+![The TEST / BUILD / KILL decision tree: a top-down sequence of five conjunctive decision nodes from a scored project, where any failed criterion exits to a TEST or KILL verdict and the patient-welfare gate (in red) can veto a commercially excellent project.](../images/14-prototype-to-product-decision-fig-01.png)
 
 *Figure 14.1 — The TEST / BUILD / KILL decision tree, with the welfare gate as veto*
 
