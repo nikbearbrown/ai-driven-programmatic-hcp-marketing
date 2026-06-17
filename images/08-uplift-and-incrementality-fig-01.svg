@@ -50,9 +50,9 @@
   <text x="58" y="360" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#545454" text-anchor="end">0</text>
 
   <!-- zone descriptors (positional, not baked-in zone-name boxes) -->
-  <text x="163" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">lost causes</text>
+  <text x="163" y="326" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">lost causes</text>
   <text x="362" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#2a1a0e" text-anchor="middle">persuadables</text>
-  <text x="561" y="344" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">sure things</text>
+  <text x="561" y="326" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454" text-anchor="middle">sure things</text>
 
   <!-- Caption -->
   <text x="32" y="406" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">The mid-propensity peak is the only profitable target; both tails are wasted spend. The chapter is built on this inversion.</text>
