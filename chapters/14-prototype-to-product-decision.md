@@ -1,244 +1,198 @@
-# Chapter 14 — From Prototype to Product Decision (The Fellows Brief)
+# Chapter 14 — From Prototype to Product Decision (The Fellow's Brief)
+*A good "no" is as valuable as a build recommendation — and harder to write.*
 
-## 1. Chapter overview
-
-This is the terminal chapter, and it produces the book's terminal deliverable: the **product-handoff brief**. By the end you will be able to take a scored portfolio project (Chapter 13) and turn it into a defensible decision — **test it, build it, or kill it** — written so a partner's product, data-science, medical, legal, regulatory, and commercial stakeholders can act on it. You will apply explicit handoff criteria (evidence strength, lift or association magnitude, compliance risk, build cost), route compliance flags to counsel rather than adjudicating them, sketch an engineering estimate, design a client-pilot and a post-launch monitoring plan for the build path, and — the chapter's moral spine — apply the **patient-welfare gate as a binding veto**: a project can be commercially excellent and still be killed because it harms patients or the health system. You will also place the project in the **four-stage research-to-product pipeline** and understand exactly where the Fellow's job ends and the partner's begins. The skill being trained is judgment under honesty: writing a *good* "no" is as assessable, and as valuable, as recommending a build.
-
-## 2. Learning objectives
-
-By the end of this chapter you will be able to:
-
-1. **(Evaluate)** Apply explicit handoff criteria — evidence strength, lift/association magnitude, compliance risk, the **patient-welfare gate**, and build cost — to reach a verdict.
-2. **(Create)** Produce the product-handoff brief *and* the rejection rationale, treating a "no" as a result.
-3. **(Apply)** Stage a portfolio: decide what to test next, what to replicate on proprietary data, what to shelve, and what to ship.
-
-## 3. Opening case — a prototype that lifts engagement but not incrementality, and trips a flag
-
-A Fellow brings the lab review a prototype she is proud of. It is an AI-driven content-personalization model for point-of-care messaging, and on her public-data proxy it shows a clean, statistically significant lift in *engagement* — the surrogate metric (opens, clicks, dwell) the platform reports natively. The vendor deck would call this a win. She is inclined to write a BUILD brief.
+A Fellow brings the lab a prototype she is proud of. It is an AI-driven content-personalization model for point-of-care messaging, and on her public-data proxy it shows a clean, statistically significant lift in engagement — opens, clicks, dwell time, the metrics the platform reports natively. The vendor deck would call this a win. She is inclined to write a BUILD brief.
 
 The lab lead asks three questions, in order.
 
-First: "Engagement, or incrementality?" The model lifts the surrogate, but she has no holdout and no credible identification — she cannot say whether it changed any *prescribing*. Engagement is not belief and is not scripts (Chapter 2). On the Evidence Ladder she is at Level 2, maybe 3: an offline result on a surrogate, not a causal readout on the outcome that matters.
+"Engagement, or incrementality?" The model lifts the surrogate, but there is no holdout, no credible identification. She cannot say whether it changed any prescribing. Engagement is not belief and is not scripts — that distinction was Chapter 2's whole argument. On the Evidence Ladder she is at Level 2, maybe 3: an offline result on a surrogate, not a causal readout on the outcome that matters.
 
-Second: "What does it touch?" The personalization fires content into the EHR sidebar — the same visual layer as drug-interaction and safety alerts (`pharma-ai-hcp-marketing-synthesis.md` §2). That is a **compliance flag** (FDA fair-balance risk if the content makes claims; an unsettled HIPAA question about real-time clinical triggers) *and* a **patient-welfare flag** (intensifying commercial messaging in the safety-alert layer raises cognitive load at the prescribing moment).
+"What does it touch?" The personalization fires content into the EHR sidebar — the same visual layer as drug-interaction and safety alerts. That is a compliance flag (FDA fair-balance risk if the content makes product claims; an unsettled HIPAA question about real-time clinical triggers) and a patient-welfare flag (intensifying commercial messaging in the safety-alert layer raises cognitive load at the exact moment a prescribing decision is being made).
 
-Third: "If we hand this to engineering and it ships, what would we be shipping?" A feature that demonstrably moves a surrogate, has *no* evidence it moves the real outcome, and lives in the most ethically fraught layer in the stack.
+"If we hand this to engineering and it ships, what would we be shipping?" A feature that demonstrably moves a surrogate, has no evidence it moves the real outcome, and lives in the most ethically fraught layer in the stack.
 
-What is the right call? Not BUILD. The honest verdict is **TEST** — the engagement signal is promising enough to justify the partner running a proper holdout on proprietary data (the only thing that can produce the causal readout public data cannot), *conditioned on* clearing the fair-balance and welfare flags first. And if the proprietary holdout later showed the lift was engagement-only — surrogate movement with no prescribing change — *and* the content tripped fair-balance, the verdict would flip to KILL regardless of how good the engagement number looked. This chapter is the machinery that produces that call, and makes the welfare flag able to override a positive commercial result.
+The right call is not BUILD. It is **TEST** — the engagement signal is promising enough to justify the partner running a proper holdout on proprietary data, the only thing that can produce the causal readout public data cannot, *conditioned on* clearing the fair-balance and welfare flags first. And if the partner's holdout later showed lift was engagement-only — surrogate movement with no prescribing change — and the content tripped fair-balance, the verdict would flip to KILL regardless of how good the engagement number looked.
 
-## 4. Prerequisites
-
-You should arrive able to:
-
-- Place an artifact on the **Evidence Ladder** and explain why public data tops out around Level 3 (Chapter 11).
-- Describe the **four-stage productization pipeline** and the IP firewall (Chapter 11).
-- Read a **scored portfolio project** — its seven-field card, ladder level, and flags (Chapter 13).
-- Distinguish **propensity from incrementality** and know why a public-data result usually can't reach Level 4 without a holdout (Chapter 8).
-- Grade **evidence quality** honestly — association dressed up vs. credible identification (Chapter 5).
-- Distinguish **engagement (surrogate) from lift and brand (the real dependent variables)** (Chapter 2).
-
-## 5. The handoff decision machinery
-
-### 5.1 The four-stage research-to-product pipeline (the decision spine)
-
-The lab's value is *reducing the partner's uncertainty*, not shipping product. A finding moves through four gates, each a larger resource commitment, mapped to the Evidence Ladder:
-
-| Stage | What happens | Who owns it | Ladder |
-|---|---|---|---|
-| **1. Open research** | Public-data test on public methodology. | The Fellow. | L0–L3 |
-| **2. Proprietary replication** | The *partner* re-runs the promising method on its internal data (prospective pilot/holdout). | The partner. | L4 |
-| **3. Prototype** | A built artifact tested in a controlled client context. | The partner. | L5 |
-| **4. Resourced product feature** | Monitored deployment with compliance + welfare checks. | The partner. | L6 |
-
-The firewall holds at Stage 1: nothing proprietary enters the book or repo. The Fellow owns Stage 1; the partner owns Stage 2 and up. **The Chapter 14 brief is precisely the gate-1→gate-2 handoff document**: does this public-data result earn proprietary replication?
-
-The load-bearing misconception to kill: *"the Fellow's job is to build the feature."* No. The Fellow's job ends at "this earns (or does not earn) the partner's data and engineering." Over-building is scope creep the firewall forbids — and, practically, a Fellow on public data *cannot* reach Levels 4–6, because those require the proprietary data and live client context that exist only inside the partner's walls.
-
-> **The standing blocker [contested — see pantry, Risk 1 / Open Question 1].** The handoff mechanics in this chapter *assume* a gate-2 partner exists, has agreed to receive briefs, and will act on them — and that the partner has signed off on the framing, including the framing of briefs that critique its own products. None of that is settled. Whether (and what) proprietary replication is in scope, and who signs off on a brief's framing, is an **open blocker**, not a resolved arrangement. Read everything below as "this is how the handoff works *if* the agreement lands where the book assumes," and treat that "if" as live.
-
-### 5.2 The handoff criteria — test / build / kill
-
-The brief reaches one of three verdicts via explicit, **conjunctive** criteria:
-
-- **Evidence strength** — the Evidence-Ladder level actually reached (be honest: public data tops at ~L3) and the quality of the identification (a credible design, or association dressed up?).
-- **Lift or association magnitude** — does it move one of the book's two dependent variables *enough to matter commercially*? A statistically significant but tiny effect is a kill.
-- **Compliance risk** — MLR / FDA fair-balance / Sunshine Act / HIPAA exposure, **flagged and routed to counsel**, never adjudicated by the Fellow.
-- **Patient-welfare gate** (§5.3) — a *required* criterion, not an appendix, and able to veto.
-- **Build cost** — the engineering/data estimate to take it to L4+. A strong-evidence, high-cost project may still be "test next" rather than "build."
-
-The three verdicts:
-
-- **TEST** — promising but not decisive → more public-data work, *or* hand to the partner for proprietary replication at gate 2. ("We reduced uncertainty about *which* claim to trust without resolving it.")
-- **BUILD** — evidence + magnitude + acceptable compliance + passes the welfare gate + tractable cost → recommend resourcing.
-- **KILL** — fails a threshold → shelve, *with the rejection rationale written.* A "no" is a result.
-
-The criteria are **conjunctive**, and **welfare can veto**: a positive commercial result that fails the welfare gate, or carries unacceptable compliance risk, or costs more than its value, is a KILL or a TEST-next — not a BUILD. The misconception to kill: *"the brief recommends building if the result is positive."* It does not. Positive-but-vetoed is the most important case the chapter teaches.
-
-### 5.3 The patient-welfare gate (the chapter's moral spine)
-
-The welfare gate asks one question: **even if this works commercially, does it harm patients or the health system?** It is a **gate** — a project can be commercially excellent and still be killed on welfare grounds. The gate operationalizes the book's central critique: the commercial stack measures *adoption* far better than it measures *welfare* (`pharma-brand-measurement-synthesis.md` §6). Concretely, the gate flags whether the project:
-
-- suppresses clinically appropriate **generic substitution** (the coupon case);
-- targets physician **susceptibility** rather than patient need (the proxy case);
-- moves prescribing of **low-clinical-value** drugs (the ICER-mismatch case);
-- intensifies **EHR-embedded messaging in the same layer as safety alerts** (the point-of-care case from the opener).
-
-The discipline is pervasive by design — every chapter carries a compliance-and-welfare check (the series anatomy). Chapter 14 is where welfare stops being a check and becomes a *binding decision criterion*. A Fellow who treats the gate as boilerplate has missed the chapter. And — consistent with the route-to-counsel rule — the welfare gate flags and reasons about harm; it does not *adjudicate* legality. "This suppresses generic substitution and raises system cost with no clinical benefit" is a welfare finding the Fellow can defend; "this is illegal" is a conclusion for counsel.
-
-**Worked welfare-veto.** A Track-D coupon project (D2) shows a co-pay program lifts branded share — a commercial win — by suppressing generic substitution, which is a welfare loss (higher system cost, no clinical benefit; Dafny, Ody & Schmitt 2017 [verify]). The welfare gate → **KILL or escalate**, regardless of the commercial lift. The kill rationale is itself a partner-valuable result: it tells the partner what it just avoided defending.
-
-### 5.4 MLR / legal review and the engineering estimate
-
-Two practical gates a buildable project must pass:
-
-- **MLR (Medical/Legal/Regulatory) + legal review.** Pharma content and claims run through MLR — historically ~50–60 days per piece [vendor-reported; verify], with AI now compressing this (McKinsey estimates 50–65% timeline reduction, methodology unspecified [verify]). Be skeptical of "AI makes MLR free": promotional volume rose ~29% year-over-year in 2025 while ~77% of approved content is rarely used, and an MIT analysis found ~95% of generative-AI pilots failing — "the problem is governance, not generation speed" [verify] (`pharma-ai-hcp-marketing-synthesis.md` §4). Any recommendation that would generate HCP-facing claims must flag MLR load and fair-balance risk — and the September 2025 FDA enforcement wave (200+ letters, AI-powered ad surveillance, fair-balance and efficacy-exaggeration the top violations [verify counts]) makes this live (§5). EHR-integrated advertising remains a regulatory gray zone with no specific OPDP guidance — a flag, not a green light. The Fellow *flags and routes*; counsel and medical affairs adjudicate.
-- **Engineering / data estimate.** A rough order-of-magnitude of what gate-2/3 costs: data access for proprietary replication, model and infrastructure build, monitoring. The estimate turns "good idea" into "good idea worth roughly $X" — the input the partner's resourcing decision actually needs. Because Fellows are not MLOps engineers, the brief gives an *order of magnitude plus the questions for the partner's engineers*, not a precise number it cannot defend.
-
-The misconception to kill: *"compliance is someone else's problem after handoff."* An un-flagged compliance landmine discovered at gate 3 is far costlier than one surfaced at gate 1. The brief's job is to surface it early.
-
-### 5.5 Client-pilot design and post-launch monitoring (gates 3–4)
-
-For a BUILD recommendation, the brief *sketches* (it does not run — that is the partner's) two things:
-
-- **The client pilot** — a prospective holdout / RCT-style test on the partner's client data. This is the L4→L5 step that finally produces a *causal* readout the public-data work could not (Chapter 8): the holdout is the gold standard the Fellow could only gesture at on public data.
-- **The post-launch monitoring plan** (L6) — ongoing effectiveness tracking, compliance audit, and a **standing patient-welfare check** so the welfare gate does not end at launch. This is where the accountability-framework work (Track D3, Chapter 13) lands operationally.
-
-The misconception to kill: *"once it ships, the research is done."* L6 is *monitored* deployment; the welfare and compliance checks are continuous. A shipped feature with no monitoring plan fails the brief.
-
-## 6. Worked example — a full handoff / kill memo
-
-Below is the terminal deliverable applied to the Chapter 13 worked project (the C1 MoE-vs-ensemble benchmark, whose kill criterion was met) and, for contrast, a welfare-veto kill. This is the structure a Fellow could hand the partner's team.
-
-> **PRODUCT-HANDOFF BRIEF**
-> **Project:** C1 — Ensemble vs. routed ("MoE") model on NPI propensity
-> **Prepared by:** [Fellow] · **Date:** [date] · **Distribution:** data science (owner), product, MLR (flag only)
->
-> **Verdict: KILL (architecture investment).**
->
-> **1. Question.** Does a routed/MoE-style model meaningfully beat a tuned gradient-boosting baseline on the partner's core NPI-propensity task?
->
-> **2. Evidence strength.** Evidence-Ladder **L3** (small offline test). Benchmark, not causal — appropriate for an architecture decision. Both models tuned with equal, logged effort; evaluated on out-of-time validation, calibration (Brier + reliability), and subgroup robustness — not AUC alone.
->
-> **3. Magnitude.** The tuned LightGBM baseline matched the routed model on AUC and **beat** it on calibration; subgroup robustness equivalent. No operational gain from routing.
->
-> **4. Compliance flags (routed, not adjudicated).** None material — internal model bake-off, no HCP-facing content. → no MLR action required at this stage.
->
-> **5. Patient-welfare gate.** PASS (no welfare exposure). Note: a "no lift" finding *protects* patients indirectly by not committing resources to an unjustified, less-interpretable system.
->
-> **6. Build cost.** The routed architecture would add substantial training and inference complexity and reduce interpretability, for no measured gain. Cost clearly exceeds value.
->
-> **7. Recommendation & staging.** **KILL the routed-architecture investment; keep the tuned ensemble.** Do *not* advance to gate 2. The "no" saves the engineering budget — the expected outcome given the tabular-data evidence (Grinsztajn et al., NeurIPS 2022 [verify]).
->
-> **8. What would change the verdict.** A future task with genuine sequence/multi-task structure (not tabular NPI prediction) where routing's advantages apply, *and* an equally tuned benchmark showing a meaningful, calibration-confirmed gain.
-
-> **PRODUCT-HANDOFF BRIEF (welfare veto)**
-> **Project:** D2 — Co-pay-coupon generic-suppression estimate
-> **Verdict: KILL (welfare gate), with escalation.**
->
-> **Evidence strength.** L3; heterogeneity-robust DiD on coupon-legality variation, valid pre-trends. *Stated at the state-quarter level — individual substitution is inferred, not observed (ecological-inference flag).*
-> **Magnitude.** Commercially positive — the coupon program lifts branded share. *Mechanism: suppression of bioequivalent-generic substitution.*
-> **Compliance flags (routed).** Coupons banned in Medicare; state-law variation; route any legality characterization to counsel.
-> **Patient-welfare gate.** **FAIL.** The commercial lift *is* generic suppression — higher system cost, no clinical benefit. This is the worked welfare veto.
-> **Recommendation.** **KILL** as a product to optimize; **escalate** the finding to compliance + medical-commercial as a risk the partner should know it carries. The rejection rationale is the deliverable: it tells the partner what it just avoided defending to a regulator or audit committee. *(Framing requires partner sign-off — Risk 2/4 — and is subject to the standing blocker, Risk 1.)*
-
-Notice the load-bearing features: the verdict is on the first line; the evidence level is honest; the welfare gate is a *decision*, not a footnote; compliance is flagged and routed, not adjudicated; and the kill carries a written rationale plus "what would change the verdict." A brief without those is incomplete.
-
-## 7. Common misconceptions
-
-- **"The brief recommends BUILD if the result is positive."** No — criteria are conjunctive and welfare can veto. Positive-but-vetoed (the coupon case) is a KILL.
-- **"Ethics is the final-chapter wrap-up."** No — the welfare check is pervasive (every chapter); Chapter 14 makes it a *binding* criterion that can override commercial success.
-- **"The Fellow builds the feature."** No — the Fellow's job ends at the gate-1→gate-2 handoff. The partner replicates, prototypes, and ships.
-- **"Compliance is someone else's problem after handoff."** No — an un-flagged landmine found at gate 3 is far costlier. Flag early; route, don't adjudicate.
-- **"Once it ships, the research is done."** No — L6 is *monitored* deployment with a standing welfare check. No monitoring plan → the brief fails.
-- **"A KILL wasted the cycle."** No — a good "no" (what would change the verdict, what the partner just avoided spending) is an assessable, valuable result and the antidote to vendor-deck optimism.
-
-## 8. Evidence check
-
-- **Independent / established:** Holdout/RCT designs are the causal gold standard (Chapter 8). Tree ensembles SOTA on medium tabular data (Grinsztajn et al., NeurIPS 2022 [verify]). The "most-promoted drugs often have low added benefit" finding gives the welfare gate empirical teeth (`pharma-marketing-evidence-synthesis.md` §4 [verify the 68% figure]).
-- **Vendor-generated (treat as claims):** MLR cycle-time figures (~50–60 days) and the McKinsey 50–65% AI-reduction estimate (methodology unspecified) are vendor/consultancy-reported [verify]. All script-lift numbers remain vendor-sourced.
-- **Contested / drifting:** The MIT "95% of GenAI pilots fail" stat circulates without clear methodology [verify]; FDA 2025 enforcement counts vary by source (use the *trend*, attribute specific counts to a dated source) [verify]; current OPDP guidance on EHR advertising is absent (a gray zone, not a settled permission).
-- **Hypothetical / design-grade:** Any BUILD path's *causal* claim is a gate-2 prediction (the partner's holdout), not something the public-data brief established.
-
-## 9. Compliance + patient-welfare check
-
-- **MLR / FDA fair balance:** Any BUILD that would generate HCP-facing content inherits MLR load and fair-balance risk (heightened by the 2025 enforcement wave). The brief flags it and routes to MLR/counsel; it does not pre-clear content.
-- **Sunshine Act / HIPAA:** Sunshine exposure arises only if a built feature involves transfers of value; HIPAA exposure arises around real-time clinical triggers (the EHR gray zone). Flag at the gate, route to counsel.
-- **Patient-welfare gate:** The binding criterion of this chapter. Run the four flags (generic suppression, susceptibility targeting, low-value prescribing, safety-alert-layer intensification) on every BUILD candidate. A failed gate vetoes the build. A shipped feature must carry a *standing* welfare check (post-launch monitoring), not a one-time clearance.
-- **Route, never adjudicate:** A brief that *concludes* on legal or regulatory permissibility has overstepped (the firewall and the out-of-scope rule). The discipline is route-to-counsel.
-
-## 10. Exercises
-
-1. **(Understand)** Write the decision tree the brief implements: starting from a scored project, what sequence of criteria (ladder level, magnitude, welfare gate, compliance, cost) leads to TEST vs. BUILD vs. KILL? Show explicitly where the welfare gate can override a positive commercial result.
-
-2. **(Evaluate)** Take the opening-case prototype (engagement lift, no incrementality, EHR-layer flag). Write the *one-paragraph* verdict with its reasoning, then state the single piece of evidence that would flip it from TEST to BUILD and the single piece that would flip it to KILL.
-
-3. **(Apply+)** You are handed a project that is commercially strong, L3, low build cost — *and* fails the welfare gate (it moves prescribing of a low-ICER-value drug). Write the **KILL rationale** as a partner would need to read it: what the partner avoided, what would change the verdict, and how to frame it given the standing partner-sign-off blocker (Risk 1/2/4). Hold the kill — do not soften it into a BUILD.
-
-4. **(Create / Part B — produce: the product-handoff brief).** Take your Chapter 13 scored project and produce the **full product-handoff brief** — the book's terminal deliverable. It must contain: the one-line verdict (test/build/kill); evidence strength (honest ladder level); magnitude; compliance flags (routed); the patient-welfare gate result; an order-of-magnitude engineering estimate plus the questions for the partner's engineers; the recommended next gate; and — if BUILD — a one-paragraph client-pilot and post-launch monitoring sketch; or — if KILL — a written rejection rationale with "what would change the verdict." A defensible KILL earns full marks.
-
-## 11. Five-part AI exercise block
-
-**When to use AI.** Use an LLM to draft the brief's structure, turn a scored card into prose, draft the client-pilot and monitoring sketch, and generate the "what would change my mind" section. AI is good at format and at surfacing criteria you might forget to address.
-
-**When NOT to use AI.** Do not let an LLM decide the *verdict*, judge whether the welfare gate is failed, decide whether the evidence truly reaches the ladder level claimed, or assert that a finding is partner-defensible. These are the human judgments the entire book has been building toward.
-
-**LLM exercise.** Prompt: *"Here is a scored project [paste card]. Write a product-handoff brief recommending build/test/kill."* Then audit the output: did it default to BUILD on a positive result? Did it apply the welfare gate as a *veto* or treat it as a checkbox? Did it adjudicate compliance instead of routing it? Rewrite every place it overstepped.
-
-**CLI exercise.** Use a coding agent to assemble the brief from your Chapter 13 artifacts: pull the scored card, the calibration plots, and the kill-criterion result into a single rendered brief, with the verdict computed *from your stated criteria* (so the logic is auditable) rather than asserted.
-
-**AI validation.** Run the brief through the Chapter 10 validation harness at a *higher bar*: every cited figure resolves and is correctly labeled vendor/independent/contested; no causal claim exceeds the ladder level; the welfare gate is applied as a binding criterion; no legal conclusion is adjudicated. Document the one judgment the AI got fluently wrong.
-
-## 12. AI Use Disclosure
-
-This is the capstone disclosure, and it carries a **higher bar**: name **three** judgments across the whole project that required human expertise no AI could supply —
-
-1. **True evidence status** — what level the work *actually* reached, and what it cannot claim.
-2. **Real-vs-noise signal** — whether the effect is real or an artifact (selection, a rigged benchmark, a surrogate).
-3. **Partner-defensibility** — whether the partner could defend the recommendation to a regulator or an audit committee.
-
-The disclosure is the final beat of the book's AI-honesty thread: AI drafted and scaffolded; you supplied the judgments that decide whether anyone should spend money on this.
-
-## 13. What would change my mind
-
-I would revise the claim that **public-data work cannot reach Level 4** if a public dataset emerged with credible exposure-level and protected-attribute data (it does not exist today). I would revise the stance that **the patient-welfare gate must be a binding veto** if evidence showed that a binding gate systematically killed projects that, in proprietary replication, turned out welfare-neutral — i.e., if the gate were producing false KILLs at the public-data stage; the gate's design assumes the cost of a false BUILD (a harmful shipped feature) exceeds the cost of a false KILL (a shelved good idea), and that assumption is itself contestable. And I would revise the entire handoff architecture if the partner agreement (Risk 1) landed such that **gate 2 does not exist or critical briefs cannot be delivered** — in which case the honest response is to report that the lab's core mechanism is blocked, not to pretend the handoff is operational.
-
-## 14. Still puzzling
-
-- The welfare gate trades a false BUILD against a false KILL — but who decides the exchange rate, and on what authority, when the Fellow is explicitly told to route policy conclusions to counsel? Is the gate a *judgment* the Fellow makes or a *flag* the Fellow raises?
-- Open Question 3 is not settled: is patient welfare a per-project *gate* (the book's recommendation, adopted here) or a capstone *appendix*? If the partner lands on capstone, the decision tree in this chapter changes materially.
-- The brief's most valuable outputs (lift is inflated; the coupon suppresses generics; the routed model loses) are exactly the ones that critique the partner at the moment of a resource decision. Is "collaborative de-risking" a stable framing for that, or does it break the first time a kill costs the partner a product line?
-
-## 15. Summary
-
-You can now convert a scored portfolio project into a product-handoff brief — the book's terminal deliverable — and reach a defensible test/build/kill verdict. You can apply the conjunctive handoff criteria (evidence strength, magnitude, compliance, welfare, cost), place the project in the four-stage pipeline, and locate the gate-1→gate-2 handoff that is the brief's job. You can flag and route compliance (MLR, fair balance, Sunshine, HIPAA) without adjudicating it, sketch an engineering estimate honestly, and design a client pilot and a standing post-launch monitoring plan. Above all, you can apply the **patient-welfare gate as a binding veto** — holding a KILL on a commercially strong project that harms patients — and write a *good* "no," because a defensible rejection reduces the partner's uncertainty as much as any build. And you can name, honestly, where the whole handoff rests on an unresolved partner agreement (Risk 1) rather than pretending the mechanism is settled.
-
-## 16. Key terms
-
-- **Product-handoff brief:** the terminal deliverable — verdict + evidence grade + magnitude + routed compliance flags + welfare-gate result + engineering estimate + next gate.
-- **Test / build / kill:** the three verdicts; a "no" is a result.
-- **Patient-welfare gate:** the binding criterion that can veto a commercially positive project on patient/system-harm grounds.
-- **Four-stage pipeline:** open research → proprietary replication → prototype → resourced feature; the Fellow owns Stage 1.
-- **Gate-1→gate-2 handoff:** the question the brief answers — does this public-data result earn proprietary replication?
-- **Route-to-counsel:** the discipline of flagging compliance risk without adjudicating legality.
-- **Client pilot:** the partner's prospective holdout (L4→L5) that finally yields a causal readout.
-- **Post-launch monitoring:** continuous effectiveness, compliance, and welfare checking of a shipped feature (L6).
-
-## 17. Bridge
-
-This closes the three-act arc: the System (what the commercial machine optimizes), the Toolkit (how to test it honestly), and the Lab (how to run a research thread and hand the result to a partner as a defensible decision). The Fellow you are now is the one the book set out to make on page one — not someone who can be impressed by a "44% lift" claim, but the honest filter between research hype and committed partner resources, holding a binding patient-welfare gate even when the commercial number says go. The back matter carries the standing open questions forward: the partner agreement (Risk 1) that this chapter's handoff mechanics depend on remains unresolved, and the welfare-gate-vs-capstone decision (Open Question 3) is a design choice this book recommends but does not impose. The work the lab exists to do is now yours to run.
-
-## 18. Further reading
-
-- Cooper, Stage-Gate process (Wiley Encyclopedia of Management). — The go/kill scaffold the four-stage pipeline adapts. [verify]
-- Ries, *The Lean Startup.* — Validated learning and the cheap-test logic behind "reduce uncertainty before committing resources."
-- O'Neil, *Weapons of Math Destruction.* — The "deployed model needs monitoring and accountability" argument behind the post-launch welfare check (`pantry/_lib_math-weapons-of-math-destruction...`).
-- Christian, *The Alignment Problem.* — Values and accountability grounding for the patient-welfare gate and monitoring plan (`pantry/_lib_ai-the-alignment-problem...`).
-- Bergstrom & West, *Calling Bullshit.* — Skeptical-reading discipline for grading evidence honestly (the brief's evidence-strength criterion and the failure-case anti-pattern).
-- `pantry/pharma-ai-hcp-marketing-synthesis.md` (§§4–5) and `pantry/pharma-brand-measurement-synthesis.md` (§6). — MLR/FDA-enforcement state and the welfare-measurement gap that gives the gate its teeth. [verify the specific MLR, enforcement, and pilot-failure figures]
+That is the machinery this chapter produces: the brief that generates this call, and the welfare gate that can override a positive commercial result.
 
 ---
 
-## Prompts
+Before the mechanics, a structural fact worth holding clearly: the Fellow's job ends at the gate-1-to-gate-2 handoff.
 
-*No figures have been generated for this chapter yet.*
-*Run the Cowork enrichment pass to populate this section.*
+The four-stage research-to-product pipeline maps cleanly to the Evidence Ladder. Stage 1 is open research — the Fellow's stage, public data and public methodology, topping out around Level 3. Stage 2 is proprietary replication — the *partner* re-runs the promising method on its internal data, running the prospective holdout the Fellow could only gesture at. Stage 3 is a working prototype inside the partner's environment. Stage 4 is a monitored, resourced deployment.
+
+<!-- → [TABLE: Four-stage pipeline — columns: Stage, What happens, Who owns it, Evidence Ladder level; rows: 1 Open research / Fellow tests on public data / Fellow / L0–L3; 2 Proprietary replication / Partner runs holdout on internal data / Partner / L4; 3 Prototype / Built artifact in client context / Partner / L5; 4 Resourced feature / Monitored deployment / Partner / L6; firewall indicated between Stages 1 and 2] -->
+
+The Chapter 14 brief is precisely the gate-1-to-gate-2 handoff document. It answers one question: does this public-data result earn the partner's data and engineering investment? The Fellow who tries to build the feature has confused the role. Over-building is scope creep the firewall forbids — and, practically, a Fellow on public data *cannot* reach Levels 4 through 6, because those require proprietary data and a live client context that exist only inside the partner's walls.
+
+One blocker to name honestly before proceeding. The handoff mechanics here assume that a gate-2 partner exists, has agreed to receive briefs, and will act on them — and that the partner has signed off on the framing, including the framing of briefs that critique its own products. None of that is settled by this chapter. Whether proprietary replication is in scope, and who signs off on a brief's framing, is an open question, not a resolved arrangement. Read everything below as how the handoff works *if* the agreement lands where the book assumes, and treat that "if" as live. `[contested — see pantry, Risk 1]`
+
+---
+
+The brief reaches one of three verdicts. **TEST** means promising but not decisive — more public-data work, or hand to the partner for proprietary replication at gate 2. **BUILD** means the evidence, the magnitude, the compliance posture, the welfare gate, and the build cost are all sufficient — recommend resourcing. **KILL** means one threshold has failed — shelve the project, and write the rationale.
+
+The criteria are conjunctive, and this matters: a project must pass all of them to reach BUILD. Failing any one produces a TEST or a KILL.
+
+**Evidence strength** is the Evidence Ladder level the artifact actually reached, graded honestly. Public data tops at roughly Level 3. The grade includes the quality of the identification — a credible design, or association dressed up as causation (Chapter 5)?
+
+**Lift or association magnitude** asks whether the effect is large enough to matter commercially. A statistically significant but economically trivial result is a kill. Significance is not size.
+
+**Compliance risk** is flagged and routed to counsel, never adjudicated by the Fellow. MLR, FDA fair-balance, Sunshine Act, HIPAA — the brief surfaces the exposure; medical, legal, and regulatory affairs make the calls. An un-flagged compliance landmine discovered at gate 3 is far costlier than one surfaced at gate 1.
+
+**Patient-welfare gate** is the subject of the next section. It is a required criterion, not an appendix, and it can veto.
+
+**Build cost** is an order-of-magnitude engineering estimate — data access for proprietary replication, model and infrastructure build, monitoring. A strong-evidence, high-cost project may still be TEST rather than BUILD. The Fellow gives an order of magnitude plus the questions for the partner's engineers, not a precise number that cannot be defended.
+
+<!-- → [DIAGRAM: Decision tree — root: scored project; first branch: evidence strength ≥ L3? No → TEST or KILL; Yes → second branch: magnitude commercially meaningful? No → KILL; Yes → third branch: compliance risk manageable? No → TEST (flag first); Yes → fourth branch: welfare gate passed? No → KILL or escalate; Yes → fifth branch: build cost tractable? No → TEST; Yes → BUILD; welfare gate shown in red to signal veto power] -->
+
+---
+
+The patient-welfare gate is the chapter's moral spine, and it needs to be understood as a gate rather than a gesture.
+
+The gate asks one question: even if this works commercially, does it harm patients or the health system? The entire commercial measurement stack, as this book has documented from Chapter 2 forward, measures adoption far better than it measures welfare. A feature that lifts NBRx is not, without additional evidence, a feature that helps patients. The gate is what operationalizes that critique at the moment of a resource decision.
+
+Four patterns trigger the gate. The first is suppression of clinically appropriate generic substitution — the coupon case, where a co-pay assistance program lifts branded share by making the branded drug cheaper to the patient but not to the system, substituting for a bioequivalent generic and raising costs without clinical benefit. The second is targeting physician susceptibility rather than patient need — the proxy case, where a personalization model optimizes on commercial responsiveness and ends up targeting physicians whose prescribing is most moveable rather than most appropriate. The third is moving prescribing of low-clinical-value drugs — the ICER-mismatch case, where the drug being promoted scores poorly on added benefit relative to available alternatives. The fourth is intensifying EHR-embedded messaging in the safety-alert layer — the opening case of this chapter.
+
+The welfare gate is a *decision*, not a footnote. A project can be commercially excellent and still be killed on welfare grounds, and the chapter is designed so that the Fellow can hold that kill. What the Fellow cannot do is adjudicate legality. "This suppresses generic substitution and raises system cost with no clinical benefit" is a welfare finding the Fellow can defend. "This is illegal" is a conclusion for counsel.
+
+The most important case the chapter teaches is positive-but-vetoed. A co-pay program that lifts branded share by suppressing generic substitution is a commercial win and a welfare kill. Writing the rationale for that kill — including what the partner just avoided defending to a regulator or audit committee — is the deliverable. The rejection rationale is not a consolation prize. It is what the lab produces when it works correctly.
+
+---
+
+For a BUILD recommendation, the brief sketches two additional things it does not run — those belong to the partner.
+
+The **client pilot** is a prospective holdout on the partner's client data, the L4-to-L5 step that finally produces the causal readout public-data work could only approximate. This is the randomized holdout design from Chapter 8, run at scale with live clinical data: treated physicians versus a randomly held-out group from the same target list, measured on the real dependent variable over a defined window with claims-lag accounting.
+
+The **post-launch monitoring plan** is the standing welfare check that does not end at launch. A shipped feature with no monitoring plan fails the brief. Level 6 is monitored deployment — continuous effectiveness tracking, compliance audit, and ongoing patient-welfare checking so that a harm pattern that emerges after deployment is caught. The monitoring plan names the outcomes tracked, the frequency, the ownership, and the threshold for escalation or shutdown.
+
+The misconception to kill: once it ships, the research is done. It is not. The welfare gate does not issue a one-time clearance. It issues a requirement for continuous monitoring, because the harms the gate exists to prevent can emerge gradually, or in subpopulations, or only after the feature has been running long enough for its effects to accumulate.
+
+---
+
+Here is the full brief for two projects — one kill on commercial grounds, one on welfare grounds — as a Fellow would hand them to a partner team.
+
+---
+
+> **PRODUCT-HANDOFF BRIEF**
+> **Project:** C1 — Ensemble vs. routed ("MoE") model on NPI propensity
+> **Verdict: KILL (architecture investment)**
+>
+> **Question.** Does a routed/mixture-of-experts model meaningfully beat a tuned gradient-boosting baseline on the partner's core NPI-propensity task?
+>
+> **Evidence strength.** Evidence Ladder L3 — a small offline benchmark, not a causal readout. Appropriate for an architecture decision. Both models tuned with equal, logged effort; evaluated on out-of-time validation, calibration (Brier score and reliability diagram), and subgroup robustness — not AUC alone.
+>
+> **Magnitude.** The tuned LightGBM baseline matched the routed model on AUC and beat it on calibration; subgroup robustness was equivalent. No operational gain from routing.
+>
+> **Compliance flags (routed, not adjudicated).** None material — internal model bake-off, no HCP-facing content. No MLR action required at this stage.
+>
+> **Patient-welfare gate.** Pass. A "no lift" finding protects indirectly: it avoids committing resources to a less-interpretable system with no measured benefit.
+>
+> **Build cost.** The routed architecture would add substantial training and inference complexity and reduce interpretability, for no measured gain. Cost clearly exceeds value.
+>
+> **Recommendation.** Kill the routed-architecture investment; keep the tuned ensemble. Do not advance to gate 2. The "no" saves engineering budget — the expected outcome given what the evidence on tree ensembles versus deep learning on medium tabular data predicts (Grinsztajn et al., NeurIPS 2022 `[verify]`).
+>
+> **What would change the verdict.** A future task with genuine sequence or multi-task structure where routing's design advantages apply, and an equally tuned benchmark showing a meaningful, calibration-confirmed gain.
+
+---
+
+> **PRODUCT-HANDOFF BRIEF**
+> **Project:** D2 — Co-pay coupon generic-suppression estimate
+> **Verdict: KILL (welfare gate), with escalation**
+>
+> **Evidence strength.** L3; heterogeneity-robust difference-in-differences on coupon-legality variation, valid pre-trends. *Note: stated at the state-quarter level — individual substitution is inferred, not directly observed. Ecological-inference flag stands.*
+>
+> **Magnitude.** Commercially positive — the coupon program lifts branded share. Mechanism: suppression of bioequivalent-generic substitution (Dafny, Ody & Schmitt 2017 `[verify]`).
+>
+> **Compliance flags (routed).** Coupons banned in Medicare; state-law variation on Medicaid and commercial. Route any legality characterization to counsel — not adjudicated here.
+>
+> **Patient-welfare gate.** Fail. The commercial lift *is* generic suppression — higher system cost, no clinical benefit. The welfare gate vetoes.
+>
+> **Recommendation.** Kill as a product to optimize. Escalate the finding to compliance and medical-commercial as a risk the partner should know it carries. The rejection rationale is the deliverable: it tells the partner what it just avoided defending to a regulator or audit committee. Framing requires partner sign-off given the standing partner-agreement blocker. `[Risk 1]`
+>
+> **What would change the verdict.** Evidence that the branded drug produces clinically meaningful benefit above the generic comparator — in which case the welfare analysis changes materially, and the brief would route to ICER for a value assessment before reconsidering.
+
+---
+
+Two features of both briefs are worth naming explicitly. The verdict is the first line, not the last. And the "what would change the verdict" field is not a hedge — it is the scientific commitment that keeps the kill from being arbitrary. A brief without that field is opinion, not analysis.
+
+---
+
+The capstone AI disclosure for this chapter carries a higher bar. Three judgments require human expertise no AI can supply.
+
+The first is true evidence status — what level the work actually reached, and what it cannot claim. An LLM will accept a before/after comparison as Level 4 if you describe it confidently. The ladder level is a claim about the world, not about the text.
+
+The second is real-versus-noise signal — whether the effect is real or an artifact of selection, a benchmarked metric that was chosen post-hoc, or a surrogate that never connected to the outcome that matters. An LLM cannot tell the difference between a result and a result-shaped number.
+
+The third is partner-defensibility — whether the partner could defend the recommendation to a regulator or an audit committee. This is a judgment about the partner's specific situation, the current regulatory environment, and the framing choices that change what a recommendation means when it leaves the Fellow's hands. It cannot be delegated.
+
+---
+
+**Five-Part AI Exercise Block**
+
+**When to use AI here.** Drafting the brief's structure, turning a scored card into prose, drafting the client-pilot and monitoring sketch, generating the "what would change my mind" section. AI is useful for format and for surfacing criteria you might forget to address.
+
+**When NOT to use AI here.** The verdict, the welfare gate judgment, the evidence level, and the partner-defensibility call. These are the human judgments the entire book has been building toward. An LLM that defaults to BUILD on a positive result, or treats the welfare gate as a checkbox rather than a veto, has made the most important error in the chapter.
+
+**LLM exercise (copy-paste prompt):**
+> "Here is a scored project: [PASTE CARD]. Write a product-handoff brief recommending build, test, or kill. Apply the patient-welfare gate as a binding veto criterion, not a checkbox."
+
+Audit the output against three questions: Did it default to BUILD on a positive result? Did it apply the welfare gate as a veto or a footnote? Did it adjudicate compliance instead of routing it? Rewrite every place it overstepped, and note the specific judgment the model got wrong.
+
+**CLI exercise.** Use a script to assemble the brief from your Chapter 13 artifacts — pulling the scored card, the calibration plots, and the kill-criterion result into a single rendered document. The verdict must be computed from your stated criteria (so the logic is auditable) rather than asserted. If the kill criterion was met before the brief runs, the script should output KILL automatically; the human's job is to write the rationale, not to decide the verdict again.
+
+**AI validation exercise.** Run the brief through the Chapter 10 validation harness at a higher bar: every cited figure resolves and is correctly labeled vendor-sourced, independent, or contested; no causal claim exceeds the ladder level; the welfare gate is applied as a binding criterion; no legal conclusion is adjudicated. Document the one judgment the AI got fluently wrong — the place where it produced a confident, well-formatted, incorrect call.
+
+**AI Use Disclosure**
+
+*Write three sentences — one per judgment — naming what required human expertise the AI could not supply across the whole project: (1) the true evidence status of your result; (2) whether the effect is real or an artifact; (3) whether the partner could defend your recommendation to a regulator. These are the three places the book has been preparing you to stand, and they are the three places AI cannot stand for you.*
+
+---
+
+**What Would Change My Mind**
+
+I would revise the claim that public-data work cannot reach Level 4 if a public dataset emerged with credible exposure-level and protected-attribute data that supported a prospective causal readout — that dataset does not exist today. I would revise the welfare gate as a binding veto if evidence showed that it systematically kills projects that, in proprietary replication, turn out welfare-neutral — the gate's design assumes that the cost of a false BUILD (a harmful shipped feature) exceeds the cost of a false KILL (a shelved good idea), and that assumption is itself contestable and should be tested empirically rather than accepted as given. I would revise the entire handoff architecture if the partner agreement did not materialize — in which case the honest response is to report that the lab's core mechanism is blocked, not to pretend the handoff is operational.
+
+**Still Puzzling**
+
+- The welfare gate trades a false BUILD against a false KILL. Who decides the exchange rate, on what authority, when the Fellow is told to route policy conclusions to counsel? Is the gate a judgment the Fellow makes or a flag the Fellow raises — and if it is a flag, who holds the veto?
+- The brief's most commercially inconvenient outputs — "the lift is inflated," "the coupon suppresses generics," "the routed model loses" — are exactly the ones that critique the partner at the moment of a resource decision. "Collaborative de-risking" is a stable framing when the kills are small. Does it hold when a kill costs the partner a product line?
+- Post-launch monitoring is required by the brief. But the Fellow cannot see Stage 2 onward. Who runs the standing welfare check after handoff, against what criteria, and with what obligation to report back?
+
+---
+
+## Exercises
+
+**Warm-up**
+
+1. *(Factual recall — the decision structure)* State the three verdicts the brief can reach and the conditions under which each is appropriate. Then explain in one sentence why the criteria are conjunctive rather than weighted — why a single failed criterion produces a non-BUILD result regardless of how strong the others are.
+   *What this tests: the logical structure of the decision, not just the vocabulary.*
+
+2. *(Factual recall — the welfare gate)* Name the four patterns that trigger the patient-welfare gate. For each, write one sentence explaining the mechanism of harm — why the commercial metric goes up while patient or system welfare goes down.
+   *What this tests: understanding the gate's content, not just its existence as a criterion.*
+
+3. *(Factual recall — pipeline and ownership)* State which stages of the four-stage pipeline the Fellow owns and which the partner owns. Explain in one sentence why the Fellow cannot reach Level 4 on public data, and what specifically the partner brings to Stage 2 that public data cannot supply.
+   *What this tests: the ownership boundary and the Evidence Ladder ceiling, understood as a structural fact rather than a rule.*
+
+**Application**
+
+4. *(Apply — opening case verdict)* Take the opening case prototype — engagement lift, no incrementality, EHR-layer flags. Write the one-paragraph verdict with its reasoning. Then state the single piece of evidence that would flip it from TEST to BUILD, and the single piece that would flip it to KILL.
+   *What this tests: applying the full decision machinery to a case the chapter introduced but did not close.*
+
+5. *(Apply — welfare veto)* A project shows commercially strong results at L3, low build cost, no compliance flags — and fails the welfare gate because it moves prescribing of a drug with low ICER added-benefit scores. Write the KILL rationale as a partner would need to read it: what the partner avoided, what would change the verdict, and how to frame it given that the partner must sign off on the framing. Hold the kill — do not soften it into a TEST.
+   *What this tests: writing a defensible rejection against commercial pressure, including the framing constraint.*
+
+6. *(Apply — engineering estimate)* A BUILD candidate requires proprietary data access, a model retrained on the partner's NPI panel, and a 90-day holdout. You are not an MLOps engineer. Write the order-of-magnitude engineering estimate the brief requires — what you can say with confidence, and the three questions you would ask the partner's engineers to sharpen it.
+   *What this tests: producing an honest estimate that acknowledges limits rather than a false precision.*
+
+**Synthesis**
+
+7. *(Synthesize — the monitoring plan)* A BUILD brief has been approved and the feature is moving to gate 3. Sketch the post-launch monitoring plan: what outcomes are tracked, at what frequency, by whom, and what threshold triggers escalation or shutdown. Include at least one welfare outcome alongside the commercial outcomes, and name the party responsible for the welfare check after the Fellow's involvement ends.
+   *What this tests: designing the L6 accountability structure, connecting the welfare gate at decision time to the standing welfare check after deployment.*
+
+8. *(Synthesize — full brief)* Take your Chapter 13 scored project and produce the full product-handoff brief with all required fields: one-line verdict; evidence strength with honest ladder level; magnitude; compliance flags routed to counsel; patient-welfare gate result; order-of-magnitude engineering estimate with partner questions; recommended next gate; and — if BUILD — a one-paragraph client-pilot and post-launch monitoring sketch, or — if KILL — a written rejection rationale with "what would change the verdict." A defensible kill earns full marks.
+   *What this tests: the terminal deliverable of the book — the Fellow's brief as a complete, honest, actionable document.*
+
+**Challenge**
+
+9. *(Open-ended — the exchange rate problem)* The welfare gate assumes that the cost of a false BUILD — a harmful shipped feature — exceeds the cost of a false KILL — a shelved good idea. Construct the strongest possible argument that this assumption is wrong in a specific commercial context, then construct the counterargument. On what empirical question does the exchange rate actually depend, and what data would you need to set it on something other than assumption?
+   *What this tests: holding the welfare gate's design as a testable assumption rather than a moral given, and identifying the evidence that would adjudicate it.*
