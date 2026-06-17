@@ -100,7 +100,7 @@ Here is the full brief for two projects — one kill on commercial grounds, one 
 >
 > **Build cost.** The routed architecture would add substantial training and inference complexity and reduce interpretability, for no measured gain. Cost clearly exceeds value.
 >
-> **Recommendation.** Kill the routed-architecture investment; keep the tuned ensemble. Do not advance to gate 2. The "no" saves engineering budget — the expected outcome given what the evidence on tree ensembles versus deep learning on medium tabular data predicts (Grinsztajn et al., NeurIPS 2022 `[verify]`).
+> **Recommendation.** Kill the routed-architecture investment; keep the tuned ensemble. Do not advance to gate 2. The "no" saves engineering budget — the expected outcome given what the evidence on tree ensembles versus deep learning on medium tabular data predicts (Grinsztajn, Oyallon & Varoquaux, NeurIPS 2022).
 >
 > **What would change the verdict.** A future task with genuine sequence or multi-task structure where routing's design advantages apply, and an equally tuned benchmark showing a meaningful, calibration-confirmed gain.
 
@@ -112,7 +112,7 @@ Here is the full brief for two projects — one kill on commercial grounds, one 
 >
 > **Evidence strength.** L3; heterogeneity-robust difference-in-differences on coupon-legality variation, valid pre-trends. *Note: stated at the state-quarter level — individual substitution is inferred, not directly observed. Ecological-inference flag stands.*
 >
-> **Magnitude.** Commercially positive — the coupon program lifts branded share. Mechanism: suppression of bioequivalent-generic substitution (Dafny, Ody & Schmitt 2017 `[verify]`).
+> **Magnitude.** Commercially positive — the coupon program lifts branded share. Mechanism: suppression of bioequivalent-generic substitution (Dafny, Ody & Schmitt, *AEJ: Economic Policy* 9(2):91–123, 2017).
 >
 > **Compliance flags (routed).** Coupons banned in Medicare; state-law variation on Medicaid and commercial. Route any legality characterization to counsel — not adjudicated here.
 >

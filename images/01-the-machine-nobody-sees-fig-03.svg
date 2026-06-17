@@ -9,14 +9,14 @@
 -->
 <svg viewBox="0 0 700 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="fig-title-03">
   <title id="fig-title-03">The natural experiment — estimated coupon effect on branded-drug volume</title>
-  <desc>Vertical bar chart. Commercial segment (coupons permitted) shows an estimated 23 to 25 percent increase in quantity of drugs without generic substitutes; Medicare Advantage (coupons banned) is the zero baseline reference.</desc>
+  <desc>Vertical bar chart. Commercial segment (coupons permitted) shows an estimated 20 percent or greater increase in branded purchases of drugs facing generic competition; Medicare Advantage (coupons banned) is the zero baseline reference.</desc>
   <metadata><cajal:figure xmlns:cajal="https://bearbrown.ai/cajal/1.0" book="AI-Driven Programmatic HCP Marketing" chapter="01-the-machine-nobody-sees" figure-number="03" figure-title="The natural experiment — estimated coupon effect on branded-drug volume" figure-type="chart" author="Nik Bear Brown" date-generated="2026-06-16" source-file="chapters/01-the-machine-nobody-sees.md"/></metadata>
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#2a1a0e"/></marker>
   </defs>
   <rect x="0" y="0" width="700" height="420" fill="#FFFFFF"/>
 
-  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Estimated coupon effect: commercial vs. Medicare Advantage (Dafny et al.)</text>
+  <text x="32" y="32" font-family="'EB Garamond','Garamond',Georgia,serif" font-size="14" fill="#2a1a0e">Estimated coupon effect: commercial vs. Medicare Advantage (Dafny, Ho &amp; Kong)</text>
 
   <!-- plot region: top48 right40 bottom56 left64 -> x 64..660, y 48..364 -->
   <rect x="64" y="48" width="596" height="316" fill="#F5F5F5" stroke="#D4D4D4" stroke-width="0.75"/>
@@ -41,9 +41,9 @@
 
   <!-- Bars: two categories -->
   <!-- Medicare Advantage = 0 (baseline, no bar) shown as a marker at baseline -->
-  <!-- Commercial = 24% (midpoint of 23-25), height = 24/30*316 = 252.8 -> y = 364-252.8 = 111.2 -->
-  <rect x="180" y="111.2" width="120" height="252.8" rx="0" fill="#C8102E"/>
-  <text x="240" y="103" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">+23–25%</text>
+  <!-- Commercial = >20% (Dafny, Ho & Kong 2022); bar drawn at ~22% = 22/30*316 = 231.7 -> y = 364-231.7 = 132.3 -->
+  <rect x="180" y="132.3" width="120" height="231.7" rx="0" fill="#C8102E"/>
+  <text x="240" y="124" text-anchor="middle" font-family="'JetBrains Mono','Fira Code','Courier New',monospace" font-size="11" fill="#2a1a0e">&gt;20%</text>
   <text x="240" y="384" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="12" fill="#2a1a0e">Commercial</text>
   <text x="240" y="398" text-anchor="middle" font-family="'Inter',-apple-system,'Helvetica Neue',sans-serif" font-size="11" fill="#545454">coupons permitted</text>
 

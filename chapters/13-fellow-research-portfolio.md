@@ -57,7 +57,7 @@ Two rules govern every card. First, the kill criterion is pre-registered — you
 
 **Dataset.** Open Payments (promotion dose per NPI) + Medicare Part D Prescriber (prescribing outcome per NPI), joined on NPI. Synthetic fallback: simulate exposure correlated with a latent prescribing propensity so the true effect is known and the selection inflation can be measured directly.
 
-**Identification.** First, estimate the naive exposed-vs-unexposed difference with no control. Then re-estimate via matching plus a Rosenbaum-style sensitivity analysis, and — where a dated policy shock exists (a gift ban, an academic medical center detailing restriction) — a heterogeneity-robust difference-in-differences (Callaway & Sant'Anna 2021 [verify]). Report the gap between the naive and design-based estimates.
+**Identification.** First, estimate the naive exposed-vs-unexposed difference with no control. Then re-estimate via matching plus a Rosenbaum-style sensitivity analysis, and — where a dated policy shock exists (a gift ban, an academic medical center detailing restriction) — a heterogeneity-robust difference-in-differences (Callaway & Sant'Anna 2021, *Journal of Econometrics* 225(2):200–230). Report the gap between the naive and design-based estimates.
 
 **Success threshold.** A reportable, defensible quantification of selection inflation — the naive lift exceeds the design-based estimate by a margin with a confidence interval around it.
 
@@ -101,7 +101,7 @@ Two rules govern every card. First, the kill criterion is pre-registered — you
 
 ## Track C — Model architecture and segmentation
 
-**The logic.** Vendors label tabular targeting stacks "Mixture of Experts." The book's established position from Chapter 7: on medium-sized tabular data, gradient-boosted tree ensembles are state of the art (Grinsztajn et al., NeurIPS 2022 [verify]), and most "MoE" platforms are stacked ensembles relabeled — legitimate ML, but not MoE, and not obviously better than a tuned ensemble. These projects produce benchmark and audit evidence the partner's data-science team can act on directly.
+**The logic.** Vendors label tabular targeting stacks "Mixture of Experts." The book's established position from Chapter 7: on medium-sized tabular data, gradient-boosted tree ensembles are state of the art (Grinsztajn, Oyallon & Varoquaux, "Why do tree-based models still outperform deep learning on tabular data?", NeurIPS 2022), and most "MoE" platforms are stacked ensembles relabeled — legitimate ML, but not MoE, and not obviously better than a tuned ensemble. These projects produce benchmark and audit evidence the partner's data-science team can act on directly.
 
 **Three projects.** C1 builds a calibrated XGBoost/LightGBM baseline on a public NPI-propensity task and compares it to a routed model — the TIKTOC worked example. C2 asks whether routing or clustering geometry reveals a stable number of physician archetypes rather than an arbitrary k chosen for a slide template. C3 applies the three architectural criteria and the six buyer questions from Chapter 7 to public vendor "MoE" descriptions and reaches a verdict — pure desk research, no proprietary data, tops out at Level 2.
 
@@ -156,7 +156,7 @@ Two rules govern every card. First, the kill criterion is pre-registered — you
 
 **Dataset.** Medicaid State Drug Utilization Data (state × quarter generic versus branded units and spend) + LOE and generic-entry dates. Coupon-legality variation — coupons are banned in Medicare; state rules vary — is the design.
 
-**Identification.** Difference-in-differences with cross-state legality contrast around generic entry — the Dafny–Ody–Schmitt template (Dafny, Ody & Schmitt, *AEJ: Economic Policy*, NBER w22745 [verify vintage and effect sizes]), heterogeneity-robust if timing is staggered (Callaway & Sant'Anna 2021 [verify]).
+**Identification.** Difference-in-differences with cross-state legality contrast around generic entry — the Dafny–Ody–Schmitt template (Dafny, Ody & Schmitt, "When Discounts Raise Costs: The Effect of Copay Coupons on Generic Utilization," *American Economic Journal: Economic Policy* 9(2):91–123, 2017; NBER WP w22745), which found that coupons raise branded sales by more than 60 percent, entirely by displacing bioequivalent generics; heterogeneity-robust if timing is staggered (Callaway & Sant'Anna 2021, *Journal of Econometrics* 225(2):200–230).
 
 **Success threshold.** A credible, signed estimate of generic-substitution suppression with valid pre-trends — an event-study plot with leads near zero.
 
