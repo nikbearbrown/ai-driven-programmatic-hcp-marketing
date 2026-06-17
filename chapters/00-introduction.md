@@ -1,36 +1,48 @@
 <!--
-    01-introduction.md
-    INTRODUCTION — Chapter 0 / roadmap chapter.
-
-    The Introduction does different work than the Preface:
-      - Preface  = why the book exists, why you wrote it (author's voice)
-      - Introduction = what the book argues and how it is organized (reader's roadmap)
-
-    This chapter is fully numbered in the body and can be as long as needed.
-    Pearl's "The Mind Over Data" and Molnar's Introduction are good models:
-    both are substantive, argument-first, and tell the reader exactly what
-    to expect from each subsequent chapter.
+  INTRODUCTION — Chapter 0 / roadmap chapter.
+  Follows the 13-element roadmap. Reader-facing: what the book argues + how it is organized.
 -->
 
 # Introduction
 
-<!-- Opening: state the central problem or claim in the first paragraph.
-     Do not throat-clear. Do not say "In this book I will..." -->
+A vendor's deck is open on the conference-room screen, paused on the slide everyone came to see: **"44% script lift."** The brand director turns to the Fellow the lab sent over — the one who has spent the week pulling the program apart on public data — and asks the only question that matters: *"If I hand this to my data-science team on Monday, what would they actually do with it?"* The honest answer is uncomfortable. They would not know whether the 44% is the effect of the advertising or the shadow of the targeting, because the platform that served the ads also measured the lift, and it aimed those ads at the physicians already most likely to prescribe. The number is real as a difference between two groups. It is unknown as an effect of the campaign. And a budget is about to be set on it.
 
-[INTRODUCTION PLACEHOLDER]
+The gap this book fills: pharmaceutical marketing has built a fast, precise, AI-driven machine for *engaging* physicians and almost no discipline for proving that the engagement *caused* a prescription worth causing.
 
-<!-- Suggested structure:
-     1. The central claim — what this book argues
-     2. Why it matters — stakes for the reader
-     3. How the book is organized — a brief tour of each chapter
-        (one sentence per chapter is enough; readers need a map, not a summary)
-     4. How to read it — linear vs. jump-around, prerequisites, etc.
--->
+The central argument is testable and contestable: **the script-lift figures that drive HCP marketing budgets are associations systematically inflated toward zero risk and away from the truth — by selection, attribution circularity, missing controls, and reporting bias — and the field's most valuable AI work is not producing a better number but specifying the design that would make a number trustworthy.** If a single pre-registered, independent, controlled study showed the vendor-range lift holding up, the argument would weaken. It has not been run.
 
-## How This Book Is Organized
+This book is written for the data-capable Fellow and the marketing-science team working alongside a martech partner — people who can read a model, join a public dataset, and are responsible for telling a brand team what the evidence does and does not support.
 
-<!-- Walk through each chapter in one sentence.
-     Example pattern: "Chapter 1 establishes X. Chapter 2 applies that
-     framework to Y. Chapters 3–6 examine..." -->
+**What this book is.** It is a field manual for seeing the HCP-marketing machine clearly and grading its claims honestly. It gives you a shared vocabulary — NPI targeting, the identity graph, lift versus brand, uplift and incrementality, the Evidence Ladder, attribution circularity, the IP firewall — and it teaches you to use AI tools strategically: to draft, reformat, and option-generate where you can check the output, and to refuse the model exactly where the judgment is irreducibly yours. It is built around public and synthetic data, so every method in it is one you can actually run.
 
-[CHAPTER MAP PLACEHOLDER]
+**What this book is not.** It is not legal or compliance counsel; it flags MLR, fair balance, the Sunshine Act, and HIPAA, then routes them to a human with authority. It is not a deep-learning course or a media-buying handbook. It assumes you can read basic statistics and write a little code — comfort with a dataframe, a regression, and the difference between a correlation and a cause — but it does not assume causal inference, which it builds from the ground up. It will not tell you whether a drug deserves to be promoted; it will tell you whether the claim that the promotion *works* is evidence or decoration.
+
+**The concept that runs throughout** is the *evidence taxonomy*: the discipline of grading any claim on two axes at once — how strong the study design is, and how independent the source is — and taking the *minimum* of the two as the grade. The vendor's 44% sits in the weakest corner of that grid: an unadjusted exposed-versus-unexposed comparison reported by the party that profits from it. The taxonomy is what lets you say so precisely, and lets you apply the same standard to evidence you *like*. Running alongside it are two distinctions you will use on every page: **Rung-1 engagement** (did the physician notice the message) versus **the budget question** (did the message change a prescription that would not otherwise have changed), and **attribution circularity** (the platform that serves the ad also measures its effect).
+
+**A running thread.** From the first chapter you carry one branded drug — your choice — through the whole book in a project called *One Drug, End to End*. You map its split-agency stakeholders, profile its lift-versus-brand position, grade its promotional claims, benchmark a model that targets it, and finally assemble a one-page brief recommending what a partner should test, build, or kill. The exercises build that case file chapter by chapter.
+
+**How this book is organized.** The fourteen chapters move in four movements.
+
+*Movement I — the machine and its anomaly (Chapters 1–3).* Chapter 1 shows you the machine nobody sees: how a commercial message rides clinical interoperability rails into the physician's chart, and why the party who pays is never in the room. Chapter 2 separates the two dependent variables every campaign actually moves — short-term lift and durable brand association. Chapter 3 builds the HCP identity graph and the deterministic NPI targeting that the whole stack hangs on.
+
+*Movement II — what the AI does, and what the evidence says (Chapters 4–5).* Chapter 4 audits what today's AI stack actually does versus what it claims. Chapter 5 is the book's spine: the evidence problem, the two-axis taxonomy, and why every sentence on the vendor deck can be true while none of it is causal evidence.
+
+*Movement III — the methods, honestly graded (Chapters 6–10).* Chapter 6 explains why gradient-boosted ensembles, not deep nets, are state of the art on tabular HCP data. Chapter 7 takes apart "Mixture of Experts" and shows when the term is architecture and when it is marketing. Chapter 8 builds uplift and incrementality — measuring real, persuadable lift. Chapter 9 makes brand association a measurable outcome. Chapter 10 puts LLMs to work on commercial research and content intelligence, with a verification harness.
+
+*Movement IV — the lab, written down (Chapters 11–14).* Chapter 11 is the external-innovation-lab operating model and the IP firewall — the contract that makes public-data research safe for a partner. Chapter 12 covers research design and the public datasets that power it. Chapter 13 is the Fellow's four-track research portfolio, run once, where a pre-registered "no" counts as a result. Chapter 14 turns a prototype into a product decision through the Fellow's one-page brief.
+
+**How to read it.** Read Movements I and II in order — they set the vocabulary and the standard everything else uses. After that, the method chapters (6–10) are largely self-contained; take them in the order your work needs. The lab chapters (11–14) are best read as a sequence, because they assemble into a single workflow. Every chapter closes with the same features: a *What would change my mind* section that states the falsifying evidence, a *Still puzzling* section that keeps the open questions open, and a five-part exercise block — *When to Use AI*, *When NOT to Use AI*, an LLM exercise, a CLI exercise, and an AI-validation exercise — that builds your *One Drug* case file and trains you to use AI tools where they help and refuse them where they don't.
+
+### A note about AI
+
+This is a book about AI-driven marketing, written in the middle of an AI wave, and it uses AI throughout — so it owes you a clear account of how. Two things are true at once, and holding both is the whole discipline.
+
+First, the engagement that is *specific to this field*. The AI in HCP marketing is not, for the most part, exotic. It is gradient-boosted trees on tabular data, propensity and uplift models, and increasingly LLMs for research and content. The book's stance is that you should use these tools fluently and skeptically. Fluently: an LLM is excellent at reformatting a vendor page into a claims table, drafting the skeleton of an evidence map, clustering ten papers into themes, generating a first list of candidate trigger events. Skeptically: an LLM will also confidently assign a grade it has no business assigning, launder a vendor's script-lift figure into an apparent fact, fabricate a citation that reads perfectly, and relabel a result that should have killed a project as "promising." The exercises in this book are built to train the line between the two. The rule, stated once and meant everywhere: **use AI where you can independently evaluate the output, and refuse it where the judgment — the causal call, the evidence grade, the kill criterion — is the irreducible human work.** When you used a tool, you say so, and you name the one thing it could not decide for you.
+
+Second, the *innovation-lab framing* that makes this book more than a manual. Bear Brown, LLC and Humanitarians AI together operate as an external innovation lab: we research and prototype the AI that might help a company, build the proof of concept on public or synthetic data, test whether it actually holds, and only then work alongside the company's team to implement what survives. Humanitarians AI runs 100–200 Fellows at any time across many majors, so when a project needs extra hands for a few weeks it staffs on a per-hour basis — low commitment for the company, high evidence for the decision. The safety contract is an **IP firewall**: published work uses public and synthetic data only; the partner replicates anything promising on its proprietary data, internally, on its side of the wall. A public-data test tops out at roughly Level 3 on the book's Evidence Ladder — a small offline test that beats a baseline — and the firewall is exactly the rung where the work crosses from the Fellow's side to the partner's. This is not a sidebar to the book; it is the book's method. Chapters 11 through 14 are the lab's operating model, its research design, its portfolio, and its handoff brief, written down so that running the exercises *is* a preview of working with the lab. If you finish this book having built your *One Drug* case file under the firewall, you have done, on your own drug, exactly what a Fellow does on a partner's question.
+
+So when you reach a chapter that uses an LLM to draft a card or a CLI agent to grep a corpus, read it as the lab working in the open: the machine does the cheap, checkable work, and a human holds the load-bearing judgment. That division is the answer to the brand director's Monday question — and it is the answer this book exists to teach.
+
+Return to that conference room. The Fellow does not say the 44% is a lie; disbelief is as lazy as belief. The Fellow says: *here is what the number is (a difference between selected groups), here is what it is not (a causal effect), here is the holdout study that would settle it, and here is the honest evidence level I can reach on public data.* That is the deliverable. Now go build it for your own drug — start with Chapter 1, and don't let a fluent sentence stand in for a counterfactual you never observed.
+
+**Tags:** HCP marketing · pharmaceutical marketing · programmatic advertising · point-of-care · NPI targeting · next-best-action · causal inference · uplift modeling · incrementality · attribution · evidence grading · gradient boosting · mixture of experts · LLMs · computational skepticism · external innovation lab · IP firewall · Humanitarians AI · Irreducibly Human
