@@ -1,107 +1,93 @@
-<!--
-  INTRODUCTION — Chapter 0 / roadmap chapter.
-  Follows the 13-element roadmap. Reader-facing: what the book argues + how it is organized.
--->
+# AI-Driven Pharma Marketing Research: A Framework for Discussion
 
-# Introduction
+*Bear Brown LLC and Humanitarians AI — for Graham Wilkinson, Doceree*
 
-A vendor's deck is open on the conference-room screen, paused on the slide everyone came to see: **"44% script lift."** The brand director turns to the Fellow the lab sent over — the one who has spent the week pulling the program apart on public data — and asks the only question that matters: *"If I hand this to my data-science team on Monday, what would they actually do with it?"* The honest answer is uncomfortable. They would not know whether the 44% is the effect of the advertising or the shadow of the targeting, because the platform that served the ads also measured the lift, and it aimed those ads at the physicians already most likely to prescribe. The number is real as a difference between two groups. It is unknown as an effect of the campaign. And a budget is about to be set on it.
+---
 
-The gap this book fills: pharmaceutical marketing has built a fast, precise, AI-driven machine for *engaging* physicians and almost no discipline for proving that the engagement *caused* a prescription worth causing.
+## What This Is
 
-The central argument is testable and contestable: **the script-lift figures that drive HCP marketing budgets are associations systematically inflated toward zero risk and away from the truth — by selection, attribution circularity, missing controls, and reporting bias — and the field's most valuable AI work is not producing a better number but specifying the design that would make a number trustworthy.** If a single pre-registered, independent, controlled study showed the vendor-range lift holding up, the argument would weaken. It has not been run.
+This is not a standard book. It is a **working framework** for a conversation we have had versions of before — at Kinesso, at IPG — now with one thing genuinely different: the AI tooling has made it possible to build, document, and staff a research program at a depth that was not practical before.
 
-This book is written for the data-capable Fellow and the marketing-science team working alongside a martech partner — people who can read a model, join a public dataset, and are responsible for telling a brand team what the evidence does and does not support.
+What you are looking at is two full courses, built and ready:
 
-**What this book is.** It is a field manual for seeing the HCP-marketing machine clearly and grading its claims honestly. It gives you a shared vocabulary — NPI targeting, the identity graph, lift versus brand, uplift and incrementality, the Evidence Ladder, attribution circularity, the IP firewall — and it teaches you to use AI tools strategically: to draft, reformat, and option-generate where you can check the output, and to refuse the model exactly where the judgment is irreducibly yours. It is built around public and synthetic data, so every method in it is one you can actually run.
+**Book A — *AI-Driven Programmatic HCP Marketing*** covers the full martech stack: NPI targeting, the evidence problem behind script-lift claims, model architecture (including what "Mixture of Experts" actually means versus what vendors mean by it), uplift and incrementality, brand association as a measurable outcome, and the external innovation lab operating model that governs how Fellows work with a partner.
 
-**What this book is not.** It is not legal or compliance counsel; it flags MLR, fair balance, the Sunshine Act, and HIPAA, then routes them to a human with authority. It is not a deep-learning course or a media-buying handbook. It assumes you can read basic statistics and write a little code — comfort with a dataframe, a regression, and the difference between a correlation and a cause — but it does not assume causal inference, which it builds from the ground up. It will not tell you whether a drug deserves to be promoted; it will tell you whether the claim that the promotion *works* is evidence or decoration.
+**Book B — *Pharma Rep Visit Data as an Untapped Causal Dataset*** goes deeper on one dataset: the CLM telemetry that has been logging physician behavior for fifteen years without anyone asking a causal question of it. The training-cohort rollout is a natural experiment. The reps who have called on the same physicians forty times hold structural knowledge the data cannot contain. Together they make a causal study of pharmaceutical promotion buildable on one dataset — which is what these chapters build, end to end.
 
-**The concept that runs throughout** is the *evidence taxonomy*: the discipline of grading any claim on two axes at once — how strong the study design is, and how independent the source is — and taking the *minimum* of the two as the grade. The vendor's 44% sits in the weakest corner of that grid: an unadjusted exposed-versus-unexposed comparison reported by the party that profits from it. The taxonomy is what lets you say so precisely, and lets you apply the same standard to evidence you *like*. Running alongside it are two distinctions you will use on every page: **Rung-1 engagement** (did the physician notice the message) versus **the budget question** (did the message change a prescription that would not otherwise have changed), and **attribution circularity** (the platform that serves the ad also measures its effect).
+The difference from previous conversations is that these are not white papers or proposals. They are fully developed curricula with working code, synthetic datasets with known ground truth, exercise blocks, and a Fellows pipeline of 100–200 people who can staff a project within weeks. When we talked about doing this kind of work at Kinesso, the scaffolding had to be built from scratch each time. It already exists now.
 
-**A running thread.** From the first chapter you carry one branded drug — your choice — through the whole book in a project called *One Drug, End to End*. You map its split-agency stakeholders, profile its lift-versus-brand position, grade its promotional claims, benchmark a model that targets it, and finally assemble a one-page brief recommending what a partner should test, build, or kill. The exercises build that case file chapter by chapter.
+---
 
-**How this book is organized.** The fourteen chapters move in four movements.
+## The Innovation Lab Offer
 
-*Movement I — the machine and its anomaly (Chapters 1–3).* Chapter 1 shows you the machine nobody sees: how a commercial message rides clinical interoperability rails into the physician's chart, and why the party who pays is never in the room. Chapter 2 separates the two dependent variables every campaign actually moves — short-term lift and durable brand association. Chapter 3 builds the HCP identity graph and the deterministic NPI targeting that the whole stack hangs on.
+Bear Brown LLC and Humanitarians AI operate as an **external innovation lab**. The model is straightforward:
 
-*Movement II — what the AI does, and what the evidence says (Chapters 4–5).* Chapter 4 audits what today's AI stack actually does versus what it claims. Chapter 5 is the book's spine: the evidence problem, the two-axis taxonomy, and why every sentence on the vendor deck can be true while none of it is causal evidence.
+We scope the question, build a proof of concept on public or synthetic data, test whether it holds — and only then work alongside your team to implement anything that survives. Because Humanitarians AI runs Fellows across many disciplines, a project that needs extra hands for a few weeks can be staffed on a per-hour basis through the nonprofit rather than through Northeastern. Low commitment for you; high evidence before you build a team around it.
 
-*Movement III — the methods, honestly graded (Chapters 6–10).* Chapter 6 explains why gradient-boosted ensembles, not deep nets, are state of the art on tabular HCP data. Chapter 7 takes apart "Mixture of Experts" and shows when the term is architecture and when it is marketing. Chapter 8 builds uplift and incrementality — measuring real, persuadable lift. Chapter 9 makes brand association a measurable outcome. Chapter 10 puts LLMs to work on commercial research and content intelligence, with a verification harness.
+The contract that makes this safe is an **IP firewall**: Fellows work only on public data (CMS Open Payments, Medicare Part D, ICER value reports) and synthetic stand-ins. Your team replicates anything promising on proprietary data internally. Nothing confidential crosses into the published work. The firewall is not bureaucratic overhead — it is what makes it possible to publish honest findings, including critical ones, without exposing anything you own.
 
-*Movement IV — the lab, written down (Chapters 11–14).* Chapter 11 is the external-innovation-lab operating model and the IP firewall — the contract that makes public-data research safe for a partner. Chapter 12 covers research design and the public datasets that power it. Chapter 13 is the Fellow's four-track research portfolio, run once, where a pre-registered "no" counts as a result. Chapter 14 turns a prototype into a product decision through the Fellow's one-page brief.
+---
 
-**How to read it.** Read Movements I and II in order — they set the vocabulary and the standard everything else uses. After that, the method chapters (6–10) are largely self-contained; take them in the order your work needs. The lab chapters (11–14) are best read as a sequence, because they assemble into a single workflow. Every chapter closes with the same features: a *What would change my mind* section that states the falsifying evidence, a *Still puzzling* section that keeps the open questions open, and a five-part exercise block — *When to Use AI*, *When NOT to Use AI*, an LLM exercise, a CLI exercise, and an AI-validation exercise — that builds your *One Drug* case file and trains you to use AI tools where they help and refuse them where they don't.
+## Prescribing-Habit Persistence: A Worked Example
 
-### A note about AI
+One project worth making concrete, because it sits at the intersection of what Doceree does and what the research can establish.
 
-This is a book about AI-driven marketing, written in the middle of an AI wave, and it uses AI throughout — so it owes you a clear account of how. Two things are true at once, and holding both is the whole discipline.
+**The question:** how sticky is prescribing behavior across drug classes, and where is brand loyalty structurally real versus rented short-term attention?
 
-First, the engagement that is *specific to this field*. The AI in HCP marketing is not, for the most part, exotic. It is gradient-boosted trees on tabular data, propensity and uplift models, and increasingly LLMs for research and content. The book's stance is that you should use these tools fluently and skeptically. Fluently: an LLM is excellent at reformatting a vendor page into a claims table, drafting the skeleton of an evidence map, clustering ten papers into themes, generating a first list of candidate trigger events. Skeptically: an LLM will also confidently assign a grade it has no business assigning, launder a vendor's script-lift figure into an apparent fact, fabricate a citation that reads perfectly, and relabel a result that should have killed a project as "promising." The exercises in this book are built to train the line between the two. The rule, stated once and meant everywhere: **use AI where you can independently evaluate the output, and refuse it where the judgment — the causal call, the evidence grade, the kill criterion — is the irreducible human work.** When you used a tool, you say so, and you name the one thing it could not decide for you.
+The industry asserts that share-of-mind predicts share-of-market with a lag — that building mental availability today translates into prescribing tomorrow. This is the assumption behind a substantial fraction of HCP marketing spend. It has never been rigorously tested on linked survey-plus-claims data. It is an open research question, not an established fact.
 
-Second, the *innovation-lab framing* that makes this book more than a manual. Bear Brown, LLC and Humanitarians AI together operate as an external innovation lab: we research and prototype the AI that might help a company, build the proof of concept on public or synthetic data, test whether it actually holds, and only then work alongside the company's team to implement what survives. Humanitarians AI runs 100–200 Fellows at any time across many majors, so when a project needs extra hands for a few weeks it staffs on a per-hour basis — low commitment for the company, high evidence for the decision. The safety contract is an **IP firewall**: published work uses public and synthetic data only; the partner replicates anything promising on its proprietary data, internally, on its side of the wall. A public-data test tops out at roughly Level 3 on the book's Evidence Ladder — a small offline test that beats a baseline — and the firewall is exactly the rung where the work crosses from the Fellow's side to the partner's. This is not a sidebar to the book; it is the book's method. Chapters 11 through 14 are the lab's operating model, its research design, its portfolio, and its handoff brief, written down so that running the exercises *is* a preview of working with the lab. If you finish this book having built your *One Drug* case file under the firewall, you have done, on your own drug, exactly what a Fellow does on a partner's question.
+**The study:** use Medicare Part D prescribing as a behavioral panel — physician by quarter by drug class. Measure how much a physician's prescribing in a given class predicts her prescribing in subsequent quarters, controlling for formulary, competitive activity, and specialty. Identify where persistence is structurally high (the physician has a durable patient-type rule: "for *this* kind of patient, this drug") versus where it is low (the physician is making a fresh decision each time, susceptible to the last rep visit or formulary change).
 
-So when you reach a chapter that uses an LLM to draft a card or a CLI agent to grep a corpus, read it as the lab working in the open: the machine does the cheap, checkable work, and a human holds the load-bearing judgment. That division is the answer to the brand director's Monday question — and it is the answer this book exists to teach.
+**Why it matters to Doceree:** a platform that delivers messages at the point of clinical decision has different value depending on where in the persistence distribution a physician sits. A loyalty-confirmed prescriber hearing the message at the moment she opens the chart is a sure thing — high conversion, zero increment. A physician whose prescribing pattern shows low persistence for this class, with a documented unresolved clinical question, is a persuadable. The message may actually move her.
 
-## Possible Projects
+The research can establish which physicians are which, using public data. Your platform can establish *when* they are in the chart. That combination is the product opportunity — and it is the thing neither party can build alone.
 
-This is not a regular book; it is a **framework for discussion**. What follows are *ideas* — candidate projects the lab could run, each a starting point rather than a fixed plan. They are deliberately concrete, so a partner can point at one and say "yes, that," "not that," or "what about…", and so a Fellow could pick one up and begin. None is a commitment; all are negotiable. Where an idea is worth more than a paragraph, the link goes to the book and chapter that works it end to end.
+**What public data reaches:** an associational finding with heterogeneity — which physician and practice characteristics predict persistence, and where the variance is. Evidence Level 2 on the rubric we use. Causal identification of whether a specific message *caused* durable loyalty (as opposed to coinciding with it) requires the cohort-rollout natural experiment in the CLM data, which lives on your side of the firewall.
 
-The same discipline governs every idea. Fellows work only on **public data** (CMS Open Payments, Medicare Part D, Medicaid drug-utilization data, ICER value reports) and on **synthetic stand-ins**; the partner replicates anything promising on its own proprietary data, behind an **IP firewall**. Each idea is graded on an **Evidence Ladder** (0–6) — public data realistically reaches about Level 3 — and each carries a **kill criterion written before the result is seen**. One blocker sits over all of it — **Risk 1**: data access, how the collaboration is framed, and consent ethics — which the partner conversation has to settle first. The ideas run in two streams: a **breadth portfolio** across the marketing stack, and a **depth practicum** that builds one dataset into a causal model.
+**Kill criterion (written before running):** if prescribing persistence turns out to be uniformly high across the physician population — if everyone is a loyalty-confirmed prescriber and there is no persuadable segment — the premise of the targeting optimization collapses and the project stops. That is a finding too, and it saves you from building infrastructure around an assumption that does not hold.
 
-### Breadth portfolio — the marketing stack (thirteen ideas)
+---
 
-**Track A — Lift and attribution** asks whether the "script-lift" numbers that set budgets are real effects or artifacts.
+## The Candidate Project List
 
-- **A1 — Script-lift attribution audit.** Rebuild a vendor-style lift number from public data, then re-estimate it with an honest design, to show how much of the headline was just the targeting picking physicians who would have prescribed anyway.
-- **A2 — EHR-lift design memo.** Write the experiment that *would* prove point-of-care advertising works, with a power analysis — and admit that on public data this is a design, not a result. Saying so plainly is the contribution.
-- **A3 — Channel decomposition.** Split an observed change in prescribing across promotion channels, honest about what cannot be separated without knowing who was actually exposed.
+These are starting points, not commitments. The attached books work each one end to end.
 
-*More detail: [Book A · Ch. 13 — Fellow Research Portfolio, Track A](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/13-fellow-research-portfolio.md) · methods in [Ch. 5 — The Evidence Problem](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/05-the-evidence-problem.md) and [Ch. 12 — Research Design & Public Data](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/12-research-design-public-data.md).*
+**Track A — Lift and attribution**
+- Script-lift audit: how much of the headline number is selection, how much is effect
+- EHR-lift design memo: the experiment that *would* prove point-of-care advertising works, with a power analysis
+- Channel decomposition: what can and cannot be separated without individual-level exposure data
 
-**Track B — Brand and physician identity** asks whether promotion builds something durable or rents short-term attention.
+**Track B — Brand and physician identity**
+- Prescribing-habit persistence (detailed above)
+- Share-of-mind → share-of-market: the leading-indicator claim tested on linked data
+- Brand equity vs. clinical value: does physician loyalty track ICER value scores after controlling for promotion intensity
+- Loss-of-exclusivity event study: how much branded share survives generic entry, and whether the survivors were the equity leaders
 
-- **B1 — Share-of-mind → share-of-market.** Test the industry's belief that mindshare today predicts market share later — never rigorously checked on linked data. An open question, not a fact.
-- **B2 — Prescribing-habit persistence.** Measure how sticky prescribing is across drug classes, to find where brand loyalty is structurally real.
-- **B3 — Brand equity vs. clinical value.** The uncomfortable test: does brand equity predict prescribing *after* you control for the drug's independent clinical value? An equity-not-value finding is a patient-welfare result.
-- **B4 — Loss-of-exclusivity event study.** Use the date a generic enters as a natural shock to see how much branded share survives, and whether the survivors were the strong brands. The causal companion to B3.
+**Track C — Model architecture**
+- Ensemble vs. Mixture-of-Experts benchmark: does the vendor architecture beat a well-tuned gradient-boosted baseline on an NPI-propensity task
+- Physician archetypes: are the segments in the data or in the slide deck
 
-*More detail: [Book A · Ch. 13, Track B](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/13-fellow-research-portfolio.md) · [Ch. 9 — Brand Association](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/09-brand-association.md) · [Ch. 2 — Lift vs. Brand](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/02-lift-vs-brand.md).*
+**Track D — Ethics and accountability**
+- Proxy-discrimination test: do targeting models encode susceptibility rather than patient need
+- Co-pay coupon generic suppression: the Dafny-Ody-Schmitt design applied to Doceree-relevant drug classes
+- Accountability framework: what monitoring and disclosure a deployed targeting system should carry
 
-**Track C — Model architecture and segmentation** checks the engineering claims behind the targeting.
+**Depth practicum — rep-visit causal model**
+- Staggered DiD on message-variant transitions: the natural experiment in the training rollout
+- Meals causal forest: per-physician heterogeneous effects on public Open Payments data — runnable today
+- Slide-sequence Double Machine Learning: does ordering matter, and what happens when you condition on the colliders
 
-- **C1 — Ensemble vs. routed model.** The worked example: a plain, well-tuned model against a fancy "Mixture-of-Experts" one on the same targeting task, judged on calibration, not just accuracy. In a worked benchmark the plain model wins — and the "no" saves a build nobody needed.
-- **C2 — Physician archetypes.** Ask whether physician "segments" are a real structure in the data or a round number chosen to fit a slide.
-- **C3 — Vendor "MoE" audit.** A desk review of vendor "Mixture-of-Experts" claims against a short list of what genuine MoE actually requires.
+---
 
-*More detail: [Book A · Ch. 13, Track C](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/13-fellow-research-portfolio.md) · [Ch. 6 — Ensembles and the Tabular-Data Advantage](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/06-ensembles-tabular-advantage.md) · [Ch. 7 — Mixture of Experts](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/07-mixture-of-experts.md).*
+## Where to Start
 
-**Track D — Privacy, fairness, and accountability** is the adversarial track, and the one that most needs partner sign-off.
+If one project needs to be concrete for a first conversation: **the meals causal forest** is the only fully public causal result in the set — it runs on CMS Open Payments and Medicare Part D, no partner data required, and produces a real heterogeneous-effect estimate today. **The script-lift audit** strikes at the number your clients are most likely to defend and reframes it as de-risking their own attribution claims. **The prescribing-habit persistence study** is the one that connects most directly to what Doceree's point-of-care platform is actually doing at the moment of clinical decision.
 
-- **D1 — Proxy-discrimination test.** Check whether targeting models quietly key on physician "susceptibility" or protected-group proxies instead of clinical need.
-- **D2 — Co-pay-coupon generic suppression.** Measure how much co-pay coupons suppress cheaper generics and raise system cost — a well-precedented public-data design that tests a partner product line, so framing must be cleared first.
-- **D3 — Accountability framework.** Write the rules a deployed targeting system should live under: what it monitors, what it discloses, what can be audited.
+Everything above Evidence Level 3 — clean causal identification, deployed models, product features — is your team's to build. The lab's highest-value output is telling you exactly what proprietary work to fund, and what to kill before you build a team around it.
 
-*More detail: [Book A · Ch. 13, Track D](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/13-fellow-research-portfolio.md) · [Ch. 14 — Prototype to Product Decision](https://github.com/nikbearbrown/ai-driven-programmatic-hcp-marketing/blob/main/chapters/14-prototype-to-product-decision.md).*
+---
 
-### Depth practicum — rep-visit telemetry, built into a causal model
-
-Three runnable studies, plus the machinery that ties them together.
-
-- **Project 1 — Staggered difference-in-differences.** Reps are trained in waves, so the rollout calendar is a natural experiment; use it to measure what a *message* actually causes a physician to prescribe. The most feasible and highest-value study. *Detail: [Book B · Ch. 10](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/10-staggered-did-message-variants.md).*
-- **Project 2 — Meals causal forest.** Use public Open Payments data to estimate how promotional meals affect prescribing for different kinds of physicians, separating genuine education from simple reciprocity. The one study you can run today, end to end, on public data alone. *Detail: [Book B · Ch. 11](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/11-meals-causal-forest-and-clickstream-dml.md).*
-- **Project 3 — Slide-sequence Double Machine Learning.** Ask whether the *order* of slides changes prescribing — and learn the hardest lesson in the set: the engagement signals you would naively control for are *caused* by the message, so conditioning on them quietly breaks the estimate. *Detail: [Book B · Ch. 11](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/11-meals-causal-forest-and-clickstream-dml.md).*
-
-And the architecture around the studies:
-
-- **The Causal Interview Bot.** Let a rep talk like a rep while the system listens like a causal scientist, turning the rep's knowledge of *why* a physician behaves a certain way into a structured prior — necessary because the data alone can never decide the direction of certain arrows. *Detail: [Book B · Ch. 8](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/08-the-causal-interview-bot.md).*
-- **Persuadables, not sure-things.** Flip targeting from "who is most likely to prescribe" (often people who would anyway) to "who would a message actually move." *Detail: [Book B · Ch. 12](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/12-from-propensity-to-persuadables.md).*
-- **Consent, compliance, and the handoff.** Handle the ethics and the law — opt-out quietly biases the sample, only the educational pathway is legally drivable, regulatory questions go to counsel — and end with the deliverable that matters: a working model on synthetic/public data plus a brief telling the partner exactly what to build behind the firewall. *Detail: [Book B · Ch. 13](https://github.com/nikbearbrown/pharma-rep-visit-data-as-an-untapped-causal-dataset/blob/main/chapters/13-consent-compliance-and-handoff.md).*
-
-### Where to start
-
-If a first conversation needs one idea to make concrete: **C1** is the cleanest — self-contained, public data, an honest "no" that saves an engineering decision. The **meals causal forest** is the only fully-public *causal* result in the set — a real heterogeneous-effect estimate on Open Payments. **A1** strikes at the field's central inflated claim while framing it as de-risking the partner's own numbers. And **D2** is well-precedented but should wait for Risk-1 sign-off. Everything above Level 3 — the strong causal versions, the deployed model — is the partner's to build; the lab's highest-value output, where the real uncertainty lives above the public-data ceiling, is *telling the partner exactly what proprietary work to fund.*
-
-Return to that conference room. The Fellow does not say the 44% is a lie; disbelief is as lazy as belief. The Fellow says: *here is what the number is (a difference between selected groups), here is what it is not (a causal effect), here is the holdout study that would settle it, and here is the honest evidence level I can reach on public data.* That is the deliverable. Now go build it for your own drug — start with Chapter 1, and don't let a fluent sentence stand in for a counterfactual you never observed.
-
-**Tags:** HCP marketing · pharmaceutical marketing · programmatic advertising · point-of-care · NPI targeting · next-best-action · causal inference · uplift modeling · incrementality · attribution · evidence grading · gradient boosting · mixture of experts · LLMs · computational skepticism · external innovation lab · IP firewall · Humanitarians AI · Irreducibly Human
+*Nik Bear Brown, PhD, MBA*
+*Humanitarians AI · Bear Brown LLC*
+*bear@bearbrown.co · humanitarians.ai*
+ʕ •ﻌ•ʔ
