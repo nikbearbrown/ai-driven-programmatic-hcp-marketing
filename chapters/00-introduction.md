@@ -43,13 +43,13 @@ Second, the *innovation-lab framing* that makes this book more than a manual. Be
 
 So when you reach a chapter that uses an LLM to draft a card or a CLI agent to grep a corpus, read it as the lab working in the open: the machine does the cheap, checkable work, and a human holds the load-bearing judgment. That division is the answer to the brand director's Monday question — and it is the answer this book exists to teach.
 
-## The research projects across the two books
+## The Innovation Lab — the project portfolio
 
-These two books are a matched pair. They share one operating model: Humanitarians AI Fellows working with a pharmaceutical marketing-technology partner, under a single discipline. Fellows work only on **public data** (CMS Open Payments, Medicare Part D, Medicaid drug-utilization data, ICER value reports) and on **synthetic stand-ins**; the partner reproduces anything promising on its own proprietary data, behind an **IP firewall**, so nothing confidential ever enters a public book or repository. Every project is graded on an **Evidence Ladder** from 0 to 6 — public data realistically reaches about Level 3, an honest offline test that beats a baseline, and the higher rungs need the partner's private data. Every project writes its **kill criterion before it sees the result**, so a disappointing finding is a result, not an embarrassment to be spun. The lab's product is not a literature review and not a relabeled vendor number; it is *reduced uncertainty about where the partner should spend real data and engineering.* One blocker sits over all of it — **Risk 1**: partner data access, how the collaboration is framed, and consent ethics — and until it is settled, the proprietary and adversarial work waits.
+This is the lab in one page. Bear Brown, LLC and Humanitarians AI run an external innovation lab for companies: we research and prototype the AI that might help a partner, prove it out on public and synthetic data, and then work alongside the partner's own team to implement whatever survives. What follows is the candidate-project menu — detailed enough that a Fellow can pick one up and start, and concrete enough that a partner can see exactly which questions are worth funding. The operating discipline is the same for every project. Fellows work only on **public data** (CMS Open Payments, Medicare Part D, Medicaid drug-utilization data, ICER value reports) and on **synthetic stand-ins**; the partner reproduces anything promising on its own proprietary data, behind an **IP firewall**, so nothing confidential ever enters a public book or repository. Every project is graded on an **Evidence Ladder** from 0 to 6 — public data realistically reaches about Level 3, an honest offline test that beats a baseline, and the higher rungs need the partner's private data. Every project writes its **kill criterion before it sees the result**, so a disappointing finding is a result, not an embarrassment to be spun. The lab's product is not a literature review and not a relabeled vendor number; it is *reduced uncertainty about where the partner should spend real data and engineering.* One blocker sits over all of it — **Risk 1**: partner data access, how the collaboration is framed, and consent ethics — and until it is settled, the proprietary and adversarial work waits.
 
-The pair divides the labor. **Book A — _AI-Driven Programmatic HCP Marketing_** is breadth: a thirteen-project portfolio across the whole marketing stack. **Book B — _Pharma Rep Visit Data as an Untapped Causal Dataset_** is depth: one dataset, one causal model, built end to end. You are holding **Book A**; the full map is below, so you can see where your book sits — and so a partner can see the two as one program.
+The portfolio runs in two streams. A **breadth portfolio** spans the whole marketing stack — measurement, brand, model architecture, and ethics — thirteen projects, each testing one falsifiable claim on public data and naming the proprietary work that would settle the strong version. A **depth practicum** takes a single dataset — rep-visit telemetry — and builds it end to end into a deployable causal model. (Each stream is also a hands-on book in this series, so a Fellow can work it cover to cover.)
 
-### Book A — the thirteen-project portfolio (breadth: the marketing stack)
+### Breadth portfolio — the marketing stack (thirteen projects)
 
 **Track A — Lift and attribution** asks whether the "script-lift" numbers that set budgets are real effects or artifacts.
 
@@ -66,7 +66,7 @@ The pair divides the labor. **Book A — _AI-Driven Programmatic HCP Marketing_*
 
 **Track C — Model architecture and segmentation** checks the engineering claims behind the targeting.
 
-- **C1 — Ensemble vs. routed model.** The worked example: a plain, well-tuned model against a fancy "Mixture-of-Experts" one on the same targeting task, judged on calibration, not just accuracy. In the book's run the plain model wins — and the "no" saves a build nobody needed.
+- **C1 — Ensemble vs. routed model.** The worked example: a plain, well-tuned model against a fancy "Mixture-of-Experts" one on the same targeting task, judged on calibration, not just accuracy. In a worked benchmark the plain model wins — and the "no" saves a build nobody needed.
 - **C2 — Physician archetypes.** Ask whether physician "segments" are a real structure in the data or a round number chosen to fit a slide.
 - **C3 — Vendor "MoE" audit.** A desk review of vendor "Mixture-of-Experts" claims against a short list of what genuine MoE actually requires.
 
@@ -76,13 +76,13 @@ The pair divides the labor. **Book A — _AI-Driven Programmatic HCP Marketing_*
 - **D2 — Co-pay-coupon generic suppression.** Measure how much co-pay coupons suppress cheaper generics and raise system cost — a well-precedented public-data design that tests a partner product line, so framing must be cleared first.
 - **D3 — Accountability framework.** Write the rules a deployed targeting system should live under: what it monitors, what it discloses, what can be audited.
 
-### Book B — one dataset, built into a causal model (depth: rep-visit telemetry)
+### Depth practicum — rep-visit telemetry, built into a causal model
 
 Three runnable studies, plus the machinery that ties them together.
 
 - **Project 1 — Staggered difference-in-differences.** Reps are trained in waves, so the rollout calendar is a natural experiment; use it to measure what a *message* actually causes a physician to prescribe. The most feasible and highest-value study.
 - **Project 2 — Meals causal forest.** Use public Open Payments data to estimate how promotional meals affect prescribing for different kinds of physicians, separating genuine education from simple reciprocity. The one study you can run today, end to end, on public data alone.
-- **Project 3 — Slide-sequence Double Machine Learning.** Ask whether the *order* of slides changes prescribing — and learn the book's hardest lesson: the engagement signals you would naively control for are *caused* by the message, so conditioning on them quietly breaks the estimate.
+- **Project 3 — Slide-sequence Double Machine Learning.** Ask whether the *order* of slides changes prescribing — and learn the hardest lesson in the set: the engagement signals you would naively control for are *caused* by the message, so conditioning on them quietly breaks the estimate.
 
 And the architecture around the studies:
 
@@ -92,7 +92,7 @@ And the architecture around the studies:
 
 ### Where to start
 
-For a first cohort that needs a fast, defensible win: **C1** is the cleanest starter — self-contained, public data, an honest "no" that saves an engineering decision. **Book B's meals study** is the only fully-public *causal* result across both books. **A1** strikes at the field's central inflated claim while framing it as de-risking the partner's own numbers. And **D2** is well-precedented but should wait for Risk-1 sign-off. Everything above Level 3 — the strong causal versions, the deployed model — is the partner's to build; the portfolio's highest-value output, where the real uncertainty lives above the public-data ceiling, is *telling the partner exactly what proprietary work to fund.*
+For a first cohort that needs a fast, defensible win: **C1** is the cleanest starter — self-contained, public data, an honest "no" that saves an engineering decision. The **meals causal forest** is the only fully-public *causal* result in the whole portfolio — a real heterogeneous-effect estimate on Open Payments. **A1** strikes at the field's central inflated claim while framing it as de-risking the partner's own numbers. And **D2** is well-precedented but should wait for Risk-1 sign-off. Everything above Level 3 — the strong causal versions, the deployed model — is the partner's to build; the portfolio's highest-value output, where the real uncertainty lives above the public-data ceiling, is *telling the partner exactly what proprietary work to fund.*
 
 Return to that conference room. The Fellow does not say the 44% is a lie; disbelief is as lazy as belief. The Fellow says: *here is what the number is (a difference between selected groups), here is what it is not (a causal effect), here is the holdout study that would settle it, and here is the honest evidence level I can reach on public data.* That is the deliverable. Now go build it for your own drug — start with Chapter 1, and don't let a fluent sentence stand in for a counterfactual you never observed.
 
